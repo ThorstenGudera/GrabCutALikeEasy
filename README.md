@@ -43,4 +43,5 @@ Usage:
 
 - You can optionally do some processing on the outline of the result, simple feathering, or bayesian matting.
 
-![Bild1_354](https://github.com/user-attachments/assets/4576bf73-333f-457a-91f0-e050507d8cf9)
+![Bild1_354](https://github.com/user-attachments/assets/96aef6a5-bc27-479a-9485-9beb4c76b5ff)
+
