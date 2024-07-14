@@ -43,7 +43,7 @@ Usage:
 
 - You can optionally do some processing on the outline of the result, simple feathering, or bayesian matting.
 
-- Disclaimer:
+Disclaimer:
 
 The code is free for academic/research purpose. Use at your own risk and we are not responsible for any loss resulting from this code.
 
