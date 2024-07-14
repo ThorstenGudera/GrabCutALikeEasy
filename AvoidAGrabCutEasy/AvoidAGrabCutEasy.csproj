@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8569999B-D22D-473E-9E09-EB8F62328363}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AvoidAGrabCutEasy</RootNamespace>
+    <AssemblyName>AvoidAGrabCutEasy</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AvailMem">
+      <HintPath>..\AvailMem\bin\Debug\AvailMem.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AvoidAGrabCut_To_Easy_Binder.cs" />
+    <Compile Include="BoykovKolmogorov.cs" />
+    <Compile Include="BreakResult.cs" />
+    <Compile Include="Centroid.cs" />
+    <Compile Include="DirectedGraph.cs" />
+    <Compile Include="frmAddCorrectRelation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddCorrectRelation.Designer.cs">
+      <DependentUpon>frmAddCorrectRelation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAvoidAGrabCutEasy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAvoidAGrabCutEasy.Designer.cs">
+      <DependentUpon>frmAvoidAGrabCutEasy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDrawNumComp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDrawNumComp.Designer.cs">
+      <DependentUpon>frmDrawNumComp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProcOutline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProcOutline.Designer.cs">
+      <DependentUpon>frmProcOutline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRect.Designer.cs">
+      <DependentUpon>frmRect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GMM_bgr.cs" />
+    <Compile Include="GrabCutOp.cs" />
+    <Compile Include="IMaxFlowAlg.cs" />
+    <Compile Include="InnerListObject.cs" />
+    <Compile Include="IQATHAlg.cs" />
+    <Compile Include="KMeans_bgr.cs" />
+    <Compile Include="ListSelectionMode.cs" />
+    <Compile Include="MatrixInverse.cs" />
+    <Compile Include="ProcOutline\BayesianMatteOp.cs" />
+    <Compile Include="ProcOutline\BitmapBorderAction.cs" />
+    <Compile Include="ProcOutline\BitmapOutlineVariant.cs" />
+    <Compile Include="ProcOutline\BlendType.cs" />
+    <Compile Include="ProcOutline\BoundaryMattingOP.cs" />
+    <Compile Include="ProcOutline\BoundaryObject.cs" />
+    <Compile Include="ProcOutline\ColorSource.cs" />
+    <Compile Include="ProcOutline\DefaultSmoothenOP.cs" />
+    <Compile Include="ProcOutline\EQSysResult.cs" />
+    <Compile Include="ProcOutline\ExtPoint.cs" />
+    <Compile Include="ProcOutline\fipbmp.cs" />
+    <Compile Include="ProcOutline\frmEdgePic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcOutline\frmEdgePic.Designer.cs">
+      <DependentUpon>frmEdgePic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProcOutline\MatrixEigen.cs" />
+    <Compile Include="ProcOutline\MatrixInverse.cs" />
+    <Compile Include="ProcOutline\Node.cs" />
+    <Compile Include="ProcOutline\OrchardBouman_bgr.cs" />
+    <Compile Include="ProcOutline\ProgressEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PushRelabelFifo.cs" />
+    <Compile Include="RGBLab.cs" />
+    <Compile Include="SavedScribbles.cs" />
+    <Compile Include="StartNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmAddCorrectRelation.resx">
+      <DependentUpon>frmAddCorrectRelation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAvoidAGrabCutEasy.resx">
+      <DependentUpon>frmAvoidAGrabCutEasy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProcOutline.resx">
+      <DependentUpon>frmProcOutline.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cache\Cache.vbproj">
+      <Project>{d14db1c1-38bb-45e8-9fcf-12dad0ebc77f}</Project>
+      <Name>Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj">
+      <Project>{AB85D96B-BA7D-4973-AC96-F64C4695FC23}</Project>
+      <Name>ChainCodeFinder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ColorCurves\ColorCurves.vbproj">
+      <Project>{f7b85c10-8d9a-487f-b3c6-b6c7e32f9bad}</Project>
+      <Name>ColorCurves</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConvolutionLib\ConvolutionLib.vbproj">
+      <Project>{73472b87-5e96-43db-b6ab-5f6bcaa92ffe}</Project>
+      <Name>ConvolutionLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj">
+      <Project>{F5D153C7-2F8F-41C7-BE9E-886BE213FDDA}</Project>
+      <Name>HelplineRulerControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

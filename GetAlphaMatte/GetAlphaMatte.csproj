@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{44142B2D-E6BC-4E81-8117-7F7CD270A8CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GetAlphaMatte</RootNamespace>
+    <AssemblyName>GetAlphaMatte</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="SegmentsListLib">
+      <HintPath>..\SegmentsListLib\bin\Debug\SegmentsListLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoSORMode.cs" />
+    <Compile Include="BayesianMatteOp.cs" />
+    <Compile Include="BlendParameters.cs" />
+    <Compile Include="EQSysResult.cs" />
+    <Compile Include="ExtPoint.cs" />
+    <Compile Include="frmEdgePic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEdgePic.Designer.cs">
+      <DependentUpon>frmEdgePic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInfo.Designer.cs">
+      <DependentUpon>frmInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSavePics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSavePics.Designer.cs">
+      <DependentUpon>frmSavePics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSavePics2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSavePics2.Designer.cs">
+      <DependentUpon>frmSavePics2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWH.Designer.cs">
+      <DependentUpon>frmWH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MatrixEigen.cs" />
+    <Compile Include="MatrixInverse.cs" />
+    <Compile Include="MatrixSet.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="OrchardBouman_bgr.cs" />
+    <Compile Include="OverlapMode.cs" />
+    <Compile Include="OverlapMode2.cs" />
+    <Compile Include="PicturesEventHandler.cs" />
+    <Compile Include="ProgressEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrimapProblemInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmEdgePic.resx">
+      <DependentUpon>frmEdgePic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInfo.resx">
+      <DependentUpon>frmInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSavePics.resx">
+      <DependentUpon>frmSavePics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWH.resx">
+      <DependentUpon>frmWH.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AvailMem\AvailMem.vbproj">
+      <Project>{f106e2d9-f242-4683-8a2e-41b310462fa2}</Project>
+      <Name>AvailMem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cache\Cache.vbproj">
+      <Project>{d14db1c1-38bb-45e8-9fcf-12dad0ebc77f}</Project>
+      <Name>Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChainCodeFinder\ChainCodeFinder.vbproj">
+      <Project>{AB85D96B-BA7D-4973-AC96-F64C4695FC23}</Project>
+      <Name>ChainCodeFinder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HelperFunctions\HelperFunctions.vbproj">
+      <Project>{a2082f19-b6a8-4f9d-9c0c-f1da5277d7ff}</Project>
+      <Name>HelperFunctions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj">
+      <Project>{f5d153c7-2f8f-41c7-be9e-886be213fdda}</Project>
+      <Name>HelplineRulerControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
