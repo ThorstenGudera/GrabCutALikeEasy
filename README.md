@@ -23,8 +23,6 @@ A lot of example code was used writing this demo app, so e.g.:
 
 grabcutmaster: https://github.com/moetayuko/GrabCut/tree/master
 
-bayesian matting (plus closedformmatting): https://github.com/MarcoForte/bayesian-matting and https://github.com/MarcoForte/closed-form-matting
-
 geeksforgeeks push rel: https://www.geeksforgeeks.org/fifo-push-relabel-algorithm/
 
 paper for bk: https://discovery.ucl.ac.uk/id/eprint/13383/1/13383.pdf
