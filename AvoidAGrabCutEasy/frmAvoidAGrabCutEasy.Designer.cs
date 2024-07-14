@@ -37,8 +37,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnOutline = new System.Windows.Forms.Button();
             this.cbLSBmp = new System.Windows.Forms.CheckBox();
             this.btnLoadScribbles = new System.Windows.Forms.Button();
             this.btnSaveScribbles = new System.Windows.Forms.Button();
@@ -140,8 +138,6 @@
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label7);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.btnOutline);
             this.panel1.Controls.Add(this.cbLSBmp);
             this.panel1.Controls.Add(this.btnLoadScribbles);
             this.panel1.Controls.Add(this.btnSaveScribbles);
@@ -268,25 +264,6 @@
             this.label7.Text = "max # components";
             this.toolTip1.SetToolTip(this.label7, "maximum output number of connected components,\r\nouter- and inner-paths (component" +
         "s which are drawn transparent).");
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(920, 76);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 669;
-            this.label3.Text = "process Outline";
-            // 
-            // btnOutline
-            // 
-            this.btnOutline.Location = new System.Drawing.Point(1006, 71);
-            this.btnOutline.Name = "btnOutline";
-            this.btnOutline.Size = new System.Drawing.Size(75, 23);
-            this.btnOutline.TabIndex = 668;
-            this.btnOutline.Text = "Go";
-            this.btnOutline.UseVisualStyleBackColor = true;
-            this.btnOutline.Click += new System.EventHandler(this.btnOutline_Click);
             // 
             // cbLSBmp
             // 
@@ -1308,8 +1285,6 @@
         private System.Windows.Forms.Button btnSaveScribbles;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox cbLSBmp;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnOutline;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numMaxComponents;
         private System.Windows.Forms.Label label9;
