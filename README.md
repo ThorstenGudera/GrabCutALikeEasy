@@ -39,6 +39,11 @@ Usage:
 - On the right pane, check the draw on result checkbox and draw with the mouse onto regions that should be the type you selected from the combobox (eg. Background, Foregound etc)
 - Click onto the Go-button again
 
+(Note: I removed the Boundary-processing parts, since I wasn't sure about the license for BayesianMatting.
+So you'll have to do it your own:
+- Do some Boundary-Cleaning like approximating by line or curve-segements.
+- Do some Boundary-Matting or maybe even simple Feathering.)
+
 Disclaimer:
 
 The code is free for academic/research purpose. Use at your own risk and we are not responsible for any loss resulting from this code.
