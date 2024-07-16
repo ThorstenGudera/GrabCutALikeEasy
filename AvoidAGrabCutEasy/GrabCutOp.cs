@@ -951,8 +951,6 @@ namespace AvoidAGrabCutEasy
             double[] d = this._bgGmm.CalcProb(prVals);
             for (int j = 0; j < d.Length; j++)
                 d[j] *= this.ProbMult1;
-            for (int j = 0; j < d.Length; j++)
-                d[j] *= this.ProbMult1;
 
             IEnumerable<double> dTmp = d.Except(d.Where(a => a == 0));
             double d1 = 0;
@@ -962,15 +960,7 @@ namespace AvoidAGrabCutEasy
             int l = d.Length;
             double[] d2 = this._fgGmm.CalcProb(prVals);
 
-            IEnumerable<double> dTmp2 = d2.Except(d.Where(a => a == 0));
-            double d21 = 0;
-            if (dTmp2.Count() > 0)
-                d21 = Math.Log(dTmp2.Max());
-
             OnShowInfo("d1 = " + d1.ToString());
-
-            double[] d4 = new double[d.Length];
-            double[] d7 = new double[d.Length];
 
             if (this.BGW != null && this.BGW.WorkerReportsProgress)
                 this.BGW.ReportProgress(40);
@@ -1497,12 +1487,6 @@ namespace AvoidAGrabCutEasy
             double[] d = this._bgGmm.CalcProb(prVals);
             for (int j = 0; j < d.Length; j++)
                 d[j] *= this.ProbMult1;
-
-            IEnumerable<double> dTmp2 = d.Except(d.Where(a => a == 0));
-            double d1 = 0;
-            if (dTmp2.Count() > 0)
-                d1 = Math.Log(dTmp2.Max()) * 7;
-            OnShowInfo("d1 = " + d1.ToString());
 
             int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
 
