@@ -190,29 +190,33 @@ Partial Public Class HorizontalRulerControl
     Private Sub CalcIterationFactor()
         _iterationFactor = 1
 
-        Me._tickFrequencySmall = Me._tickFrequencySmallBU
+        If Not Me.IsDisposed Then
+            Me._tickFrequencySmall = Me._tickFrequencySmallBU
 
-        If Me.DrawEnd > Me.DrawStart AndAlso Zoom <> 1.0F AndAlso Zoom > _minZoomFactor Then
-            Using g As Graphics = Me.CreateGraphics()
-                Dim tmp1 As SizeF = g.MeasureString((Me.DrawEnd / Zoom).ToString("N0"), Me.Font)
-                Dim x1 As Single = Me.DrawEnd - Me.TickFrequencyLarge * Zoom
-                Dim tmp2 As SizeF = g.MeasureString((x1 / Zoom).ToString("N0"), Me.Font)
+            If Me.DrawEnd > Me.DrawStart AndAlso Zoom <> 1.0F AndAlso Zoom > _minZoomFactor Then
+                If Not Me.IsDisposed Then
+                    Using g As Graphics = Me.CreateGraphics()
+                        Dim tmp1 As SizeF = g.MeasureString((Me.DrawEnd / Zoom).ToString("N0"), Me.Font)
+                        Dim x1 As Single = Me.DrawEnd - Me.TickFrequencyLarge * Zoom
+                        Dim tmp2 As SizeF = g.MeasureString((x1 / Zoom).ToString("N0"), Me.Font)
 
-                While Me.DrawEnd - (tmp1.Width / 2.0F) < x1 + (tmp2.Width / 2.0F)
-                    _iterationFactor += 1
+                        While Me.DrawEnd - (tmp1.Width / 2.0F) < x1 + (tmp2.Width / 2.0F)
+                            _iterationFactor += 1
 
-                    x1 = Me.DrawEnd - Me.TickFrequencyLarge * Zoom * _iterationFactor
-                    tmp2 = g.MeasureString((x1 / Zoom).ToString("N0"), Me.Font)
-                End While
+                            x1 = Me.DrawEnd - Me.TickFrequencyLarge * Zoom * _iterationFactor
+                            tmp2 = g.MeasureString((x1 / Zoom).ToString("N0"), Me.Font)
+                        End While
 
-                If _iterationFactor > 1 Then
-                    'direkt auf Wert zugreifen, nicht auf die Property, wg. BU
-                    Me._tickFrequencySmall *= _iterationFactor - (_iterationFactor Mod 2)
+                        If _iterationFactor > 1 Then
+                            'direkt auf Wert zugreifen, nicht auf die Property, wg. BU
+                            Me._tickFrequencySmall *= _iterationFactor - (_iterationFactor Mod 2)
+                        End If
+                    End Using
                 End If
-            End Using
-        End If
+            End If
 
-        DrawBackgroundBitmap()
+            DrawBackgroundBitmap()
+        End If
     End Sub
 
     Private Sub DrawBackgroundBitmap()

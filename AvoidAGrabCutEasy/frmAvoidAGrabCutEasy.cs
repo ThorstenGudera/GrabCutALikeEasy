@@ -2499,11 +2499,14 @@ namespace AvoidAGrabCutEasy
         {
             this.Timer3.Stop();
 
-            this.toolStripProgressBar1.Visible = false;
-            this.toolStripProgressBar1.Value = 0;
+            if (!this.toolStripProgressBar1.IsDisposed)
+            {
+                this.toolStripProgressBar1.Visible = false;
+                this.toolStripProgressBar1.Value = 0;
 
-            this.helplineRulerCtrl1.dbPanel1.Invalidate();
-            this.helplineRulerCtrl2.dbPanel1.Invalidate();
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                this.helplineRulerCtrl2.dbPanel1.Invalidate();
+            }
         }
 
         private void cmbZoom_SelectedIndexChanged(object sender, EventArgs e)
