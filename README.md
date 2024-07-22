@@ -1,7 +1,7 @@
 GrabCut revisited: Just grab it, dont cut it.
 
 The well known GrabCut algorithm is known to be reliable for segmenting images, but needs a lot of resources, both Memory and CPU-time.
-And: when using a MicCut algorithm being written from scratch and not coming from a specialized library, it may turn out, that the time of running the process will be [very] long.
+And: when using a MinCut algorithm being written from scratch and not coming from a specialized library, it may turn out, that the time of running the process will be [very] long.
 So, how to speed things up and lower the resources needed, by getting almost the same results?
 
 The answer is simple: You dont need a MinCut and so dont need the whole Graph and the ResidualGraph, and, you also dont need to compute the BetaSmootheness function.
