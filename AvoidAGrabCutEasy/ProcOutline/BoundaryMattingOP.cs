@@ -2368,9 +2368,12 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                 + (green - wvG2) * (green - wvG2)
                                 + (red - wvR2) * (red - wvR2));
 
-                            double vB = dB - ((wv.StdBGB + wv.StdBGG + wv.StdBGR) / 3);
+                            //double vB = dB - ((wv.StdBGB + wv.StdBGG + wv.StdBGR) / 3);
 
                             double d = dF + dB;
+
+                            //if (dF - ((wv.StdFGB + wv.StdFGG + wv.StdFGR) / 3) < 0)
+                            //    vF = 0;
 
                             //get alpha
                             //double aDF = (441.67 - dF) / 441.67;
@@ -2393,11 +2396,14 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
                     for (int x = 0; x < w; x++)
                     {
-                        if (pF[3] > alphaTh)
-                            pF[3] = 255;
-                        else
+                        if (pTr[x * 4 + y * stride] > 5 && pTr[x * 4 + y * stride] < 250)
                         {
-                            pF[3] = (byte)Math.Max(Math.Min(alphaTh * Math.Pow((double)pF[3] / alphaTh, 2.5), 255), 0);
+                            if (pF[3] > alphaTh)
+                                pF[3] = 255;
+                            else
+                            {
+                                pF[3] = (byte)Math.Max(Math.Min(alphaTh * Math.Pow((double)pF[3] / alphaTh, 2.5), 255), 0);
+                            }
                         }
                         pF += 4;
                     }

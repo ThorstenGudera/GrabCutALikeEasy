@@ -47,7 +47,7 @@
             this.numWinSz = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
-            this.cbBayes = new System.Windows.Forms.CheckBox();
+            this.cbSimpleMatting = new System.Windows.Forms.CheckBox();
             this.numAlphaTh = new System.Windows.Forms.NumericUpDown();
             this.label54 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
@@ -359,7 +359,7 @@
             this.groupBox5.Controls.Add(this.numWinSz);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.label28);
-            this.groupBox5.Controls.Add(this.cbBayes);
+            this.groupBox5.Controls.Add(this.cbSimpleMatting);
             this.groupBox5.Controls.Add(this.numAlphaTh);
             this.groupBox5.Controls.Add(this.label54);
             this.groupBox5.Location = new System.Drawing.Point(190, 49);
@@ -368,6 +368,7 @@
             this.groupBox5.TabIndex = 551;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "AlphaMatting";
+            this.groupBox5.Visible = false;
             // 
             // numFeatherWidth
             // 
@@ -426,16 +427,16 @@
             this.label28.TabIndex = 552;
             this.label28.Text = "windowSize";
             // 
-            // cbBayes
+            // cbSimpleMatting
             // 
-            this.cbBayes.AutoSize = true;
-            this.cbBayes.Location = new System.Drawing.Point(10, 14);
-            this.cbBayes.Name = "cbBayes";
-            this.cbBayes.Size = new System.Drawing.Size(108, 17);
-            this.cbBayes.TabIndex = 0;
-            this.cbBayes.Text = "do simple Matting";
-            this.cbBayes.UseVisualStyleBackColor = true;
-            this.cbBayes.CheckedChanged += new System.EventHandler(this.cbBayes_CheckedChanged);
+            this.cbSimpleMatting.AutoSize = true;
+            this.cbSimpleMatting.Location = new System.Drawing.Point(10, 14);
+            this.cbSimpleMatting.Name = "cbSimpleMatting";
+            this.cbSimpleMatting.Size = new System.Drawing.Size(108, 17);
+            this.cbSimpleMatting.TabIndex = 0;
+            this.cbSimpleMatting.Text = "do simple Matting";
+            this.cbSimpleMatting.UseVisualStyleBackColor = true;
+            this.cbSimpleMatting.CheckedChanged += new System.EventHandler(this.cbSimpleMatting_CheckedChanged);
             // 
             // numAlphaTh
             // 
@@ -454,7 +455,7 @@
             this.numAlphaTh.Size = new System.Drawing.Size(48, 20);
             this.numAlphaTh.TabIndex = 511;
             this.numAlphaTh.Value = new decimal(new int[] {
-            127,
+            75,
             0,
             0,
             0});
@@ -752,7 +753,7 @@
             this.numBoundInner.Size = new System.Drawing.Size(48, 20);
             this.numBoundInner.TabIndex = 511;
             this.numBoundInner.Value = new decimal(new int[] {
-            6,
+            4,
             0,
             0,
             0});
@@ -1273,8 +1274,8 @@
             // 
             // toolStripStatusLabel1
             // 
-            this.toolStripStatusLabel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+            this.toolStripStatusLabel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
@@ -1284,8 +1285,8 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.AutoSize = false;
-            this.toolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+            this.toolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.toolStripStatusLabel2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
@@ -1470,7 +1471,7 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.NumericUpDown numWinSz;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.CheckBox cbBayes;
+        private System.Windows.Forms.CheckBox cbSimpleMatting;
         private System.Windows.Forms.NumericUpDown numAlphaTh;
         private System.Windows.Forms.Label label54;
         internal System.ComponentModel.BackgroundWorker backgroundWorker3;

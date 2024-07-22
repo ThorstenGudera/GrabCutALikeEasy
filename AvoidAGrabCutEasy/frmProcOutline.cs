@@ -39,7 +39,7 @@ namespace AvoidAGrabCutEasy
         private string m_CachePathAddition;
         private DefaultSmoothenOP _dsOP;
         private BoundaryMattingOP _bmOP;
-        private int _maxWidth = 14;
+        private int _maxWidth = 24;
         private int _oW = 0;
         private int _iW = 0;
         private Stopwatch _sw;
@@ -504,7 +504,7 @@ namespace AvoidAGrabCutEasy
                 this.Cursor = Cursors.Default;
                 this.SetControls(true);
 
-                this.cbBayes_CheckedChanged(this.cbBayes, new EventArgs());
+                this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
             }
         }
 
@@ -536,7 +536,7 @@ namespace AvoidAGrabCutEasy
                 this.Cursor = Cursors.WaitCursor;
                 this.SetControls(false);
 
-                if (this.cbBayes.Checked)
+                if (this.cbSimpleMatting.Checked)
                 {
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
@@ -573,7 +573,7 @@ namespace AvoidAGrabCutEasy
             this.cmbBlendType.SelectedIndex = 1;
 
             this.rbBoth.Checked = true;
-            this.cbBayes.Checked = true;
+            //this.cbSimpleMatting.Checked = true;
 
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
         }
@@ -710,7 +710,7 @@ namespace AvoidAGrabCutEasy
             this.SetControls(true);
             this.Cursor = Cursors.Default;
 
-            this.cbBayes_CheckedChanged(this.cbBayes, new EventArgs());
+            this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
 
             this._pic_changed = true;
 
@@ -822,7 +822,7 @@ namespace AvoidAGrabCutEasy
             this.SetControls(true);
             this.Cursor = Cursors.Default;
 
-            this.cbBayes_CheckedChanged(this.cbBayes, new EventArgs());
+            this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
 
             this._pic_changed = true;
 
@@ -842,9 +842,9 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
         }
 
-        private void cbBayes_CheckedChanged(object sender, EventArgs e)
+        private void cbSimpleMatting_CheckedChanged(object sender, EventArgs e)
         {
-            DisableBoundControls(this.cbBayes.Checked);
+            DisableBoundControls(this.cbSimpleMatting.Checked);
         }
 
         private void DisableBoundControls(bool ch)
@@ -1136,7 +1136,7 @@ namespace AvoidAGrabCutEasy
             this.SetControls(true);
             this.Cursor = Cursors.Default;
 
-            this.cbBayes_CheckedChanged(this.cbBayes, new EventArgs());
+            this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
 
             this.btnAlphaV.Text = "Go";
 
@@ -1226,12 +1226,12 @@ namespace AvoidAGrabCutEasy
 
         private void numBoundOuter_ValueChanged(object sender, EventArgs e)
         {
-            DisableBoundControls(this.cbBayes.Checked);
+            DisableBoundControls(this.cbSimpleMatting.Checked);
         }
 
         private void numBoundInner_ValueChanged(object sender, EventArgs e)
         {
-            DisableBoundControls(this.cbBayes.Checked);
+            DisableBoundControls(this.cbSimpleMatting.Checked);
         }
     }
 }

@@ -119,6 +119,9 @@
     <EmbeddedResource Include="frmAvoidAGrabCutEasy.resx">
       <DependentUpon>frmAvoidAGrabCutEasy.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmProcOutline.resx">
+      <DependentUpon>frmProcOutline.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cache\Cache.vbproj">
