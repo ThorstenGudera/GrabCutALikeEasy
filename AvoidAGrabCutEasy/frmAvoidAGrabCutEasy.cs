@@ -3433,5 +3433,65 @@ namespace AvoidAGrabCutEasy
                 }
             }
         }
+
+        private void btnCache_Click(object sender, EventArgs e)
+        {
+            if (_undoOPCache != null && _undoOPCache.Cache.IsActive)
+            {
+                string folder = _undoOPCache.GetCachePath();
+
+                using (frmCachedPictures frm = new frmCachedPictures(folder))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        if (frm.cbLoadTo.Checked)
+                        {
+                            bool hlc1 = frm.rbHlc1.Checked || frm.rbHlc12.Checked;
+                            bool hlc2 = frm.rbHlc2.Checked || frm.rbHlc12.Checked;
+
+                            if (hlc1)
+                            {
+                                Bitmap bmp = null;
+                                FileInfo fi = new FileInfo(Path.Combine(folder, frm.listBox1.SelectedItem.ToString()));
+
+                                using (Image img = Image.FromFile(fi.FullName))
+                                    bmp = new Bitmap(img);
+
+                                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                                this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                                    (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                                    (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                                Bitmap bC = new Bitmap(bmp);
+                                this.SetBitmap(ref this._bmpBU, ref bC);
+                            }
+
+                            if (hlc2)
+                            {
+                                Bitmap bmp = null;
+                                FileInfo fi = new FileInfo(Path.Combine(folder, frm.listBox1.SelectedItem.ToString()));
+
+                                using (Image img = Image.FromFile(fi.FullName))
+                                    bmp = new Bitmap(img);
+
+                                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+
+                                this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                    (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                    (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                                //Bitmap bC = new Bitmap(bmp);
+                                //this.SetBitmap(ref this._b4Copy, ref bC);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

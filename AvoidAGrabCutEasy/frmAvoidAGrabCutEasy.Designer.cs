@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnOutline = new System.Windows.Forms.Button();
             this.cbSetPFGToFG = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -109,8 +111,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnOutline = new System.Windows.Forms.Button();
+            this.btnCache = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQATH)).BeginInit();
@@ -134,6 +135,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnCache);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.btnOutline);
             this.panel1.Controls.Add(this.cbSetPFGToFG);
@@ -205,6 +207,25 @@
             this.panel1.TabIndex = 0;
             this.panel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDoubleClick);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(886, 79);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 13);
+            this.label3.TabIndex = 676;
+            this.label3.Text = "process Outline";
+            // 
+            // btnOutline
+            // 
+            this.btnOutline.Location = new System.Drawing.Point(972, 74);
+            this.btnOutline.Name = "btnOutline";
+            this.btnOutline.Size = new System.Drawing.Size(75, 23);
+            this.btnOutline.TabIndex = 675;
+            this.btnOutline.Text = "Go";
+            this.btnOutline.UseVisualStyleBackColor = true;
+            this.btnOutline.Click += new System.EventHandler(this.btnOutline_Click);
             // 
             // cbSetPFGToFG
             // 
@@ -1179,24 +1200,17 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // label3
+            // btnCache
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(886, 79);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 676;
-            this.label3.Text = "process Outline";
-            // 
-            // btnOutline
-            // 
-            this.btnOutline.Location = new System.Drawing.Point(972, 74);
-            this.btnOutline.Name = "btnOutline";
-            this.btnOutline.Size = new System.Drawing.Size(75, 23);
-            this.btnOutline.TabIndex = 675;
-            this.btnOutline.Text = "Go";
-            this.btnOutline.UseVisualStyleBackColor = true;
-            this.btnOutline.Click += new System.EventHandler(this.btnOutline_Click);
+            this.btnCache.Enabled = false;
+            this.btnCache.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnCache.Location = new System.Drawing.Point(986, 29);
+            this.btnCache.Name = "btnCache";
+            this.btnCache.Size = new System.Drawing.Size(75, 23);
+            this.btnCache.TabIndex = 677;
+            this.btnCache.Text = "CachedPics";
+            this.btnCache.UseVisualStyleBackColor = true;
+            this.btnCache.Click += new System.EventHandler(this.btnCache_Click);
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1321,5 +1335,6 @@
         private System.Windows.Forms.CheckBox cbSetPFGToFG;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnOutline;
+        private System.Windows.Forms.Button btnCache;
     }
 }

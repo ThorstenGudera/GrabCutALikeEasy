@@ -65,6 +65,12 @@
     <Compile Include="frmAvoidAGrabCutEasy.Designer.cs">
       <DependentUpon>frmAvoidAGrabCutEasy.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmCachedPictures.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCachedPictures.Designer.cs">
+      <DependentUpon>frmCachedPictures.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDrawNumComp.cs">
       <SubType>Form</SubType>
     </Compile>

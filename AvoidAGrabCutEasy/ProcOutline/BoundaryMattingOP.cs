@@ -2107,8 +2107,11 @@ namespace AvoidAGrabCutEasy.ProcOutline
             }
         }
 
-        //I dont know, if this is of any practical use, I usually use Bayes-Matting, but I wasn't sure, if posting Bayes-Matting-Code is allowed.
-        //So I wrote some lines from an older Idea, to get a matting effect. Motto was: Just "do something" with the values and the mean and the stddev...
+        //I dont know, if this is of any practical use, I usually use Bayes-Matting for trimaps with a thin/narrow unknown region,
+        //but I wasn't sure, if posting Bayes-Matting-Code is allowed. There's example code on GitHub though.
+        //So I wrote some lines from an older Idea, to remove some outliers and get something like a matting effect.
+        //Motto was: Just "do something" with the values and the mean and the stddev...
+        //Maybe I'll add some real alpha-matting code, if I find the time to do so...
         public Bitmap DoSimpleMatting(Bitmap trWork, int iW, int oW, int windowSize, int alphaTh, int normalDistToCheck, int featherWidth, BackgroundWorker bgw)
         {
             Bitmap fg = this.BmpWork;
