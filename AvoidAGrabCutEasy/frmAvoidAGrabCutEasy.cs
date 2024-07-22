@@ -3404,5 +3404,34 @@ namespace AvoidAGrabCutEasy
         {
             this._numShiftY = (int)this.numShiftY.Value;
         }
+
+        private void btnOutline_Click(object sender, EventArgs e)
+        {
+            if (this._b4Copy != null)
+            {
+                using (frmProcOutline frm = new frmProcOutline(this.helplineRulerCtrl2.Bmp, this._bmpBU, this.CachePathAddition))
+                {
+                    frm.SetupCache();
+
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        Bitmap b = new Bitmap(frm.FBitmap);
+
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, b, this.helplineRulerCtrl2, "Bmp");
+
+                        //Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
+                        //this.SetBitmap(ref this._b4Copy, ref bC);
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                        _undoOPCache.Add(b);
+                    }
+                }
+            }
+        }
     }
 }
