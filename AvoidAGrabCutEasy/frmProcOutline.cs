@@ -224,9 +224,15 @@ namespace AvoidAGrabCutEasy
 
                         this.SetBitmap(this.helplineRulerCtrl1.Bmp, b1, this.helplineRulerCtrl1, "Bmp");
 
+                        this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                            (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
                         this._pic_changed = false;
 
-                        this.helplineRulerCtrl1.CalculateZoom();
+                        //this.helplineRulerCtrl1.CalculateZoom();
 
                         this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
 
