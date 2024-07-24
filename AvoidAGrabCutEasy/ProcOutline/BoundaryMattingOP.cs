@@ -2112,7 +2112,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
         //So I wrote some lines from an older Idea, to remove some outliers and get something like a matting effect.
         //Motto was: Just "do something" with the values and the mean and the stddev...
         //Maybe I'll add some real alpha-matting code, if I find the time to do so...
-        public Bitmap ExperimentalOutlineProc(Bitmap trWork, int iW, int oW, int windowSize, double gamma, int normalDistToCheck, BackgroundWorker bgw)
+        public Bitmap ExperimentalOutlineProc(Bitmap trWork, int iW, int oW, int windowSize, double gamma, double gamma2, int normalDistToCheck, BackgroundWorker bgw)
         {
             Bitmap fg = this.BmpWork;
             Bitmap bOrig = this.BmpOrig;
@@ -2436,9 +2436,9 @@ namespace AvoidAGrabCutEasy.ProcOutline
                             //double aDB = (441.67 - dB) / 441.67;
                             //double aDF = 1.0 - vF / d;
 
-                            double aDF = 1.0 - Math.Pow((dFMax + dF) / (dMax * ((distA + 1) - distances[x, y])), 1.4);
+                            double aDF = 1.0 - Math.Pow((dFMax + dF) / (dMax * ((distA + 1) - distances[x, y])), gamma);
                             //aDF /= 2.0;
-                            aDF *= Math.Pow((double)(distA - distances[x, y]) / (double)distA, 0.4);
+                            aDF *= Math.Pow((double)(distA - distances[x, y]) / (double)distA, gamma2);
 
                             pFG[x * 4 + y * stride] = p[x * 4 + y * stride];
                             pFG[x * 4 + y * stride + 1] = p[x * 4 + y * stride + 1];

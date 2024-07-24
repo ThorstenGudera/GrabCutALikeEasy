@@ -556,10 +556,11 @@ namespace AvoidAGrabCutEasy
                     _sw.Start();
 
                     int windowSize = (int)this.numWinSz.Value;
-                    double gamma = (int)this.numGamma.Value;
+                    double gamma = (int)this.numGamma.Value;   
+                    double gamma2 = (int)this.numGamma2.Value;
                     int normalDistToCheck = 10;
 
-                    this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, gamma, normalDistToCheck });
+                    this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, gamma, normalDistToCheck, gamma2 });
                 }
                 else
                 {
@@ -1057,7 +1058,8 @@ namespace AvoidAGrabCutEasy
             object[] o = (object[])e.Argument;
             int windowSize = (int)o[0];
             double gamma = (double)o[1];
-            int normalDistToCheck = (int)o[2];
+            int normalDistToCheck = (int)o[2];  
+            double gamma2 = (double)o[3];
 
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
             {
@@ -1082,17 +1084,17 @@ namespace AvoidAGrabCutEasy
                 Bitmap bWork = new Bitmap(this._bmpOrig);
                 Bitmap trWork = bTrimap;
 
-                e.Result = ExperimentalOutlineProc(bWork, trWork, windowSize, gamma, normalDistToCheck);
+                e.Result = ExperimentalOutlineProc(bWork, trWork, windowSize, gamma, gamma2, normalDistToCheck);
                 return;
             }
         }
 
-        private Bitmap ExperimentalOutlineProc(Bitmap bOrig, Bitmap trWork, int windowSize, double gamma, int normalDistToCheck)
+        private Bitmap ExperimentalOutlineProc(Bitmap bOrig, Bitmap trWork, int windowSize, double gamma,  double gamma2, int normalDistToCheck)
         {
             Bitmap fg = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
             BoundaryMattingOP bMOP = new BoundaryMattingOP(fg, bOrig);
-            Bitmap bRes = bMOP.ExperimentalOutlineProc(trWork, this._iW, this._oW, windowSize, gamma, normalDistToCheck, this.backgroundWorker3);
+            Bitmap bRes = bMOP.ExperimentalOutlineProc(trWork, this._iW, this._oW, windowSize, gamma, gamma2, normalDistToCheck, this.backgroundWorker3);
             bMOP.Dispose();
 
             return bRes;

@@ -115,6 +115,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            this.numGamma2 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -148,6 +149,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -353,6 +355,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.cbExpOutlProc);
+            this.groupBox5.Controls.Add(this.numGamma2);
             this.groupBox5.Controls.Add(this.numGamma);
             this.groupBox5.Controls.Add(this.label54);
             this.groupBox5.Controls.Add(this.numWinSz);
@@ -383,7 +386,7 @@
             0,
             0,
             65536});
-            this.numGamma.Location = new System.Drawing.Point(87, 63);
+            this.numGamma.Location = new System.Drawing.Point(75, 63);
             this.numGamma.Minimum = new decimal(new int[] {
             1,
             0,
@@ -403,13 +406,13 @@
             this.label54.AutoSize = true;
             this.label54.Location = new System.Drawing.Point(12, 65);
             this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(41, 13);
+            this.label54.Size = new System.Drawing.Size(56, 13);
             this.label54.TabIndex = 556;
-            this.label54.Text = "gamma";
+            this.label54.Text = "gamma1 2";
             // 
             // numWinSz
             // 
-            this.numWinSz.Location = new System.Drawing.Point(99, 37);
+            this.numWinSz.Location = new System.Drawing.Point(90, 37);
             this.numWinSz.Maximum = new decimal(new int[] {
             127,
             0,
@@ -1307,6 +1310,29 @@
             this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
             this.backgroundWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker3_RunWorkerCompleted);
             // 
+            // numGamma2
+            // 
+            this.numGamma2.DecimalPlaces = 4;
+            this.numGamma2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numGamma2.Location = new System.Drawing.Point(141, 63);
+            this.numGamma2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numGamma2.Name = "numGamma2";
+            this.numGamma2.Size = new System.Drawing.Size(60, 20);
+            this.numGamma2.TabIndex = 555;
+            this.numGamma2.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            65536});
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1358,6 +1384,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1451,5 +1478,6 @@
         private System.Windows.Forms.CheckBox cbExpOutlProc;
         private System.Windows.Forms.NumericUpDown numGamma;
         private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.NumericUpDown numGamma2;
     }
 }
