@@ -369,15 +369,20 @@
             this.cbExpOutlProc.AutoSize = true;
             this.cbExpOutlProc.Location = new System.Drawing.Point(10, 14);
             this.cbExpOutlProc.Name = "cbExpOutlProc";
-            this.cbExpOutlProc.Size = new System.Drawing.Size(152, 17);
+            this.cbExpOutlProc.Size = new System.Drawing.Size(146, 17);
             this.cbExpOutlProc.TabIndex = 554;
-            this.cbExpOutlProc.Text = "dexperimental Outline Proc";
+            this.cbExpOutlProc.Text = "experimental Outline Proc";
             this.cbExpOutlProc.UseVisualStyleBackColor = true;
             this.cbExpOutlProc.CheckedChanged += new System.EventHandler(this.cbExpOutlProc_CheckedChanged);
             // 
             // numGamma
             // 
             this.numGamma.DecimalPlaces = 4;
+            this.numGamma.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.numGamma.Location = new System.Drawing.Point(87, 63);
             this.numGamma.Minimum = new decimal(new int[] {
             1,
