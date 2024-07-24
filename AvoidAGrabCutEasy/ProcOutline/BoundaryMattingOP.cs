@@ -2112,17 +2112,17 @@ namespace AvoidAGrabCutEasy.ProcOutline
         //So I wrote some lines from an older Idea, to remove some outliers and get something like a matting effect.
         //Motto was: Just "do something" with the values and the mean and the stddev...
         //Maybe I'll add some real alpha-matting code, if I find the time to do so...
-        public Bitmap DoSimpleMatting(Bitmap trWork, int iW, int oW, int windowSize, int alphaTh, int normalDistToCheck, int featherWidth, BackgroundWorker bgw)
+        public Bitmap ExperimentalOutlineProc(Bitmap trWork, int iW, int oW, int windowSize, double gamma, int normalDistToCheck, BackgroundWorker bgw)
         {
             Bitmap fg = this.BmpWork;
             Bitmap bOrig = this.BmpOrig;
 
-            //byte[,] distances = new byte[fg.Width, fg.Height];
+            byte[,] distances = new byte[fg.Width, fg.Height];
             int distI = iW;
             int distO = oW;
             int distA = distI + distO;
 
-            //disstance of reference window center to the currently examined point in the trimap
+            //distance of reference window center to the currently examined point in the trimap
             int windowShift = distA + 1;
             //field of elementary shifts ("normals")
             PointF[,] normalField = new PointF[fg.Width, fg.Height];
@@ -2150,7 +2150,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                     int ii = 0;
                     foreach (Point pt in pts)
                     {
-                        //distances[pt.X, pt.Y] = (byte)(i + distI + 1);
+                        distances[pt.X, pt.Y] = (byte)(i + distI + 1);
                         PointF n = GetNormal(pts, ii, normalDistToCheck);
 
                         double f = 1.0;
@@ -2168,6 +2168,32 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
             fgC.Dispose();
             fgC = null;
+
+            //prepare img outline
+            List<ChainCode> c2 = GetBoundary(fg);
+
+            foreach (ChainCode cc in c2)
+            {
+                List<Point> pts = cc.Coord;
+
+                int ii = 0;
+                foreach (Point pt in pts)
+                {
+                    distances[pt.X, pt.Y] = (byte)(distI + 1);
+
+                    PointF n = GetNormal(pts, ii, normalDistToCheck);
+
+                    double f = 1.0;
+                    if (Math.Abs(n.X) > Math.Abs(n.Y))
+                        f = 1.0 / Math.Abs(n.X);
+                    else
+                        f = 1.0 / Math.Abs(n.Y);
+
+                    normalField[pt.X, pt.Y] = new PointF((float)(n.X * f), (float)(n.Y * f));
+
+                    ii++;
+                }
+            }
 
             //prepare inner parts
             fgC = new Bitmap(fg);
@@ -2192,7 +2218,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
                     int ii = 0;
                     foreach (Point pt in pts)
                     {
-                        //distances[pt.X, pt.Y] = (byte)(distI - i);
+                        distances[pt.X, pt.Y] = (byte)(distI - i);
 
                         PointF n = GetNormal(pts, ii, normalDistToCheck);
 
@@ -2256,6 +2282,13 @@ namespace AvoidAGrabCutEasy.ProcOutline
                             int[,] resFGR = new int[windowSize, windowSize];
                             int[,] resBGR = new int[windowSize, windowSize];
 
+                            int maxFGB = 0;
+                            int maxFGG = 0;
+                            int maxFGR = 0;
+                            int maxBGB = 0;
+                            int maxBGG = 0;
+                            int maxBGR = 0;
+
                             //fill the arrays
                             for (int yy = y - h2 + winshiftY, y4 = 0; yy < y + h2 + winshiftY; yy++, y4++)
                             {
@@ -2266,6 +2299,13 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                             resFGB[x4, y4] = (int)p[xx * 4 + yy * stride];
                                             resFGG[x4, y4] = (int)p[xx * 4 + yy * stride + 1];
                                             resFGR[x4, y4] = (int)p[xx * 4 + yy * stride + 2];
+
+                                            if (resFGB[x4, y4] > maxFGB)
+                                                maxFGB = resFGB[x4, y4];
+                                            if (resFGG[x4, y4] > maxFGG)
+                                                maxFGG = resFGG[x4, y4];
+                                            if (resFGR[x4, y4] > maxFGR)
+                                                maxFGR = resFGR[x4, y4];
                                         }
                             }
 
@@ -2278,6 +2318,13 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                             resBGB[x4, y4] = (int)p[xx * 4 + yy * stride];
                                             resBGG[x4, y4] = (int)p[xx * 4 + yy * stride + 1];
                                             resBGR[x4, y4] = (int)p[xx * 4 + yy * stride + 2];
+
+                                            if (resBGB[x4, y4] > maxBGB)
+                                                maxBGB = resBGB[x4, y4];
+                                            if (resBGG[x4, y4] > maxBGG)
+                                                maxBGG = resBGG[x4, y4];
+                                            if (resBGR[x4, y4] > maxBGR)
+                                                maxBGR = resBGR[x4, y4];
                                         }
                             }
 
@@ -2358,56 +2405,71 @@ namespace AvoidAGrabCutEasy.ProcOutline
                                 + (green - wvG) * (green - wvG)
                                 + (red - wvR) * (red - wvR));
 
-                            double vF = Math.Abs(dF - ((wv.StdFGB + wv.StdFGG + wv.StdFGR) / 3));
+                            double dFMax = Math.Sqrt((blue - maxFGB) * (blue - maxFGB)
+                                + (green - maxFGG) * (green - maxFGG)
+                                + (red - maxFGR) * (red - maxFGR));
+
+                            //double vF = Math.Abs(dF - ((wv.StdFGB + wv.StdFGG + wv.StdFGR) / 3));
 
                             double wvB2 = wv.MuBGB;
                             double wvG2 = wv.MuBGG;
                             double wvR2 = wv.MuBGR;
 
-                            double dB = Math.Sqrt((blue - wvB2) * (blue - wvB2)
-                                + (green - wvG2) * (green - wvG2)
-                                + (red - wvR2) * (red - wvR2));
+                            //double dB = Math.Sqrt((blue - wvB2) * (blue - wvB2)
+                            //    + (green - wvG2) * (green - wvG2)
+                            //    + (red - wvR2) * (red - wvR2));
 
-                            //double vB = dB - ((wv.StdBGB + wv.StdBGG + wv.StdBGR) / 3);
+                            double dBMax = Math.Sqrt((blue - maxBGB) * (blue - maxBGB)
+                                + (green - maxBGG) * (green - maxBGG)
+                                + (red - maxBGR) * (red - maxBGR));
 
-                            double d = dF + dB;
+                            //double vB = Math.Abs(dB - ((wv.StdBGB + wv.StdBGG + wv.StdBGR) / 3));
+
+                            //double d = dF + dB;
+                            double dMax = dFMax + dBMax;
 
                             //if (dF - ((wv.StdFGB + wv.StdFGG + wv.StdFGR) / 3) < 0)
                             //    vF = 0;
 
                             //get alpha
-                            //double aDF = (441.67 - dF) / 441.67;
+                            //double aDF2 = (441.67 - dF) / 441.67;
                             //double aDB = (441.67 - dB) / 441.67;
-                            double aDF = 1.0 - vF / d;
+                            //double aDF = 1.0 - vF / d;
+
+                            double aDF = 1.0 - Math.Pow((dFMax + dF) / (dMax * ((distA + 1) - distances[x, y])), 1.4);
+                            //aDF /= 2.0;
+                            aDF *= Math.Pow((double)(distA - distances[x, y]) / (double)distA, 0.4);
 
                             pFG[x * 4 + y * stride] = p[x * 4 + y * stride];
                             pFG[x * 4 + y * stride + 1] = p[x * 4 + y * stride + 1];
                             pFG[x * 4 + y * stride + 2] = p[x * 4 + y * stride + 2];
                             pFG[x * 4 + y * stride + 3] = (byte)Math.Max(Math.Min(aDF * 255, 255), 0);
+
+                            //todo: nachbearbeitung von innerpaths
                         }
                     }
                 }
 
                 //reshift some values to full opacity, gamma correct the rest
-                Parallel.For(0, h, y =>
-                {
-                    byte* pF = (byte*)bmFG.Scan0;
-                    pF += y * stride;
+                //Parallel.For(0, h, y =>
+                //{
+                //    byte* pF = (byte*)bmFG.Scan0;
+                //    pF += y * stride;
 
-                    for (int x = 0; x < w; x++)
-                    {
-                        if (pTr[x * 4 + y * stride] > 5 && pTr[x * 4 + y * stride] < 250)
-                        {
-                            if (pF[3] > alphaTh)
-                                pF[3] = 255;
-                            else
-                            {
-                                pF[3] = (byte)Math.Max(Math.Min(alphaTh * Math.Pow((double)pF[3] / alphaTh, 2.5), 255), 0);
-                            }
-                        }
-                        pF += 4;
-                    }
-                });
+                //    for (int x = 0; x < w; x++)
+                //    {
+                //        if (pTr[x * 4 + y * stride] > 5 && pTr[x * 4 + y * stride] < 250)
+                //        {
+                //            if (pF[3] > alphaTh)
+                //                pF[3] = 255;
+                //            else
+                //            {
+                //                pF[3] = (byte)Math.Max(Math.Min(alphaTh * Math.Pow((double)pF[3] / alphaTh, 2.5), 255), 0);
+                //            }
+                //        }
+                //        pF += 4;
+                //    }
+                //});
             }
 
             bOrig.UnlockBits(bmData);
@@ -2415,7 +2477,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
             trWork.UnlockBits(bmTr);
 
             //feather
-            Feather(fg, featherWidth /*Math.Max(distA / 4, 1)*/);
+            //Feather(fg, featherWidth /*Math.Max(distA / 4, 1)*/);
 
             //Form fff = new Form();
             //fff.BackgroundImage = fg;

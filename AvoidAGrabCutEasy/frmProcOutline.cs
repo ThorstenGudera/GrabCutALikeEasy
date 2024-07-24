@@ -510,7 +510,7 @@ namespace AvoidAGrabCutEasy
                 this.Cursor = Cursors.Default;
                 this.SetControls(true);
 
-                this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
+                this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
             }
         }
 
@@ -542,7 +542,7 @@ namespace AvoidAGrabCutEasy
                 this.Cursor = Cursors.WaitCursor;
                 this.SetControls(false);
 
-                if (this.cbSimpleMatting.Checked)
+                if (this.cbExpOutlProc.Checked)
                 {
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
@@ -556,11 +556,10 @@ namespace AvoidAGrabCutEasy
                     _sw.Start();
 
                     int windowSize = (int)this.numWinSz.Value;
-                    int alphaTh = (int)this.numAlphaTh.Value;
+                    double gamma = (int)this.numGamma.Value;
                     int normalDistToCheck = 10;
-                    int featherWidth = (int)this.numFeatherWidth.Value;
 
-                    this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, alphaTh, normalDistToCheck, featherWidth });
+                    this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, gamma, normalDistToCheck });
                 }
                 else
                 {
@@ -579,7 +578,7 @@ namespace AvoidAGrabCutEasy
             this.cmbBlendType.SelectedIndex = 1;
 
             this.rbBoth.Checked = true;
-            //this.cbSimpleMatting.Checked = true;
+            //this.cbExpOutlProc.Checked = true;
 
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
         }
@@ -716,7 +715,7 @@ namespace AvoidAGrabCutEasy
             this.SetControls(true);
             this.Cursor = Cursors.Default;
 
-            this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
+            this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
 
             this._pic_changed = true;
 
@@ -828,7 +827,7 @@ namespace AvoidAGrabCutEasy
             this.SetControls(true);
             this.Cursor = Cursors.Default;
 
-            this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
+            this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
 
             this._pic_changed = true;
 
@@ -848,9 +847,9 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker2.RunWorkerCompleted += backgroundWorker2_RunWorkerCompleted;
         }
 
-        private void cbSimpleMatting_CheckedChanged(object sender, EventArgs e)
+        private void cbExpOutlProc_CheckedChanged(object sender, EventArgs e)
         {
-            DisableBoundControls(this.cbSimpleMatting.Checked);
+            DisableBoundControls(this.cbExpOutlProc.Checked);
         }
 
         private void DisableBoundControls(bool ch)
@@ -861,8 +860,8 @@ namespace AvoidAGrabCutEasy
 
             this.label45.Enabled = this.label46.Enabled = this.numBoundOuter.Enabled = this.numBoundInner.Enabled = true;
             this.label52.Enabled = this.cbBlur.Enabled = this.numBlur.Enabled = !ch; //maybe this changes
-            this.label28.Enabled = this.label54.Enabled = this.label2.Enabled = ch;
-            this.numWinSz.Enabled = this.numAlphaTh.Enabled = this.numFeatherWidth.Enabled = ch;
+            this.label28.Enabled = this.label54.Enabled = ch;
+            this.numWinSz.Enabled = this.numGamma.Enabled = ch;
 
             int maxWidth = this._maxWidth;
             int oW = (int)this.numBoundOuter.Value;
@@ -1057,9 +1056,8 @@ namespace AvoidAGrabCutEasy
         {
             object[] o = (object[])e.Argument;
             int windowSize = (int)o[0];
-            int alphaTh = (int)o[1];
+            double gamma = (double)o[1];
             int normalDistToCheck = (int)o[2];
-            int featherWidth = (int)o[3];
 
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
             {
@@ -1084,17 +1082,17 @@ namespace AvoidAGrabCutEasy
                 Bitmap bWork = new Bitmap(this._bmpOrig);
                 Bitmap trWork = bTrimap;
 
-                e.Result = DoSimpleMatting(bWork, trWork, windowSize, alphaTh, normalDistToCheck, featherWidth);
+                e.Result = ExperimentalOutlineProc(bWork, trWork, windowSize, gamma, normalDistToCheck);
                 return;
             }
         }
 
-        private Bitmap DoSimpleMatting(Bitmap bOrig, Bitmap trWork, int windowSize, int alphaTh, int normalDistToCheck, int featherWidth)
+        private Bitmap ExperimentalOutlineProc(Bitmap bOrig, Bitmap trWork, int windowSize, double gamma, int normalDistToCheck)
         {
             Bitmap fg = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
             BoundaryMattingOP bMOP = new BoundaryMattingOP(fg, bOrig);
-            Bitmap bRes = bMOP.DoSimpleMatting(trWork, this._iW, this._oW, windowSize, alphaTh, normalDistToCheck, featherWidth, this.backgroundWorker3);
+            Bitmap bRes = bMOP.ExperimentalOutlineProc(trWork, this._iW, this._oW, windowSize, gamma, normalDistToCheck, this.backgroundWorker3);
             bMOP.Dispose();
 
             return bRes;
@@ -1142,7 +1140,7 @@ namespace AvoidAGrabCutEasy
             this.SetControls(true);
             this.Cursor = Cursors.Default;
 
-            this.cbSimpleMatting_CheckedChanged(this.cbSimpleMatting, new EventArgs());
+            this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
 
             this.btnAlphaV.Text = "Go";
 
@@ -1232,12 +1230,12 @@ namespace AvoidAGrabCutEasy
 
         private void numBoundOuter_ValueChanged(object sender, EventArgs e)
         {
-            DisableBoundControls(this.cbSimpleMatting.Checked);
+            DisableBoundControls(this.cbExpOutlProc.Checked);
         }
 
         private void numBoundInner_ValueChanged(object sender, EventArgs e)
         {
-            DisableBoundControls(this.cbSimpleMatting.Checked);
+            DisableBoundControls(this.cbExpOutlProc.Checked);
         }
     }
 }

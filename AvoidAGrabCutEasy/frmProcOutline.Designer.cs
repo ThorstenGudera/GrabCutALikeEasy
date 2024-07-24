@@ -43,13 +43,11 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.numFeatherWidth = new System.Windows.Forms.NumericUpDown();
-            this.numWinSz = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.cbSimpleMatting = new System.Windows.Forms.CheckBox();
-            this.numAlphaTh = new System.Windows.Forms.NumericUpDown();
+            this.cbExpOutlProc = new System.Windows.Forms.CheckBox();
+            this.numGamma = new System.Windows.Forms.NumericUpDown();
             this.label54 = new System.Windows.Forms.Label();
+            this.numWinSz = new System.Windows.Forms.NumericUpDown();
+            this.label28 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.cmbBlendType = new System.Windows.Forms.ComboBox();
             this.label52 = new System.Windows.Forms.Label();
@@ -123,9 +121,8 @@
             this.splitContainer1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numFeatherWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWinSz)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numAlphaTh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFactorOuterPx)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAlphaStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBlur)).BeginInit();
@@ -355,37 +352,55 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.numFeatherWidth);
-            this.groupBox5.Controls.Add(this.numWinSz);
-            this.groupBox5.Controls.Add(this.label2);
-            this.groupBox5.Controls.Add(this.label28);
-            this.groupBox5.Controls.Add(this.cbSimpleMatting);
-            this.groupBox5.Controls.Add(this.numAlphaTh);
+            this.groupBox5.Controls.Add(this.cbExpOutlProc);
+            this.groupBox5.Controls.Add(this.numGamma);
             this.groupBox5.Controls.Add(this.label54);
+            this.groupBox5.Controls.Add(this.numWinSz);
+            this.groupBox5.Controls.Add(this.label28);
             this.groupBox5.Location = new System.Drawing.Point(190, 49);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(212, 95);
             this.groupBox5.TabIndex = 551;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "AlphaMatting";
-            this.groupBox5.Visible = false;
+            this.groupBox5.Text = "Experimental";
             // 
-            // numFeatherWidth
+            // cbExpOutlProc
             // 
-            this.numFeatherWidth.Location = new System.Drawing.Point(160, 63);
-            this.numFeatherWidth.Maximum = new decimal(new int[] {
-            127,
+            this.cbExpOutlProc.AutoSize = true;
+            this.cbExpOutlProc.Location = new System.Drawing.Point(10, 14);
+            this.cbExpOutlProc.Name = "cbExpOutlProc";
+            this.cbExpOutlProc.Size = new System.Drawing.Size(152, 17);
+            this.cbExpOutlProc.TabIndex = 554;
+            this.cbExpOutlProc.Text = "dexperimental Outline Proc";
+            this.cbExpOutlProc.UseVisualStyleBackColor = true;
+            this.cbExpOutlProc.CheckedChanged += new System.EventHandler(this.cbExpOutlProc_CheckedChanged);
+            // 
+            // numGamma
+            // 
+            this.numGamma.DecimalPlaces = 4;
+            this.numGamma.Location = new System.Drawing.Point(87, 63);
+            this.numGamma.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
-            0});
-            this.numFeatherWidth.Name = "numFeatherWidth";
-            this.numFeatherWidth.Size = new System.Drawing.Size(48, 20);
-            this.numFeatherWidth.TabIndex = 553;
-            this.numFeatherWidth.Value = new decimal(new int[] {
-            3,
+            131072});
+            this.numGamma.Name = "numGamma";
+            this.numGamma.Size = new System.Drawing.Size(60, 20);
+            this.numGamma.TabIndex = 555;
+            this.numGamma.Value = new decimal(new int[] {
+            14,
             0,
             0,
-            0});
+            65536});
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(12, 65);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(41, 13);
+            this.label54.TabIndex = 556;
+            this.label54.Text = "gamma";
             // 
             // numWinSz
             // 
@@ -409,15 +424,6 @@
             0,
             0});
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(120, 65);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
-            this.label2.TabIndex = 552;
-            this.label2.Text = "feather";
-            // 
             // label28
             // 
             this.label28.AutoSize = true;
@@ -426,48 +432,6 @@
             this.label28.Size = new System.Drawing.Size(63, 13);
             this.label28.TabIndex = 552;
             this.label28.Text = "windowSize";
-            // 
-            // cbSimpleMatting
-            // 
-            this.cbSimpleMatting.AutoSize = true;
-            this.cbSimpleMatting.Location = new System.Drawing.Point(10, 14);
-            this.cbSimpleMatting.Name = "cbSimpleMatting";
-            this.cbSimpleMatting.Size = new System.Drawing.Size(108, 17);
-            this.cbSimpleMatting.TabIndex = 0;
-            this.cbSimpleMatting.Text = "do simple Matting";
-            this.cbSimpleMatting.UseVisualStyleBackColor = true;
-            this.cbSimpleMatting.CheckedChanged += new System.EventHandler(this.cbSimpleMatting_CheckedChanged);
-            // 
-            // numAlphaTh
-            // 
-            this.numAlphaTh.Location = new System.Drawing.Point(64, 63);
-            this.numAlphaTh.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numAlphaTh.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.numAlphaTh.Name = "numAlphaTh";
-            this.numAlphaTh.Size = new System.Drawing.Size(48, 20);
-            this.numAlphaTh.TabIndex = 511;
-            this.numAlphaTh.Value = new decimal(new int[] {
-            75,
-            0,
-            0,
-            0});
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(12, 65);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(51, 13);
-            this.label54.TabIndex = 540;
-            this.label54.Text = "alpha TH";
             // 
             // label53
             // 
@@ -1007,7 +971,7 @@
             this.numPPCleanAmount.Size = new System.Drawing.Size(48, 20);
             this.numPPCleanAmount.TabIndex = 557;
             this.numPPCleanAmount.Value = new decimal(new int[] {
-            2,
+            4,
             0,
             0,
             0});
@@ -1024,7 +988,7 @@
             this.numPPPixelDepthOuter.Size = new System.Drawing.Size(48, 20);
             this.numPPPixelDepthOuter.TabIndex = 558;
             this.numPPPixelDepthOuter.Value = new decimal(new int[] {
-            2,
+            4,
             0,
             0,
             0});
@@ -1359,9 +1323,8 @@
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numFeatherWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWinSz)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numAlphaTh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFactorOuterPx)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAlphaStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBlur)).EndInit();
@@ -1471,9 +1434,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.NumericUpDown numWinSz;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.CheckBox cbSimpleMatting;
-        private System.Windows.Forms.NumericUpDown numAlphaTh;
-        private System.Windows.Forms.Label label54;
         internal System.ComponentModel.BackgroundWorker backgroundWorker3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.CheckBox cbRemArea;
@@ -1483,7 +1443,8 @@
         private System.Windows.Forms.NumericUpDown numShiftX;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btmSetBU;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numFeatherWidth;
+        private System.Windows.Forms.CheckBox cbExpOutlProc;
+        private System.Windows.Forms.NumericUpDown numGamma;
+        private System.Windows.Forms.Label label54;
     }
 }
