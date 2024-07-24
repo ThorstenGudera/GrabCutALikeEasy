@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCache = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btnOutline = new System.Windows.Forms.Button();
             this.cbSetPFGToFG = new System.Windows.Forms.CheckBox();
@@ -111,7 +112,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnCache = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQATH)).BeginInit();
@@ -207,6 +207,18 @@
             this.panel1.TabIndex = 0;
             this.panel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDoubleClick);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // btnCache
+            // 
+            this.btnCache.Enabled = false;
+            this.btnCache.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnCache.Location = new System.Drawing.Point(986, 29);
+            this.btnCache.Name = "btnCache";
+            this.btnCache.Size = new System.Drawing.Size(75, 23);
+            this.btnCache.TabIndex = 677;
+            this.btnCache.Text = "CachedPics";
+            this.btnCache.UseVisualStyleBackColor = true;
+            this.btnCache.Click += new System.EventHandler(this.btnCache_Click);
             // 
             // label3
             // 
@@ -929,7 +941,7 @@
             this.numMaxComponents.Size = new System.Drawing.Size(45, 20);
             this.numMaxComponents.TabIndex = 625;
             this.numMaxComponents.Value = new decimal(new int[] {
-            10,
+            1,
             0,
             0,
             0});
@@ -1199,18 +1211,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
-            // 
-            // btnCache
-            // 
-            this.btnCache.Enabled = false;
-            this.btnCache.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCache.Location = new System.Drawing.Point(986, 29);
-            this.btnCache.Name = "btnCache";
-            this.btnCache.Size = new System.Drawing.Size(75, 23);
-            this.btnCache.TabIndex = 677;
-            this.btnCache.Text = "CachedPics";
-            this.btnCache.UseVisualStyleBackColor = true;
-            this.btnCache.Click += new System.EventHandler(this.btnCache_Click);
             // 
             // frmAvoidAGrabCutEasy
             // 

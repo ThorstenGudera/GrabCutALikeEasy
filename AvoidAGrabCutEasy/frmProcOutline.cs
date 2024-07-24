@@ -556,8 +556,8 @@ namespace AvoidAGrabCutEasy
                     _sw.Start();
 
                     int windowSize = (int)this.numWinSz.Value;
-                    double gamma = (int)this.numGamma.Value;   
-                    double gamma2 = (int)this.numGamma2.Value;
+                    double gamma = (double)this.numGamma.Value;   
+                    double gamma2 = (double)this.numGamma2.Value;
                     int normalDistToCheck = 10;
 
                     this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, gamma, normalDistToCheck, gamma2 });
