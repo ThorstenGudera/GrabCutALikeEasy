@@ -27,6 +27,8 @@ geeksforgeeks push rel: https://www.geeksforgeeks.org/fifo-push-relabel-algorith
 
 paper for bk: https://discovery.ucl.ac.uk/id/eprint/13383/1/13383.pdf
 
+closed form matting: https://github.com/MarcoForte/closed-form-matting
+
 I maybe havent implemented the BoykovKolmogorov Algorithm correctly. I did it from the PseudoCode in the paper, but mine sometimes doesnt stop. 
 The queue doesnt get empty, so I aded a Check-Method that compares the current path to the last checked path and breaks when similarity exceeds a given amount.
 
