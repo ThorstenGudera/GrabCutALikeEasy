@@ -41,9 +41,7 @@ Usage:
 - On the right pane, check the draw on result checkbox and draw with the mouse onto regions that should be the type you selected from the combobox (eg. Background, Foregound etc)
 - Click onto the Go-button again
 
-(Note: Still to do on the results is:
-- Some Boundary-Cleaning like approximating by line or curve-segements.
-- Some Boundary-Matting or maybe even simple Feathering.)
+
 
 Disclaimer:
 
