@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             this.label1 = new System.Windows.Forms.Label();
             this.btmSetBU = new System.Windows.Forms.Button();
             this.Label20 = new System.Windows.Forms.Label();
@@ -43,11 +42,6 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cbExpOutlProc = new System.Windows.Forms.CheckBox();
-            this.numGamma = new System.Windows.Forms.NumericUpDown();
-            this.label54 = new System.Windows.Forms.Label();
-            this.numWinSz = new System.Windows.Forms.NumericUpDown();
-            this.label28 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.cmbBlendType = new System.Windows.Forms.ComboBox();
             this.label52 = new System.Windows.Forms.Label();
@@ -115,15 +109,20 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            this.numGamma2 = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numSleep = new System.Windows.Forms.NumericUpDown();
+            this.cbHalfSize = new System.Windows.Forms.CheckBox();
+            this.numError = new System.Windows.Forms.NumericUpDown();
+            this.cbExpOutlProc = new System.Windows.Forms.CheckBox();
+            this.label54 = new System.Windows.Forms.Label();
+            this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWinSz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFactorOuterPx)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAlphaStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBlur)).BeginInit();
@@ -149,7 +148,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSleep)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numError)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -180,25 +180,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1268, 722);
             this.splitContainer1.SplitterDistance = 835;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // helplineRulerCtrl1
-            // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 722);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // label1
             // 
@@ -354,92 +335,18 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label2);
+            this.groupBox5.Controls.Add(this.numSleep);
+            this.groupBox5.Controls.Add(this.cbHalfSize);
+            this.groupBox5.Controls.Add(this.numError);
             this.groupBox5.Controls.Add(this.cbExpOutlProc);
-            this.groupBox5.Controls.Add(this.numGamma2);
-            this.groupBox5.Controls.Add(this.numGamma);
             this.groupBox5.Controls.Add(this.label54);
-            this.groupBox5.Controls.Add(this.numWinSz);
-            this.groupBox5.Controls.Add(this.label28);
             this.groupBox5.Location = new System.Drawing.Point(190, 49);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(212, 95);
             this.groupBox5.TabIndex = 551;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Experimental";
-            // 
-            // cbExpOutlProc
-            // 
-            this.cbExpOutlProc.AutoSize = true;
-            this.cbExpOutlProc.Location = new System.Drawing.Point(10, 14);
-            this.cbExpOutlProc.Name = "cbExpOutlProc";
-            this.cbExpOutlProc.Size = new System.Drawing.Size(146, 17);
-            this.cbExpOutlProc.TabIndex = 554;
-            this.cbExpOutlProc.Text = "experimental Outline Proc";
-            this.cbExpOutlProc.UseVisualStyleBackColor = true;
-            this.cbExpOutlProc.CheckedChanged += new System.EventHandler(this.cbExpOutlProc_CheckedChanged);
-            // 
-            // numGamma
-            // 
-            this.numGamma.DecimalPlaces = 4;
-            this.numGamma.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numGamma.Location = new System.Drawing.Point(75, 63);
-            this.numGamma.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numGamma.Name = "numGamma";
-            this.numGamma.Size = new System.Drawing.Size(60, 20);
-            this.numGamma.TabIndex = 555;
-            this.numGamma.Value = new decimal(new int[] {
-            14,
-            0,
-            0,
-            65536});
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(12, 65);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(56, 13);
-            this.label54.TabIndex = 556;
-            this.label54.Text = "gamma1 2";
-            // 
-            // numWinSz
-            // 
-            this.numWinSz.Location = new System.Drawing.Point(90, 37);
-            this.numWinSz.Maximum = new decimal(new int[] {
-            127,
-            0,
-            0,
-            0});
-            this.numWinSz.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.numWinSz.Name = "numWinSz";
-            this.numWinSz.Size = new System.Drawing.Size(48, 20);
-            this.numWinSz.TabIndex = 553;
-            this.numWinSz.Value = new decimal(new int[] {
-            11,
-            0,
-            0,
-            0});
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(12, 39);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(63, 13);
-            this.label28.TabIndex = 552;
-            this.label28.Text = "windowSize";
             // 
             // label53
             // 
@@ -1310,28 +1217,124 @@
             this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
             this.backgroundWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker3_RunWorkerCompleted);
             // 
-            // numGamma2
+            // label2
             // 
-            this.numGamma2.DecimalPlaces = 4;
-            this.numGamma2.Increment = new decimal(new int[] {
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(102, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 574;
+            this.label2.Text = "sleep";
+            // 
+            // numSleep
+            // 
+            this.numSleep.Location = new System.Drawing.Point(143, 35);
+            this.numSleep.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numSleep.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numSleep.Name = "numSleep";
+            this.numSleep.Size = new System.Drawing.Size(60, 20);
+            this.numSleep.TabIndex = 573;
+            this.numSleep.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numSleep.ValueChanged += new System.EventHandler(this.numSleep_ValueChanged);
+            // 
+            // cbHalfSize
+            // 
+            this.cbHalfSize.AutoSize = true;
+            this.cbHalfSize.Checked = true;
+            this.cbHalfSize.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHalfSize.Location = new System.Drawing.Point(17, 36);
+            this.cbHalfSize.Name = "cbHalfSize";
+            this.cbHalfSize.Size = new System.Drawing.Size(80, 17);
+            this.cbHalfSize.TabIndex = 572;
+            this.cbHalfSize.Text = "reduce size";
+            this.cbHalfSize.UseVisualStyleBackColor = true;
+            // 
+            // numError
+            // 
+            this.numError.DecimalPlaces = 4;
+            this.numError.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.numGamma2.Location = new System.Drawing.Point(141, 63);
-            this.numGamma2.Minimum = new decimal(new int[] {
+            this.numError.Location = new System.Drawing.Point(57, 62);
+            this.numError.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numError.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.numError.Name = "numError";
+            this.numError.Size = new System.Drawing.Size(60, 20);
+            this.numError.TabIndex = 570;
+            this.numError.Value = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.numGamma2.Name = "numGamma2";
-            this.numGamma2.Size = new System.Drawing.Size(60, 20);
-            this.numGamma2.TabIndex = 555;
-            this.numGamma2.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            65536});
+            // 
+            // cbExpOutlProc
+            // 
+            this.cbExpOutlProc.AutoSize = true;
+            this.cbExpOutlProc.Location = new System.Drawing.Point(9, 13);
+            this.cbExpOutlProc.Name = "cbExpOutlProc";
+            this.cbExpOutlProc.Size = new System.Drawing.Size(123, 17);
+            this.cbExpOutlProc.TabIndex = 569;
+            this.cbExpOutlProc.Text = "do ClosedFormMatte";
+            this.cbExpOutlProc.UseVisualStyleBackColor = true;
+            this.cbExpOutlProc.CheckedChanged += new System.EventHandler(this.cbExpOutlProc_CheckedChanged);
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(11, 64);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(29, 13);
+            this.label54.TabIndex = 571;
+            this.label54.Text = "Error";
+            // 
+            // backgroundWorker4
+            // 
+            this.backgroundWorker4.WorkerReportsProgress = true;
+            this.backgroundWorker4.WorkerSupportsCancellation = true;
+            this.backgroundWorker4.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker4_DoWork);
+            this.backgroundWorker4.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker4_ProgressChanged);
+            this.backgroundWorker4.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker4_RunWorkerCompleted);
+            // 
+            // helplineRulerCtrl1
+            // 
+            this.helplineRulerCtrl1.Bmp = null;
+            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.helplineRulerCtrl1.DontDoLayout = false;
+            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
+            this.helplineRulerCtrl1.DontPaintBaseImg = false;
+            this.helplineRulerCtrl1.DontProcDoubleClick = false;
+            this.helplineRulerCtrl1.IgnoreZoom = false;
+            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
+            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 722);
+            this.helplineRulerCtrl1.TabIndex = 0;
+            this.helplineRulerCtrl1.Zoom = 1F;
+            this.helplineRulerCtrl1.ZoomSetManually = false;
+            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // frmProcOutline
             // 
@@ -1354,8 +1357,6 @@
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWinSz)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFactorOuterPx)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAlphaStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBlur)).EndInit();
@@ -1384,7 +1385,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSleep)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numError)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1464,8 +1466,6 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker2;
         public System.Windows.Forms.CheckBox cbApproxLines;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.NumericUpDown numWinSz;
-        private System.Windows.Forms.Label label28;
         internal System.ComponentModel.BackgroundWorker backgroundWorker3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.CheckBox cbRemArea;
@@ -1475,9 +1475,12 @@
         private System.Windows.Forms.NumericUpDown numShiftX;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btmSetBU;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numSleep;
+        private System.Windows.Forms.CheckBox cbHalfSize;
+        private System.Windows.Forms.NumericUpDown numError;
         private System.Windows.Forms.CheckBox cbExpOutlProc;
-        private System.Windows.Forms.NumericUpDown numGamma;
         private System.Windows.Forms.Label label54;
-        private System.Windows.Forms.NumericUpDown numGamma2;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }

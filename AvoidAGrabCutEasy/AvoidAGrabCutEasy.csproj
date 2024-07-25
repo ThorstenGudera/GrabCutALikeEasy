@@ -97,14 +97,33 @@
     <Compile Include="KMeans_bgr.cs" />
     <Compile Include="ListSelectionMode.cs" />
     <Compile Include="MatrixInverse.cs" />
+    <Compile Include="ProcOutline\AutoSORMode.cs" />
     <Compile Include="ProcOutline\BitmapBorderAction.cs" />
     <Compile Include="ProcOutline\BitmapOutlineVariant.cs" />
+    <Compile Include="ProcOutline\BlendParameters.cs" />
     <Compile Include="ProcOutline\BlendType.cs" />
     <Compile Include="ProcOutline\BoundaryMattingOP.cs" />
     <Compile Include="ProcOutline\BoundaryObject.cs" />
+    <Compile Include="ProcOutline\ClosedFormMatteOp.cs" />
     <Compile Include="ProcOutline\ColorSource.cs" />
     <Compile Include="ProcOutline\DefaultSmoothenOP.cs" />
     <Compile Include="ProcOutline\fipbmp.cs" />
+    <Compile Include="ProcOutline\frmEdgePic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcOutline\frmEdgePic.Designer.cs">
+      <DependentUpon>frmEdgePic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProcOutline\frmInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcOutline\frmInfo.Designer.cs">
+      <DependentUpon>frmInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProcOutline\MatrixEigen.cs" />
+    <Compile Include="ProcOutline\MatrixInverse.cs" />
+    <Compile Include="ProcOutline\ProgressEventArgs.cs" />
+    <Compile Include="ProcOutline\TrimapProblemInfo.cs" />
     <Compile Include="ProcOutline\WindowVal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushRelabelFifo.cs" />
