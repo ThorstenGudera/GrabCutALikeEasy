@@ -117,6 +117,12 @@
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnSetGamma = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numGamma = new System.Windows.Forms.NumericUpDown();
+            this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
+            this.cbEditTrimap = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -150,6 +156,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -164,6 +172,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.btmSetBU);
             this.splitContainer1.Panel2.Controls.Add(this.Label20);
@@ -354,6 +363,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.cbEditTrimap);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.numSleep);
             this.groupBox5.Controls.Add(this.cbHalfSize);
@@ -1336,6 +1346,77 @@
             this.backgroundWorker4.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker4_ProgressChanged);
             this.backgroundWorker4.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker4_RunWorkerCompleted);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnSetGamma);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.numGamma);
+            this.groupBox2.Location = new System.Drawing.Point(9, 586);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(212, 75);
+            this.groupBox2.TabIndex = 660;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "AlphaGamma";
+            // 
+            // btnSetGamma
+            // 
+            this.btnSetGamma.Location = new System.Drawing.Point(119, 44);
+            this.btnSetGamma.Name = "btnSetGamma";
+            this.btnSetGamma.Size = new System.Drawing.Size(75, 23);
+            this.btnSetGamma.TabIndex = 512;
+            this.btnSetGamma.Text = "Go";
+            this.btnSetGamma.UseVisualStyleBackColor = true;
+            this.btnSetGamma.Click += new System.EventHandler(this.btnSetGamma_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "set AlphaGamma";
+            // 
+            // numGamma
+            // 
+            this.numGamma.DecimalPlaces = 2;
+            this.numGamma.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numGamma.Location = new System.Drawing.Point(119, 18);
+            this.numGamma.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numGamma.Name = "numGamma";
+            this.numGamma.Size = new System.Drawing.Size(60, 20);
+            this.numGamma.TabIndex = 511;
+            this.numGamma.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // backgroundWorker5
+            // 
+            this.backgroundWorker5.WorkerReportsProgress = true;
+            this.backgroundWorker5.WorkerSupportsCancellation = true;
+            this.backgroundWorker5.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker5_DoWork);
+            this.backgroundWorker5.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker5_RunWorkerCompleted);
+            // 
+            // cbEditTrimap
+            // 
+            this.cbEditTrimap.AutoSize = true;
+            this.cbEditTrimap.Location = new System.Drawing.Point(129, 64);
+            this.cbEditTrimap.Name = "cbEditTrimap";
+            this.cbEditTrimap.Size = new System.Drawing.Size(74, 17);
+            this.cbEditTrimap.TabIndex = 575;
+            this.cbEditTrimap.Text = "edit trimap";
+            this.cbEditTrimap.UseVisualStyleBackColor = true;
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1387,6 +1468,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1482,5 +1566,11 @@
         private System.Windows.Forms.CheckBox cbExpOutlProc;
         private System.Windows.Forms.Label label54;
         internal System.ComponentModel.BackgroundWorker backgroundWorker4;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btnSetGamma;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown numGamma;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker5;
+        private System.Windows.Forms.CheckBox cbEditTrimap;
     }
 }

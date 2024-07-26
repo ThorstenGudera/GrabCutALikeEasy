@@ -50,6 +50,7 @@ namespace AvoidAGrabCutEasy
         private ClosedFormMatteOp[] _cfopArray;
         private frmInfo _frmInfo;
         private List<TrimapProblemInfo> _trimapProblemInfos = new List<TrimapProblemInfo>();
+        private Bitmap _bmpRef;
 
         public Bitmap FBitmap
         {
@@ -378,6 +379,8 @@ namespace AvoidAGrabCutEasy
                     this._bmpBU.Dispose();
                 if (this._bmpOrig != null)
                     this._bmpOrig.Dispose();
+                if (this._bmpRef != null)
+                    this._bmpRef.Dispose();
 
                 if (this._cfop != null)
                 {
@@ -514,6 +517,9 @@ namespace AvoidAGrabCutEasy
                 {
                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, bWork, this.helplineRulerCtrl1, "Bmp");
 
+                    Bitmap bC = new Bitmap(bWork);
+                    this.SetBitmap(ref _bmpRef, ref bC);
+
                     this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                     this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
@@ -594,6 +600,8 @@ namespace AvoidAGrabCutEasy
                         int innerW = this._iW;
                         int outerW = this._oW;
 
+                        bool editTrimap = this.cbEditTrimap.Checked;
+
                         Bitmap bTrimap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
                         using (Bitmap bForeground = RemoveOutlineEx(this.helplineRulerCtrl1.Bmp, innerW, true))
@@ -611,6 +619,32 @@ namespace AvoidAGrabCutEasy
 
                         Bitmap bWork = new Bitmap(this._bmpOrig);
                         Bitmap trWork = bTrimap;
+
+                        if (editTrimap)
+                        {
+                            using (frmEditTrimap frm = new frmEditTrimap(trWork, bWork))
+                            {
+                                Bitmap bmp = null;
+
+                                if (frm.ShowDialog() == DialogResult.OK)
+                                {
+                                    bmp = new Bitmap(frm.FBitmap);
+
+                                    Bitmap bOld2 = trWork;
+                                    trWork = bmp;
+                                    if (bOld2 != null)
+                                    {
+                                        bOld2.Dispose();
+                                        bOld2 = null;
+                                    }
+
+                                    //Form fff = new Form();
+                                    //fff.BackgroundImage = trWork;
+                                    //fff.BackgroundImageLayout = ImageLayout.Zoom;
+                                    //fff.ShowDialog();
+                                }
+                            }
+                        }
 
                         Bitmap bWork2 = ResampleBmp(bWork, 2);
                         Bitmap trWork2 = ResampleBmp(trWork, 2);
@@ -846,6 +880,9 @@ namespace AvoidAGrabCutEasy
             {
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
+                Bitmap bC = new Bitmap(bmp);
+                this.SetBitmap(ref _bmpRef, ref bC);
+
                 this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                 this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
@@ -957,6 +994,9 @@ namespace AvoidAGrabCutEasy
             if (bmp != null)
             {
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                Bitmap bC = new Bitmap(bmp);
+                this.SetBitmap(ref _bmpRef, ref bC);
 
                 this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
@@ -1276,6 +1316,9 @@ namespace AvoidAGrabCutEasy
                 Bitmap bRes = (Bitmap)e.Result;
 
                 this.SetBitmap(this.helplineRulerCtrl1.Bmp, bRes, this.helplineRulerCtrl1, "Bmp");
+
+                Bitmap bC = new Bitmap(bRes);
+                this.SetBitmap(ref _bmpRef, ref bC);
 
                 this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                 this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
@@ -2691,6 +2734,9 @@ namespace AvoidAGrabCutEasy
                 {
                     this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
 
+                    Bitmap bC = new Bitmap(bmp);
+                    this.SetBitmap(ref _bmpRef, ref bC);
+
                     this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                     this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
@@ -2892,6 +2938,98 @@ namespace AvoidAGrabCutEasy
             return bmp;
         }
 
+        private unsafe Bitmap GetAlphaBoundsPic(Bitmap bmpIn, Bitmap bmpAlpha, double gamma)
+        {
+            Bitmap bmp = null;
+
+            if (AvailMem.AvailMem.checkAvailRam(bmpAlpha.Width * bmpAlpha.Height * 16L))
+            {
+                int w = bmpAlpha.Width;
+                int h = bmpAlpha.Height;
+
+                bmp = new Bitmap(w, h);
+
+                BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                BitmapData bmIn = bmpIn.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                BitmapData bmA = bmpAlpha.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmD.Scan0;
+                    p += y * stride;
+
+                    byte* pIn = (byte*)bmIn.Scan0;
+                    pIn += y * stride;
+
+                    byte* pA = (byte*)bmA.Scan0;
+                    pA += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        p[0] = pIn[0];
+                        p[1] = pIn[1];
+                        p[2] = pIn[2];
+
+                        p[3] = (byte)Math.Max(Math.Min(255.0 * Math.Pow((double)pA[0] / 255.0, gamma), 255), 0);
+
+                        p += 4;
+                        pIn += 4;
+                        pA += 4;
+                    }
+                });
+
+                bmp.UnlockBits(bmD);
+                bmpIn.UnlockBits(bmIn);
+                bmpAlpha.UnlockBits(bmA);
+            }
+
+            return bmp;
+        }
+
+        private unsafe Bitmap GetAlphaBoundsPic(Bitmap bmpAlpha, double gamma)
+        {
+            Bitmap bmp = null;
+
+            if (AvailMem.AvailMem.checkAvailRam(bmpAlpha.Width * bmpAlpha.Height * 16L))
+            {
+                int w = bmpAlpha.Width;
+                int h = bmpAlpha.Height;
+
+                bmp = new Bitmap(w, h);
+
+                BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                BitmapData bmA = bmpAlpha.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmD.Stride;
+
+                Parallel.For(0, h, y =>
+                {
+                    byte* p = (byte*)bmD.Scan0;
+                    p += y * stride;
+
+                    byte* pA = (byte*)bmA.Scan0;
+                    pA += y * stride;
+
+                    for (int x = 0; x < w; x++)
+                    {
+                        p[0] = pA[0];
+                        p[1] = pA[1];
+                        p[2] = pA[2];
+
+                        p[3] = (byte)Math.Max(Math.Min(255.0 * Math.Pow((double)pA[3] / 255.0, gamma), 255), 0);
+
+                        p += 4;
+                        pA += 4;
+                    }
+                });
+
+                bmp.UnlockBits(bmD);
+                bmpAlpha.UnlockBits(bmA);
+            }
+
+            return bmp;
+        }
+
         private void numSleep_ValueChanged(object sender, EventArgs e)
         {
             if (this._cfop != null && this._cfop.BlendParameters != null)
@@ -3044,6 +3182,80 @@ namespace AvoidAGrabCutEasy
             b.UnlockBits(bmData);
 
             return !(unknownFound && (bgCount == 0 || fgCount == 0));
+        }
+
+        private void btnSetGamma_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl1.Bmp != null && this._bmpRef != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                this.btnSetGamma.Enabled = true;
+                this.btnSetGamma.Text = "Cancel";
+
+                double gamma = (double)this.numGamma.Value;
+
+                this.backgroundWorker5.RunWorkerAsync(gamma);
+            }
+        }
+
+        private void backgroundWorker5_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Bitmap bmp = new Bitmap(this._bmpRef);
+            double gamma = (double)e.Argument;
+
+            e.Result = GetAlphaBoundsPic(bmp, gamma);
+        }
+
+        private void backgroundWorker5_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!this.IsDisposed)
+            {
+                Bitmap bmp = null;
+
+                if (e.Result != null)
+                    bmp = (Bitmap)e.Result;
+
+                if (bmp != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                    this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                        (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                        (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                    _undoOPCache.Add(bmp);
+                }
+
+                this.btnSetGamma.Text = "Go";
+
+                this.SetControls(true);
+                this.Cursor = Cursors.Default;
+
+                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
+
+                this._pic_changed = true;
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+
+                this.Timer3.Start();
+
+                this.backgroundWorker5.Dispose();
+                this.backgroundWorker5 = new BackgroundWorker();
+                this.backgroundWorker5.WorkerReportsProgress = true;
+                this.backgroundWorker5.WorkerSupportsCancellation = true;
+                this.backgroundWorker5.DoWork += backgroundWorker5_DoWork;
+                //this.backgroundWorker5.ProgressChanged += backgroundWorker5_ProgressChanged;
+                this.backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
+            }
         }
     }
 }

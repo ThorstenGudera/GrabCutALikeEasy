@@ -114,6 +114,12 @@
     <Compile Include="ProcOutline\frmEdgePic.Designer.cs">
       <DependentUpon>frmEdgePic.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProcOutline\frmEditTrimap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcOutline\frmEditTrimap.Designer.cs">
+      <DependentUpon>frmEditTrimap.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProcOutline\frmInfo.cs">
       <SubType>Form</SubType>
     </Compile>
