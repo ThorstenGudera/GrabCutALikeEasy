@@ -373,7 +373,10 @@ namespace AvoidAGrabCutEasy
                     this.backgroundWorker3.CancelAsync();
 
                 if (this.backgroundWorker4.IsBusy)
-                    this.backgroundWorker4.CancelAsync();
+                    this.backgroundWorker4.CancelAsync();   
+                
+                if (this.backgroundWorker5.IsBusy)
+                    this.backgroundWorker5.CancelAsync();
 
                 if (this._bmpBU != null)
                     this._bmpBU.Dispose();
@@ -3186,6 +3189,12 @@ namespace AvoidAGrabCutEasy
 
         private void btnSetGamma_Click(object sender, EventArgs e)
         {
+            if (this.backgroundWorker5.IsBusy)
+            {
+                this.backgroundWorker5.CancelAsync();
+                return;
+            }
+
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpRef != null)
             {
                 this.Cursor = Cursors.WaitCursor;
