@@ -363,10 +363,16 @@ namespace AvoidAGrabCutEasy
             if (!e.Cancel)
             {
                 if (this.backgroundWorker1.IsBusy)
-                {
                     this.backgroundWorker1.CancelAsync();
-                    return;
-                }
+
+                if (this.backgroundWorker2.IsBusy)
+                    this.backgroundWorker2.CancelAsync();
+
+                if (this.backgroundWorker3.IsBusy)
+                    this.backgroundWorker3.CancelAsync();
+
+                if (this.backgroundWorker4.IsBusy)
+                    this.backgroundWorker4.CancelAsync();
 
                 if (this._bmpBU != null)
                     this._bmpBU.Dispose();
@@ -573,6 +579,8 @@ namespace AvoidAGrabCutEasy
                         _sw = new Stopwatch();
                     _sw.Reset();
                     _sw.Start();
+
+                    this.btnOK.Enabled = this.btnCancel.Enabled = false;
 
                     //int windowSize = (int)this.numWinSz.Value;
                     //double gamma = (double)this.numGamma.Value;   
@@ -2656,70 +2664,75 @@ namespace AvoidAGrabCutEasy
 
         private void backgroundWorker4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Bitmap bmp = null;
-
-            if (e.Result != null)
+            if (!this.IsDisposed)
             {
-                bmp = (Bitmap)e.Result;
+                Bitmap bmp = null;
 
-                Bitmap b2 = bmp;
-                bmp = ResampleBack(bmp);
-                b2.Dispose();
-                b2 = null;
+                if (e.Result != null)
+                {
+                    bmp = (Bitmap)e.Result;
 
-                frmEdgePic frm4 = new frmEdgePic(bmp);
-                frm4.Text = "Alpha Matte";
-                frm4.ShowDialog();
+                    Bitmap b2 = bmp;
+                    bmp = ResampleBack(bmp);
+                    b2.Dispose();
+                    b2 = null;
 
-                b2 = bmp;
-                bmp = GetAlphaBoundsPic(this._bmpOrig, bmp);
-                b2.Dispose();
-                b2 = null;
+                    frmEdgePic frm4 = new frmEdgePic(bmp);
+                    frm4.Text = "Alpha Matte";
+                    frm4.ShowDialog();
+
+                    b2 = bmp;
+                    bmp = GetAlphaBoundsPic(this._bmpOrig, bmp);
+                    b2.Dispose();
+                    b2 = null;
+                }
+
+                if (bmp != null)
+                {
+                    this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                    this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                        (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                        (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                    _undoOPCache.Add(bmp);
+                }
+
+                if (this._cfop != null)
+                {
+                    this._cfop.ShowProgess -= Cfop_UpdateProgress;
+                    this._cfop.ShowInfo -= _cfop_ShowInfo;
+                    this._cfop.Dispose();
+                }
+
+                this.btnAlphaV.Text = "Go";
+
+                this.SetControls(true);
+                this.Cursor = Cursors.Default;
+
+                this.btnOK.Enabled = this.btnCancel.Enabled = true;
+
+                this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
+
+                this._pic_changed = true;
+
+                this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+                if (this.Timer3.Enabled)
+                    this.Timer3.Stop();
+
+                this.Timer3.Start();
+
+                this.backgroundWorker4.Dispose();
+                this.backgroundWorker4 = new BackgroundWorker();
+                this.backgroundWorker4.WorkerReportsProgress = true;
+                this.backgroundWorker4.WorkerSupportsCancellation = true;
+                this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+                this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
+                this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
             }
-
-            if (bmp != null)
-            {
-                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
-
-                this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
-                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
-                    (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
-                    (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
-
-                _undoOPCache.Add(bmp);
-            }
-
-            if (this._cfop != null)
-            {
-                this._cfop.ShowProgess -= Cfop_UpdateProgress;
-                this._cfop.ShowInfo -= _cfop_ShowInfo;
-                this._cfop.Dispose();
-            }
-
-            this.btnPPGo.Text = "Go";
-
-            this.SetControls(true);
-            this.Cursor = Cursors.Default;
-
-            this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
-
-            this._pic_changed = true;
-
-            this.helplineRulerCtrl1.dbPanel1.Invalidate();
-
-            if (this.Timer3.Enabled)
-                this.Timer3.Stop();
-
-            this.Timer3.Start();
-
-            this.backgroundWorker4.Dispose();
-            this.backgroundWorker4 = new BackgroundWorker();
-            this.backgroundWorker4.WorkerReportsProgress = true;
-            this.backgroundWorker4.WorkerSupportsCancellation = true;
-            this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
-            this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
-            this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
         }
 
         private void GetTiles(Bitmap bWork, Bitmap trWork, List<Bitmap> bmp, List<Bitmap> bmp2,
@@ -2814,15 +2827,20 @@ namespace AvoidAGrabCutEasy
 
         private Bitmap ResampleBack(Bitmap bmp)
         {
-            Bitmap bOut = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-
-            using (Graphics gx = Graphics.FromImage(bOut))
+            if (this.helplineRulerCtrl1 != null && !this.IsDisposed && this.helplineRulerCtrl1.Bmp != null && bmp != null)
             {
-                gx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                gx.DrawImage(bmp, 0, 0, bOut.Width, bOut.Height);
+                Bitmap bOut = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+
+                using (Graphics gx = Graphics.FromImage(bOut))
+                {
+                    gx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    gx.DrawImage(bmp, 0, 0, bOut.Width, bOut.Height);
+                }
+
+                return bOut;
             }
 
-            return bOut;
+            return null;
         }
 
         private unsafe Bitmap GetAlphaBoundsPic(Bitmap bmpIn, Bitmap bmpAlpha)
