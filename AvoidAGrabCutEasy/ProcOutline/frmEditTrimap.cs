@@ -33,7 +33,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
             get { return this.helplineRulerCtrl1.Bmp; }
         }
 
-        public frmEditTrimap(Bitmap trWork, Bitmap orig)
+        public frmEditTrimap(Bitmap trWork, Bitmap orig, double factor)
         {
             InitializeComponent();
             _bOrig = orig;
@@ -63,6 +63,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
             this.helplineRulerCtrl1.dbPanel1.MouseUp += helplineRulerCtrl1_MouseUp;
 
             this.helplineRulerCtrl1.PostPaint += helplineRulerCtrl1_Paint;
+
+            this.numWH.Value = (decimal)(int)Math.Max((double)this.numWH.Value / factor, 1);
         }
 
         private void helplineRulerCtrl1_MouseDown(object sender, MouseEventArgs e)

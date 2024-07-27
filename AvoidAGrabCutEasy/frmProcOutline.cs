@@ -729,7 +729,7 @@ namespace AvoidAGrabCutEasy
 
                         if (editTrimap)
                         {
-                            using (frmEditTrimap frm = new frmEditTrimap(trWork, bWork))
+                            using (frmEditTrimap frm = new frmEditTrimap(trWork, bWork, factor))
                             {
                                 Bitmap bmp = null;
 
