@@ -664,11 +664,53 @@ namespace AvoidAGrabCutEasy
                         int outerW = this._oW;
 
                         bool editTrimap = this.cbEditTrimap.Checked;
+                        Bitmap bWork = new Bitmap(this._bmpOrig);
 
-                        Bitmap bTrimap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                        if (cbHalfSize.Checked)
+                        {
+                            Bitmap bWork2 = ResampleBmp(bWork, 2);
 
-                        using (Bitmap bForeground = RemoveOutlineEx(this.helplineRulerCtrl1.Bmp, innerW, true))
-                        using (Bitmap bBackground = ExtendOutlineEx(this.helplineRulerCtrl1.Bmp, outerW, true, false))
+                            Bitmap bOld = bWork;
+                            bWork = bWork2;
+                            bOld.Dispose();
+                            bOld = null;
+                        }
+
+                        //maybe put this before the halfSize code...
+                        double res = CheckWidthHeight(bWork, true, (double)this.numMaxSize.Value);
+                        this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
+
+                        if (res > 1)
+                        {
+                            Bitmap bOld = bWork;
+                            bWork = ResampleDown(bWork, res);
+                            if (bOld != null)
+                            {
+                                bOld.Dispose();
+                                bOld = null;
+                            }
+                        }
+
+                        //the question is: should we change innerW, outerW by the resampling factor.
+                        double factor = this.cbHalfSize.Checked ? 2.0 : 1.0;
+                        factor *= (res > 1) ? res : 1.0;
+
+                        innerW = (int)Math.Max(Math.Ceiling(innerW / factor), 1);
+                        outerW = (int)Math.Max(Math.Ceiling(outerW / factor), 1);
+
+                        Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
+
+                        Bitmap bW = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        Bitmap bOld4 = bW;
+                        bW = ResampleDown(bW, factor);
+                        if (bOld4 != null)
+                        {
+                            bOld4.Dispose();
+                            bOld4 = null;
+                        }
+
+                        using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
+                        using (Bitmap bBackground = ExtendOutlineEx(bW, outerW, true, false))
                         {
                             using (Graphics gx = Graphics.FromImage(bTrimap))
                             {
@@ -680,7 +722,9 @@ namespace AvoidAGrabCutEasy
                             }
                         }
 
-                        Bitmap bWork = new Bitmap(this._bmpOrig);
+                        bW.Dispose();
+                        bW = null;
+
                         Bitmap trWork = bTrimap;
 
                         if (editTrimap)
@@ -703,45 +747,6 @@ namespace AvoidAGrabCutEasy
                                 }
                             }
                         }
-
-                        if (cbHalfSize.Checked)
-                        {
-                            Bitmap bWork2 = ResampleBmp(bWork, 2);
-                            Bitmap trWork2 = ResampleBmp(trWork, 2);
-
-                            Bitmap bOld = bWork;
-                            bWork = bWork2;
-                            bOld.Dispose();
-                            bOld = trWork;
-                            trWork = trWork2;
-                            bOld.Dispose();
-                            bOld = null;
-                        }
-
-                        //maybe put this before the halfSize code...
-                        double res = CheckWidthHeight(bWork, true, (double)this.numMaxSize.Value);
-                        this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
-
-                        if (res > 1)
-                        {
-                            Bitmap bOld = bWork;
-                            bWork = ResampleDown(bWork, res);
-                            if (bOld != null)
-                            {
-                                bOld.Dispose();
-                                bOld = null;
-                            }
-                            bOld = trWork;
-                            trWork = ResampleDown(trWork, res);
-                            if (bOld != null)
-                            {
-                                bOld.Dispose();
-                                bOld = null;
-                            }
-                        }
-
-                        //the question is: should we change innerW, outerW by the resampling factor. I leave then as they are,
-                        //so you get (relatively) bigger unknown regions when the pic is resampled
 
                         ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
                         BlendParameters bParam = new BlendParameters();

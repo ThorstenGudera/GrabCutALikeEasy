@@ -46,6 +46,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbEditTrimap = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -123,8 +125,6 @@
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
-            this.label9 = new System.Windows.Forms.Label();
-            this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -132,6 +132,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSleep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numError)).BeginInit();
@@ -160,7 +161,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -420,6 +420,47 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Enabled = false;
+            this.label9.Location = new System.Drawing.Point(196, 187);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(50, 13);
+            this.label9.TabIndex = 676;
+            this.label9.Text = "Max Size";
+            this.toolTip1.SetToolTip(this.label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - " +
+        "then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, " +
+        "due to processing time.");
+            // 
+            // numMaxSize
+            // 
+            this.numMaxSize.Enabled = false;
+            this.numMaxSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numMaxSize.Location = new System.Drawing.Point(252, 184);
+            this.numMaxSize.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numMaxSize.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numMaxSize.Name = "numMaxSize";
+            this.numMaxSize.Size = new System.Drawing.Size(61, 20);
+            this.numMaxSize.TabIndex = 675;
+            this.numMaxSize.Value = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.cbEditTrimap);
@@ -516,7 +557,7 @@
             1,
             0,
             0,
-            196608});
+            131072});
             // 
             // cbExpOutlProc
             // 
@@ -1422,47 +1463,6 @@
             this.backgroundWorker5.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker5_DoWork);
             this.backgroundWorker5.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker5_RunWorkerCompleted);
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Enabled = false;
-            this.label9.Location = new System.Drawing.Point(196, 187);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(50, 13);
-            this.label9.TabIndex = 676;
-            this.label9.Text = "Max Size";
-            this.toolTip1.SetToolTip(this.label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - " +
-        "then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, " +
-        "due to processing time.");
-            // 
-            // numMaxSize
-            // 
-            this.numMaxSize.Enabled = false;
-            this.numMaxSize.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numMaxSize.Location = new System.Drawing.Point(252, 184);
-            this.numMaxSize.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numMaxSize.Minimum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numMaxSize.Name = "numMaxSize";
-            this.numMaxSize.Size = new System.Drawing.Size(61, 20);
-            this.numMaxSize.TabIndex = 675;
-            this.numMaxSize.Value = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
-            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1485,6 +1485,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSleep)).EndInit();
@@ -1517,7 +1518,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
