@@ -740,6 +740,9 @@ namespace AvoidAGrabCutEasy
                             }
                         }
 
+                        //the question is: should we change innerW, outerW by the resampling factor. I leave then as they are,
+                        //so you get (relatively) bigger unknown regions when the pic is resampled
+
                         ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
                         BlendParameters bParam = new BlendParameters();
                         bParam.MaxIterations = 10000;
