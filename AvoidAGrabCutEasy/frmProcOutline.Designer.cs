@@ -31,6 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnSetGamma = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numGamma = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.btmSetBU = new System.Windows.Forms.Button();
             this.Label20 = new System.Windows.Forms.Label();
@@ -43,6 +47,7 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbEditTrimap = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.numSleep = new System.Windows.Forms.NumericUpDown();
             this.cbHalfSize = new System.Windows.Forms.CheckBox();
@@ -117,16 +122,15 @@
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnSetGamma = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.numGamma = new System.Windows.Forms.NumericUpDown();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
-            this.cbEditTrimap = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSleep)).BeginInit();
@@ -156,8 +160,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -208,6 +211,60 @@
             this.helplineRulerCtrl1.Zoom = 1F;
             this.helplineRulerCtrl1.ZoomSetManually = false;
             this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnSetGamma);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.numGamma);
+            this.groupBox2.Location = new System.Drawing.Point(9, 586);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(212, 75);
+            this.groupBox2.TabIndex = 660;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "AlphaGamma";
+            // 
+            // btnSetGamma
+            // 
+            this.btnSetGamma.Location = new System.Drawing.Point(119, 44);
+            this.btnSetGamma.Name = "btnSetGamma";
+            this.btnSetGamma.Size = new System.Drawing.Size(75, 23);
+            this.btnSetGamma.TabIndex = 512;
+            this.btnSetGamma.Text = "Go";
+            this.btnSetGamma.UseVisualStyleBackColor = true;
+            this.btnSetGamma.Click += new System.EventHandler(this.btnSetGamma_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "set AlphaGamma";
+            // 
+            // numGamma
+            // 
+            this.numGamma.DecimalPlaces = 2;
+            this.numGamma.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numGamma.Location = new System.Drawing.Point(119, 18);
+            this.numGamma.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numGamma.Name = "numGamma";
+            this.numGamma.Size = new System.Drawing.Size(60, 20);
+            this.numGamma.TabIndex = 511;
+            this.numGamma.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // label1
             // 
@@ -330,6 +387,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label9);
+            this.groupBox4.Controls.Add(this.numMaxSize);
             this.groupBox4.Controls.Add(this.groupBox5);
             this.groupBox4.Controls.Add(this.label53);
             this.groupBox4.Controls.Add(this.cmbBlendType);
@@ -376,6 +435,16 @@
             this.groupBox5.TabIndex = 551;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Experimental";
+            // 
+            // cbEditTrimap
+            // 
+            this.cbEditTrimap.AutoSize = true;
+            this.cbEditTrimap.Location = new System.Drawing.Point(129, 64);
+            this.cbEditTrimap.Name = "cbEditTrimap";
+            this.cbEditTrimap.Size = new System.Drawing.Size(74, 17);
+            this.cbEditTrimap.TabIndex = 575;
+            this.cbEditTrimap.Text = "edit trimap";
+            this.cbEditTrimap.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -1346,60 +1415,6 @@
             this.backgroundWorker4.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker4_ProgressChanged);
             this.backgroundWorker4.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker4_RunWorkerCompleted);
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnSetGamma);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.numGamma);
-            this.groupBox2.Location = new System.Drawing.Point(9, 586);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(212, 75);
-            this.groupBox2.TabIndex = 660;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "AlphaGamma";
-            // 
-            // btnSetGamma
-            // 
-            this.btnSetGamma.Location = new System.Drawing.Point(119, 44);
-            this.btnSetGamma.Name = "btnSetGamma";
-            this.btnSetGamma.Size = new System.Drawing.Size(75, 23);
-            this.btnSetGamma.TabIndex = 512;
-            this.btnSetGamma.Text = "Go";
-            this.btnSetGamma.UseVisualStyleBackColor = true;
-            this.btnSetGamma.Click += new System.EventHandler(this.btnSetGamma_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 20);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "set AlphaGamma";
-            // 
-            // numGamma
-            // 
-            this.numGamma.DecimalPlaces = 2;
-            this.numGamma.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numGamma.Location = new System.Drawing.Point(119, 18);
-            this.numGamma.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numGamma.Name = "numGamma";
-            this.numGamma.Size = new System.Drawing.Size(60, 20);
-            this.numGamma.TabIndex = 511;
-            this.numGamma.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // backgroundWorker5
             // 
             this.backgroundWorker5.WorkerReportsProgress = true;
@@ -1407,15 +1422,46 @@
             this.backgroundWorker5.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker5_DoWork);
             this.backgroundWorker5.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker5_RunWorkerCompleted);
             // 
-            // cbEditTrimap
+            // label9
             // 
-            this.cbEditTrimap.AutoSize = true;
-            this.cbEditTrimap.Location = new System.Drawing.Point(129, 64);
-            this.cbEditTrimap.Name = "cbEditTrimap";
-            this.cbEditTrimap.Size = new System.Drawing.Size(74, 17);
-            this.cbEditTrimap.TabIndex = 575;
-            this.cbEditTrimap.Text = "edit trimap";
-            this.cbEditTrimap.UseVisualStyleBackColor = true;
+            this.label9.AutoSize = true;
+            this.label9.Enabled = false;
+            this.label9.Location = new System.Drawing.Point(196, 187);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(50, 13);
+            this.label9.TabIndex = 676;
+            this.label9.Text = "Max Size";
+            this.toolTip1.SetToolTip(this.label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - " +
+        "then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, " +
+        "due to processing time.");
+            // 
+            // numMaxSize
+            // 
+            this.numMaxSize.Enabled = false;
+            this.numMaxSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numMaxSize.Location = new System.Drawing.Point(252, 184);
+            this.numMaxSize.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numMaxSize.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numMaxSize.Name = "numMaxSize";
+            this.numMaxSize.Size = new System.Drawing.Size(61, 20);
+            this.numMaxSize.TabIndex = 675;
+            this.numMaxSize.Value = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
             // 
             // frmProcOutline
             // 
@@ -1434,6 +1480,9 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -1468,9 +1517,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1572,5 +1619,7 @@
         private System.Windows.Forms.NumericUpDown numGamma;
         internal System.ComponentModel.BackgroundWorker backgroundWorker5;
         private System.Windows.Forms.CheckBox cbEditTrimap;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown numMaxSize;
     }
 }

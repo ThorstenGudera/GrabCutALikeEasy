@@ -558,6 +558,66 @@ namespace AvoidAGrabCutEasy
             }
         }
 
+        private double CheckWidthHeight(Bitmap bmp, bool fp, double maxSize)
+        {
+            double r = 1.0;
+            if (fp)
+            {
+                r = (double)Math.Max(bmp.Width, bmp.Height) / maxSize;
+                return r;
+            }
+
+            int res = 1;
+            if (bmp.Width * bmp.Height > maxSize * maxSize * 256L)
+            {
+                res = 32;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 128L)
+            {
+                res = 24;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 64L)
+            {
+                res = 16;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 32L)
+            {
+                res = 12;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 16L)
+            {
+                res = 8;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 8L)
+            {
+                res = 6;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 4L)
+            {
+                res = 4;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize * 2L)
+            {
+                res = 3;
+            }
+            else if (bmp.Width * bmp.Height > maxSize * maxSize)
+            {
+                res = 2;
+            }
+
+            return res;
+        }
+
+        private Bitmap ResampleDown(Bitmap bWork, double resPic)
+        {
+            Bitmap bOut = new Bitmap((int)Math.Ceiling(bWork.Width / resPic), (int)Math.Ceiling(bWork.Height / resPic));
+
+            using (Graphics gx = Graphics.FromImage(bOut))
+                gx.DrawImage(bWork, 0, 0, bOut.Width, bOut.Height);
+
+            return bOut;
+        }
+
         private void btnAlphaV_Click(object sender, EventArgs e)
         {
             if (this.backgroundWorker3.IsBusy)
@@ -640,25 +700,45 @@ namespace AvoidAGrabCutEasy
                                         bOld2.Dispose();
                                         bOld2 = null;
                                     }
-
-                                    //Form fff = new Form();
-                                    //fff.BackgroundImage = trWork;
-                                    //fff.BackgroundImageLayout = ImageLayout.Zoom;
-                                    //fff.ShowDialog();
                                 }
                             }
                         }
 
-                        Bitmap bWork2 = ResampleBmp(bWork, 2);
-                        Bitmap trWork2 = ResampleBmp(trWork, 2);
+                        if (cbHalfSize.Checked)
+                        {
+                            Bitmap bWork2 = ResampleBmp(bWork, 2);
+                            Bitmap trWork2 = ResampleBmp(trWork, 2);
 
-                        Bitmap bOld = bWork;
-                        bWork = bWork2;
-                        bOld.Dispose();
-                        bOld = trWork;
-                        trWork = trWork2;
-                        bOld.Dispose();
-                        bOld = null;
+                            Bitmap bOld = bWork;
+                            bWork = bWork2;
+                            bOld.Dispose();
+                            bOld = trWork;
+                            trWork = trWork2;
+                            bOld.Dispose();
+                            bOld = null;
+                        }
+
+                        //maybe put this before the halfSize code...
+                        double res = CheckWidthHeight(bWork, true, (double)this.numMaxSize.Value);
+                        this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
+
+                        if (res > 1)
+                        {
+                            Bitmap bOld = bWork;
+                            bWork = ResampleDown(bWork, res);
+                            if (bOld != null)
+                            {
+                                bOld.Dispose();
+                                bOld = null;
+                            }
+                            bOld = trWork;
+                            trWork = ResampleDown(trWork, res);
+                            if (bOld != null)
+                            {
+                                bOld.Dispose();
+                                bOld = null;
+                            }
+                        }
 
                         ClosedFormMatteOp cfop = new ClosedFormMatteOp(bWork, trWork);
                         BlendParameters bParam = new BlendParameters();
@@ -682,7 +762,7 @@ namespace AvoidAGrabCutEasy
                         bool group = false;
                         int groupAmountX = 0;
                         int groupAmountY = 0;
-                        int maxSize = this.cbHalfSize.Checked ? bWork.Width / 2 * bWork.Height / 2 : bWork.Width * bWork.Height;
+                        int maxSize = bWork.Width * bWork.Height;
                         bool trySingleTile = this.cbHalfSize.Checked ? false : true;
                         bool verifyTrimaps = false;
 
@@ -1056,6 +1136,7 @@ namespace AvoidAGrabCutEasy
             this.label52.Enabled = this.cbBlur.Enabled = this.numBlur.Enabled = !ch; //maybe this changes
             this.label2.Enabled = this.label54.Enabled = ch;
             this.cbHalfSize.Enabled = this.numError.Enabled = ch;
+            this.label9.Enabled = this.numMaxSize.Enabled = ch;
 
             int maxWidth = this._maxWidth;
             int oW = (int)this.numBoundOuter.Value;

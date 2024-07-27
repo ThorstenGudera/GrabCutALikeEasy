@@ -521,8 +521,6 @@ namespace GetAlphaMatte
             });
             this.Trimap.UnlockBits(bmT);
 
-            //todo: either add the diag-vals of the Matrix this.R to this.N, or add this.N to the diag-vals or this.R, or do both
-            //this doesnt work correctly, review!
             for (int i = 0; i < this.N.Length; i++)
             {
                 if (pos.ContainsKey(i))
@@ -723,10 +721,6 @@ namespace GetAlphaMatte
         {
             double[][] A = new double[3][];
 
-            //A[0] = new double[3] { 1.17, 0.00000000e+00, 0.00000000e+00 };
-            //A[1] = new double[3] { 0.00000000e+00, 3.42, 3.41 };
-            //A[2] = new double[3] { 0.00000000e+00, 3.41, 3.42 };
-
             A[0] = new double[3] { 1.17, 0.00000000e+00, 0.00000000e+00 };
             A[1] = new double[3] { 0.00000000e+00, 3.42, 3.41 };
             A[2] = new double[3] { 0.00000000e+00, 3.41, 3.42 };
@@ -734,23 +728,10 @@ namespace GetAlphaMatte
             double[] b = new double[3] { 4.35, -3.48, -3.48 };
             double[] b2 = new double[3] { -3.48, 4.35, -3.48 };
 
-
-            //double[] b3 = new double[3] { -3.92, 2, 4 };
-            //double[] b4 = new double[3] { 0, 3, 5 };
-
-            //double[] b3 = new double[3] { -3.48 , 4 };
-
             double[] x1 = MatrixEigen.MatLinSolveQR(A, b);
             double[] x2 = MatrixEigen.MatLinSolveQR(A, b2);
-            //double[] x3 = MatrixEigen.MatLinSolveQR(A, b3);
-            //double[] x4 = MatrixEigen.MatLinSolveQR(A, b4);
-
-            //double[] x3 = MatrixEigen.MatLinSolveQR(A, b3);
 
             double[][] x = new double[3][];
-            //x[0] = new double[3] { };       
-            //x[1] = new double[3] { };       
-            //x[2] = new double[3] { };
 
             x[0] = x1;
             x[1] = x2;
@@ -833,225 +814,6 @@ namespace GetAlphaMatte
             bOut2.UnlockBits(bmData);
 
             return bOut2;
-
-
-
-            /*
-             
-            double maxError = 0.0001;
-            bool preRelax = true;
-            int cnt = 0;
-            int innerIterations = 35;
-            int restart = 200;
-
-            double[] x_Cur = new double[b.Length];
-            double[] r_Cur = new double[b.Length];
-            double w = this.ComputeWForSOR(this.BlendParameters.AutoSOR, this.BlendParameters.AutoSORMode, b.Length, this._w, this._h, this.BlendParameters.MinPixelAmount);
-
-            if (preRelax)
-            {
-                x_Cur = GaussSeidelForPoissonEq_Div_CG(b, r, PRE_OP_GSSOR, true,
-                                this.BlendParameters.DesiredMaxLinearError, indMaps);
-                GetResidual(r_Cur, x_Cur, b, r, indMaps);
-            }
-            else
-                b.CopyTo(r_Cur, 0);
-
-            r_Cur = JacobiPreconditioner_Apply(r_Cur, r, indMaps);
-            double eVal = maxError;
-
-            // inner Alg following wiki.de: https://de.wikipedia.org/wiki/GMRES-Verfahren
-            // outer Alg following my idea ...
-
-            for (var z2 = 1; z2 <= restart; z2++)
-            {
-                if (this.BlendParameters.BGW.CancellationPending)
-                    break;
-
-                double[][] V = new double[innerIterations + 1][];
-                double rNorm = GetNorm(r_Cur);
-
-                if (rNorm == 0)
-                    rNorm = 1;
-
-                double[] t = new double[b.Length];
-                V[0] = t;
-                //for (int i = 0; i < b.Length; i++)
-                Parallel.For(0, b.Length, i =>
-                {
-                    V[0][i] = r_Cur[i] / rNorm;
-                });
-
-                double[,] H = new double[innerIterations + 1, innerIterations];
-                //double[,] H_old = new double[innerIterations + 1, innerIterations];
-                double[][] wl = new double[innerIterations + 1][];
-                double[] cs = new double[innerIterations + 1];
-                double[] sn = new double[innerIterations + 1];
-                double[] y = new double[innerIterations + 1];
-                double[] gamma = new double[innerIterations + 1];
-                gamma[0] = rNorm;
-
-                int cnt2 = 0;
-
-                if (z2 % 5 == 0)
-                    ShowInfo?.Invoke(this, "### Restart: " + z2.ToString() + ". Max Error: " + Math.Abs(eVal).ToString());
-
-                for (int j = 0; j <= innerIterations - 1; j++)
-                {
-                    if (this.BlendParameters.BGW.CancellationPending)
-                        break;
-
-                    // Arnoldi
-                    double[] q = MultiplyA(V[j], r, indMaps);
-                    q = JacobiPreconditioner_Apply(q, r, indMaps);
-
-                    for (int i = 0; i <= j; i++)
-                        H[i, j] = ScPr(V[i], q);
-
-                    wl[j] = ComputeWj(q, H, V, j);
-                    H[j + 1, j] = GetNorm(wl[j]);
-
-                    if (H[j + 1, j] == 0)
-                    {
-                        innerIterations = j;
-                        break;
-                    }
-
-                    //Parallel.For(0, innerIterations + 1, i2 =>
-                    //{
-                    //    for (int j2 = 0; j2 < innerIterations; j2++)
-                    //        H_old[i2, j2] = H[i2, j2];
-                    //});
-
-                    // Givens
-                    //serially is faster than parallelly
-                    for (int i = 0; i < j; i++)
-                    //Parallel.For(0, j, (i, loopState) =>
-                    {
-                        //    if (this.CancellationPending)
-                        //        loopState.Break();
-
-                        if (this.BlendParameters.BGW.CancellationPending)
-                            break;
-
-                        ApplyRot(H, cs, sn, i, j);
-                    }//);
-
-                    double beta = Math.Sqrt(H[j, j] * H[j, j] + H[j + 1, j] * H[j + 1, j]);
-                    if (H[j, j] == 0)
-                    {
-                        sn[j + 1] = 1;
-                        cs[j + 1] = 0;
-                    }
-                    sn[j + 1] = H[j + 1, j] / beta;
-                    cs[j + 1] = H[j, j] / beta;
-
-                    H[j, j] = beta;
-
-                    gamma[j + 1] = -sn[j + 1] * gamma[j];
-                    gamma[j] *= cs[j + 1];
-
-                    // H(j, j) = cs(j + 1) * H(j, j) + sn(j + 1) * H(j + 1, j) '= beta
-
-                    //lock (this._lockObject)
-                    //{
-                    //    if (_blendParameters.PE != null)
-                    //    {
-                    //        if (_blendParameters.PE.ImgWidthHeight < Int32.MaxValue)
-                    //            _blendParameters.PE.CurrentProgress += 10 / (innerIterations / 5);
-                    //        try
-                    //        {
-                    //            if (System.Convert.ToInt32(_blendParameters.PE.CurrentProgress) % _blendParameters.PE.PrgInterval == 0)
-                    //                OnShowProgress(_blendParameters.PE.CurrentProgress);
-                    //        }
-                    //        catch
-                    //        {
-                    //        }
-                    //    }
-                    //}
-
-                    eVal = gamma[j + 1];
-                    cnt2 = j;
-
-                    if (Math.Abs(gamma[j + 1]) / rNorm >= (maxError / rNorm) && j < innerIterations - 1)
-                    {
-                        V[j + 1] = Pr(wl[j], 1.0 / H[j + 1, j]);
-                        H[j + 1, j] = 0;
-                    }
-                    else
-                    {
-                        for (int i = j; i >= 0; i--)
-                        {
-                            if (this.BlendParameters.BGW.CancellationPending)
-                                break;
-
-                            double d = 0;
-
-                            for (int l = i + 1; l <= j; l++)
-                                d += H[i, l] * y[l];
-
-                            y[i] = (gamma[i] - d) / H[i, i];
-                        }
-
-                        double[] rz = new double[b.Length - 1 + 1];
-
-                        for (int i = 0; i <= j; i++)
-                        {
-                            if (this.BlendParameters.BGW.CancellationPending)
-                                break;
-
-                            double[] z = Pr(V[i], y[i]);
-                            for (int l = 0; l <= b.Length - 1; l++)
-                                rz[l] += z[l];
-                        }
-
-                        for (int l = 0; l <= b.Length - 1; l++)
-                            x_Cur[l] += rz[l];
-
-                        break;
-                    }
-                }
-
-                if (Math.Abs(eVal) / rNorm < (maxError / rNorm) || z2 == restart - 1)
-                {
-                    cnt = z2 * innerIterations + cnt2 + 1;
-                    break;
-                }
-                else
-                {
-                    GetResidual(r_Cur, x_Cur, b, r, indMaps);
-                    r_Cur = JacobiPreconditioner_Apply(r_Cur, r, indMaps);
-                    cnt = (z2 - 1) * innerIterations + cnt2 + 1;
-                }
-            }
-
-            Bitmap bOut = new Bitmap(this._w, this._h);
-
-            BitmapData bmData2 = bOut.LockBits(new Rectangle(0, 0, this._w, this._h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            int stride2 = bmData2.Stride;
-
-            unsafe
-            {
-                Parallel.For(0, this._h, y =>
-                {
-                    byte* p = (byte*)bmData2.Scan0;
-                    p += y * stride2;
-
-                    for (int x = 0; x < this._w; x++)
-                    {
-                        p[0] = p[1] = p[2] = (byte)Math.Max(Math.Min(x_Cur[y * this._w + x] * 255.0, 255), 0);
-                        p[3] = 255;
-
-                        p += 4;
-                    }
-                });
-            }
-
-            bOut.UnlockBits(bmData2);
-
-            return bOut;
-
-            */
         }
 
         public Bitmap SolveSystemGMRES()
@@ -1628,14 +1390,6 @@ namespace GetAlphaMatte
 
                         if (indMaps.ContainsKey(diag))
                         {
-                            //for (int q = 0; q < indMaps[diag].Count(); q++)
-                            //    if (indMaps[diag][q] < diag)
-                            //        sigma += (r[i][q] * xVector[indMaps[diag][q]]);
-                            //    else if (indMaps[diag][q] == diag)
-                            //        d = q;
-                            //    else if (indMaps[diag][q] > diag)
-                            //        sigma += (r[i][q] * xVectorOld[indMaps[diag][q]]);
-
                             //slow but works
                             for (int q = 0; q < indMaps[diag].Count(); q++)
                                 if (indMaps[diag][q] != diag)
@@ -1664,26 +1418,6 @@ namespace GetAlphaMatte
                 }
 
                 xVector.CopyTo(xVectorOld, 0);
-
-                //lock (this._lockObject)
-                //{
-                //    if (!pe == null)
-                //    {
-                //        if (pe.ImgWidthHeight < Int32.MaxValue)
-                //            pe.CurrentProgress += 1;
-                //        try
-                //        {
-                //            if (System.Convert.ToInt32(pe.CurrentProgress) % pe.PrgInterval == 0)
-                //            {
-                //                OnShowProgress(pe.CurrentProgress);
-                //                ShowInfo?.Invoke(this, "### --- ### Info: " + p.ToString() + " Iterations of plane " + plane.ToString() + " finished. Max Error: " + maxErr.ToString());
-                //            }
-                //        }
-                //        catch
-                //        {
-                //        }
-                //    }
-                //}
             }
 
             return xVector;
@@ -1693,8 +1427,6 @@ namespace GetAlphaMatte
         {
             bool b = false;
             double max = 0;
-
-            // CheckResult2(solvedVector, solvedVectorA)
 
             for (int i = 0; i <= solvedVector.Length - 1; i++)
             {
@@ -1719,8 +1451,6 @@ namespace GetAlphaMatte
         {
             bool b = false;
             double max = 0;
-
-            // CheckResult2(solvedVector, solvedVectorA)
 
             for (int i = 0; i <= solvedVector.Length - 1; i++)
             {
