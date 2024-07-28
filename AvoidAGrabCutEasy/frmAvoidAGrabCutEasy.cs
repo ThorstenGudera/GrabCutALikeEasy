@@ -3493,5 +3493,31 @@ namespace AvoidAGrabCutEasy
                 }
             }
         }
+
+        private void btnCompose_Click(object sender, EventArgs e)
+        {
+            if (this.helplineRulerCtrl2.Bmp != null)
+            {
+                using (frmCompose frm = new frmCompose(this.helplineRulerCtrl2.Bmp))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        Bitmap bmp = new Bitmap(frm.FBitmap);
+
+                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+                        _undoOPCache.Add(bmp);
+
+                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl2.Zoom.ToString());
+                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+
+                        Bitmap bC = new Bitmap(bmp);
+                        this.SetBitmap(ref this._bmpBU, ref bC);
+                    }
+                }
+            }
+        }
     }
 }

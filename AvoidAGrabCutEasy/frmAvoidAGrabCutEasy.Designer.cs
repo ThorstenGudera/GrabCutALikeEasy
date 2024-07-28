@@ -112,6 +112,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label12 = new System.Windows.Forms.Label();
+            this.btnCompose = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQATH)).BeginInit();
@@ -135,6 +137,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.btnCompose);
             this.panel1.Controls.Add(this.btnCache);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.btnOutline);
@@ -223,7 +227,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(886, 79);
+            this.label3.Location = new System.Drawing.Point(771, 79);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 13);
             this.label3.TabIndex = 676;
@@ -231,7 +235,7 @@
             // 
             // btnOutline
             // 
-            this.btnOutline.Location = new System.Drawing.Point(972, 74);
+            this.btnOutline.Location = new System.Drawing.Point(857, 74);
             this.btnOutline.Name = "btnOutline";
             this.btnOutline.Size = new System.Drawing.Size(75, 23);
             this.btnOutline.TabIndex = 675;
@@ -1212,6 +1216,25 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(945, 80);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(50, 13);
+            this.label12.TabIndex = 679;
+            this.label12.Text = "compose";
+            // 
+            // btnCompose
+            // 
+            this.btnCompose.Location = new System.Drawing.Point(1001, 75);
+            this.btnCompose.Name = "btnCompose";
+            this.btnCompose.Size = new System.Drawing.Size(75, 23);
+            this.btnCompose.TabIndex = 678;
+            this.btnCompose.Text = "Go";
+            this.btnCompose.UseVisualStyleBackColor = true;
+            this.btnCompose.Click += new System.EventHandler(this.btnCompose_Click);
+            // 
             // frmAvoidAGrabCutEasy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1336,5 +1359,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnOutline;
         private System.Windows.Forms.Button btnCache;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btnCompose;
     }
 }

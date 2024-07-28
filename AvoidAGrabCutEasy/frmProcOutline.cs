@@ -3124,21 +3124,34 @@ namespace AvoidAGrabCutEasy
 
         private void numSleep_ValueChanged(object sender, EventArgs e)
         {
-            if (this._cfop != null && this._cfop.BlendParameters != null)
-                this._cfop.BlendParameters.SleepAmount = (int)this.numSleep.Value;
-
-            if (this._cfopArray != null)
+            if (this._cfop != null)
             {
-                for (int i = 0; i < _cfopArray.Length; i++)
-                    if (_cfopArray[i] != null)
-                        try
-                        {
-                            _cfopArray[i].BlendParameters.SleepAmount = (int)this.numSleep.Value;
-                        }
-                        catch
-                        {
+                if ((int)this.numSleep.Value == 0)
+                    this._cfop.BlendParameters.Sleep = false;
+                else
+                    this._cfop.BlendParameters.Sleep = true;
 
-                        }
+                if (this._cfop != null && this._cfop.BlendParameters != null)
+                    this._cfop.BlendParameters.SleepAmount = (int)this.numSleep.Value;
+
+                if (this._cfopArray != null)
+                {
+                    for (int i = 0; i < _cfopArray.Length; i++)
+                        if (_cfopArray[i] != null)
+                            try
+                            {
+                                if ((int)this.numSleep.Value == 0)
+                                    _cfopArray[i].BlendParameters.Sleep = false;
+                                else
+                                    _cfopArray[i].BlendParameters.Sleep = true;
+
+                                _cfopArray[i].BlendParameters.SleepAmount = (int)this.numSleep.Value;
+                            }
+                            catch
+                            {
+
+                            }
+                }
             }
         }
 

@@ -25,6 +25,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ConvolutionLib", "Convoluti
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SegmentsListLib", "SegmentsListLib\SegmentsListLib.vbproj", "{B8EB152D-87CD-4F48-A06B-36D5FE13C0CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LUBitmapDesigner", "LUBitmapDesigner\LUBitmapDesigner.csproj", "{066AF484-5D07-45CF-8DBF-FB442677F450}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,14 @@ Global
 		{B8EB152D-87CD-4F48-A06B-36D5FE13C0CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8EB152D-87CD-4F48-A06B-36D5FE13C0CF}.Release|Itanium.ActiveCfg = Release|Any CPU
 		{B8EB152D-87CD-4F48-A06B-36D5FE13C0CF}.Release|Itanium.Build.0 = Release|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Debug|Itanium.Build.0 = Debug|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{066AF484-5D07-45CF-8DBF-FB442677F450}.Release|Itanium.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

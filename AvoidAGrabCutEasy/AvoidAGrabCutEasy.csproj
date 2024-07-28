@@ -71,6 +71,12 @@
     <Compile Include="frmCachedPictures.Designer.cs">
       <DependentUpon>frmCachedPictures.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmCompose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompose.Designer.cs">
+      <DependentUpon>frmCompose.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDrawNumComp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -168,6 +174,10 @@
     <ProjectReference Include="..\HelplineRulerControl\HelplineRulerControl.vbproj">
       <Project>{F5D153C7-2F8F-41C7-BE9E-886BE213FDDA}</Project>
       <Name>HelplineRulerControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LUBitmapDesigner\LUBitmapDesigner.csproj">
+      <Project>{066af484-5d07-45cf-8dbf-fb442677f450}</Project>
+      <Name>LUBitmapDesigner</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
