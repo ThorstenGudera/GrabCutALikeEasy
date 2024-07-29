@@ -837,7 +837,7 @@
             // 
             this.numBoundOuter.Location = new System.Drawing.Point(130, 21);
             this.numBoundOuter.Maximum = new decimal(new int[] {
-            255,
+            25,
             0,
             0,
             0});
@@ -855,7 +855,7 @@
             // 
             this.numBoundInner.Location = new System.Drawing.Point(223, 21);
             this.numBoundInner.Maximum = new decimal(new int[] {
-            255,
+            25,
             0,
             0,
             0});

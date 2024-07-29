@@ -41,7 +41,7 @@ namespace AvoidAGrabCutEasy
         private string m_CachePathAddition;
         private DefaultSmoothenOP _dsOP;
         private BoundaryMattingOP _bmOP;
-        private int _maxWidth = 24;
+        private int _maxWidth = 50;
         private int _oW = 0;
         private int _iW = 0;
         private Stopwatch _sw;
@@ -620,6 +620,11 @@ namespace AvoidAGrabCutEasy
 
         private void btnAlphaV_Click(object sender, EventArgs e)
         {
+            if (this.backgroundWorker2.IsBusy)
+            {
+                this.backgroundWorker2.CancelAsync();
+                return;
+            }
             if (this.backgroundWorker3.IsBusy)
             {
                 this.backgroundWorker3.CancelAsync();
