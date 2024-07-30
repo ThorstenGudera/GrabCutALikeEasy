@@ -41,6 +41,10 @@ namespace AvoidAGrabCutEasy.ProcOutline
             BmpOrig = new Bitmap(bmpOrig);
         }
 
+        public BoundaryMattingOP()
+        {
+        }
+
         public void Init(int normalDistToCheck, int widthInside, int widthOutside, float measureColDistDist, double alphaStartValue, BlendType blendType)
         {
             this._normalDistToCheck = normalDistToCheck;

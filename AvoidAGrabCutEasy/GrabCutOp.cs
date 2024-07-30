@@ -2167,5 +2167,332 @@ namespace AvoidAGrabCutEasy
             if (this.Bmp != null)
                 this.Bmp.Dispose();
         }
+
+        //##################################
+        public int InitWithTrimap(Bitmap trimap)
+        {
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(0);
+
+            if (this.Bmp != null && trimap != null)
+            {
+                this._w = this.Bmp.Width;
+                this._h = this.Bmp.Height;
+
+                //first get a representaion of the current state by defining a "mask" array for storing the
+                //pixel states: bg, fg, probably bg, probably fg as 0, 1, 2, 3
+                this.Mask = new int[this._w, this._h];
+
+                //BG = 0, FG = 1, PrBG = 2, PrFG = 3
+                ReadIn(trimap, this.Mask);
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(20);
+
+                if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                    this.BGW.CancelAsync();
+
+                if (this.Mask == null)
+                    return -5;
+
+                //ShowMaskToBmp();
+
+                //do a first classification, i.e. determine the known and unknown states for the pixels,
+                //store these values in arrays and list to use later
+                int cl = Classify();
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(30);
+
+                if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                    this.BGW.CancelAsync();
+
+                if (cl != 0)
+                    return cl;
+
+                this._source = this._w * this._h;
+                this._sink = this._source + 1;
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(50);
+
+                if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                    this.BGW.CancelAsync();
+
+                //now init the Gmms [the machinery for the Data-term of the energy function]
+                InitGMMs();
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(100);
+
+                return 0;
+            }
+
+            return -3;
+        }
+
+        private unsafe void ReadIn(Bitmap trimap, int[,] mask)
+        {
+            int w = trimap.Width;
+            int h = trimap.Height;
+            BitmapData bmTr = trimap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmTr.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmTr.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[0] < 5)
+                        mask[x, y] = 0;
+                    else if (p[0] > 250)
+                        mask[x, y] = 1;
+                    else
+                        mask[x, y] = 3;
+
+                    p += 4;
+                }
+            });
+
+            trimap.UnlockBits(bmTr);
+        }
+
+        public int RunBoundary()
+        {
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(10);
+
+            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                return 101;
+
+            if (this._bgGmm == null || this._fgGmm == null)
+                return 102;
+
+            OnShowInfo("Iteration " + (1).ToString() + " of " + this.NumIters.ToString());
+
+            if (!this.SkipLearn)
+            {
+                if (!AssignSamplesAndFit())
+                    return 100;
+            }
+
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(15);
+
+            //compute the directed graph
+            int j = ComputeAlpha();
+
+            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                return 101;
+
+            if (j != 0)
+                return j;
+
+            EstimateSegmentationAlpha();
+
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(100);
+
+            return 0;
+        }
+
+        private unsafe int ComputeAlpha()
+        {
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(20);
+
+            this._result2 = null;
+
+            List<Point> bGIndexes = new List<Point>();
+            List<Point> fGIndexes = new List<Point>();
+            List<Point> pRIndexes = new List<Point>();
+            List<Point> pRIndexesFull = new List<Point>();
+
+            List<Point> pRFIndexes = new List<Point>();
+            List<Point> pRBIndexes = new List<Point>();
+
+            int w = this._w;
+            int h = this._h;
+
+            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+            {
+                return -1;
+            }
+
+            BitmapData bmData = this.Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            int stride = bmData.Stride;
+
+            byte* p = (byte*)bmData.Scan0;
+
+            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+
+            //fill the list for the known and unknown parts of the data
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                {
+                    if (this.Mask[x, y] == 0)
+                        bGIndexes.Add(new Point(x, y));
+                    else if (this.Mask[x, y] == 1)
+                        fGIndexes.Add(new Point(x, y));
+                    else if (this.Mask[x, y] == 2)
+                    {
+                        pRIndexes.Add(new Point(x, y));
+                        pRBIndexes.Add(new Point(x, y));
+                    }
+                    else if (this.Mask[x, y] == 3)
+                    {
+                        pRIndexes.Add(new Point(x, y));
+                        pRFIndexes.Add(new Point(x, y));
+                    }
+                }
+
+            //Console.WriteLine(bGIndexes.Count.ToString());
+            //Console.WriteLine(fGIndexes.Count.ToString());
+            //Console.WriteLine(pRIndexes.Count.ToString());
+
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(30);
+            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+            {
+                this.Bmp.UnlockBits(bmData);
+                return -1;
+            }
+
+            //ShowIndexesImage(bGIndexes, fGIndexes, pRIndexes);
+
+            //this is the main list used for computing/storing the graph-capacities
+            this._graphCapacity = new List<double>();
+
+            //the Data term
+            //t - links -->
+            // https://www.researchgate.net/publication/230837921_Exact_Maximum_A_Posteriori_Estimation_for_Binary_Images
+            //innerhalb des Graphen links zu Nodes des graphen(keine Adressen des Bildes)
+            IEnumerable<Tuple<int, int>> v = pRIndexes.Select(ind => Tuple.Create(this._source, ind.X + ind.Y * w));
+            List<Tuple<int, int>> vf = v.ToList();
+
+            //get and tweak the probabilities of the pixels being fg or bg
+            double[][] prVals = new double[v.Count()][];
+            int cnt = v.Count();
+            Parallel.For(0, cnt, j =>
+            {
+                int x = vf[j].Item2 % w;
+                int y = vf[j].Item2 / w;
+                int address = x * 4 + y * stride;
+                prVals[j] = new double[] { p[address], p[address + 1], p[address + 2] };
+            });
+
+            double[] d = this._bgGmm.CalcProb(prVals);
+            for (int j = 0; j < d.Length; j++)
+                d[j] *= this.ProbMult1;
+
+            IEnumerable<double> dTmp = d.Except(d.Where(a => a == 0));
+            double d1 = 0;
+            if (dTmp.Count() > 0)
+                d1 = Math.Log(dTmp.Max());
+
+            int l = d.Length;
+            double[] d2 = this._fgGmm.CalcProb(prVals);
+
+            OnShowInfo("d1 = " + d1.ToString());
+
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(40);
+
+            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+            {
+                this.Bmp.UnlockBits(bmData);
+                return -1;
+            }
+
+            int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
+
+            //take the negative logs as penalties (take the bg_probabilities for computing the fg_capacities and vice versa)
+            Parallel.For(0, l, () => new InnerListObject(), (i, loopState, innerList) =>
+            {
+                if (d[i] == 0)
+                    d[i] = 0.0000000001;
+                if (d2[i] == 0)
+                    d2[i] = 0.0000000001;
+
+                if (this.UseThreshold)
+                {
+                    d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
+                }
+
+                double vv = Math.Log(d[i] / d2[i]);
+
+                if (double.IsInfinity(vv))
+                    vv = 0.0000001;
+
+                Point ind = pRIndexes[i];
+
+                if (vv > 0)
+                {
+                    innerList.Edges.Add(Tuple.Create(this._source, ind.X + ind.Y * w));
+                    if (this.MultCapacitiesForTLinks)
+                    {
+                        if (CastIntCapacitiesForTLinks)
+                            innerList.Capacities.Add((int)(vv * this.MultTLinkCapacity));
+                        else
+                            innerList.Capacities.Add(vv * this.MultTLinkCapacity);
+                    }
+                    else
+                        innerList.Capacities.Add(vv);
+                }
+                else
+                {
+                    z[ind.X + ind.Y * w] = 1;
+                    innerList.Edges.Add(Tuple.Create(ind.X + ind.Y * w, this._sink));
+                    if (this.MultCapacitiesForTLinks)
+                    {
+                        if (CastIntCapacitiesForTLinks)
+                            innerList.Capacities.Add((int)(-vv * this.MultTLinkCapacity));
+                        else
+                            innerList.Capacities.Add(-vv * this.MultTLinkCapacity);
+                    }
+                    else
+                        innerList.Capacities.Add(-vv);
+                }
+
+                return innerList;
+            }, (innerList) =>
+            {
+                //make sure, the edges get the correct capacities, means, add both chonks of data in the same processing cycles
+                lock (this._lockObject)
+                {
+                    edges.AddRange(innerList.Edges);
+                    this._graphCapacity.AddRange(innerList.Capacities);
+                }
+            });
+
+            //if we want to use only the first guess, we dont need to set up the graph and the n-links and so can return here
+            //no Mincut needed.
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(95);
+
+            this.Bmp.UnlockBits(bmData);
+            this._result2 = z;
+
+            return 0;
+        }
+
+        private unsafe void EstimateSegmentationAlpha()
+        {
+            int w = this._w;
+            int h = this._h;
+            //List<int> r = new List<int>();
+
+            //for (int i = 0; i < this._result2.Length; i++)
+            //    r.Add(i);
+
+            List<int> r = this._result2.ToList();
+
+            if (r != null)
+                this.Result = r;
+            else
+                this.Result = new List<int>();
+        }
     }
 }

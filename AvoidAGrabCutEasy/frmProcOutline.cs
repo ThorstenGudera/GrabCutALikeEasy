@@ -51,6 +51,8 @@ namespace AvoidAGrabCutEasy
         private frmInfo _frmInfo;
         private List<TrimapProblemInfo> _trimapProblemInfos = new List<TrimapProblemInfo>();
         private Bitmap _bmpRef;
+        private GrabCutOp _gc;
+        private object _lockObject = new object();
 
         public Bitmap FBitmap
         {
@@ -834,6 +836,8 @@ namespace AvoidAGrabCutEasy
             //this.cbExpOutlProc.Checked = true;
 
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
+
+            DisableBoundControls(this.cbExpOutlProc.Checked);
         }
 
         private void SetControls(bool e)
@@ -1329,6 +1333,100 @@ namespace AvoidAGrabCutEasy
                                             gx.CompositingMode = CompositingMode.SourceCopy;
                                             gx.FillPath(Brushes.Transparent, gp);
                                             gx.DrawPath(Pens.Transparent, gp);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            return bOut;
+        }
+
+        private Bitmap ExtendOutlineEx2(Bitmap bmp, int outerW, bool dontFill, bool drawPath)
+        {
+            Bitmap bOut = new Bitmap(bmp.Width, bmp.Height);
+
+            List<ChainCode> lInner = GetBoundary(bmp);
+
+            if (lInner.Count > 0)
+            {
+                lInner = lInner.OrderByDescending(a => a.Coord.Count).ToList();
+
+                for (int i = 0; i < lInner.Count; i++)
+                {
+                    List<PointF> pts = lInner[i].Coord.Select(a => new PointF(a.X, a.Y)).ToList();
+
+                    if (pts.Count > 2)
+                    {
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            gp.AddLines(pts.ToArray());
+
+                            if (gp.PointCount > 0)
+                            {
+                                using (Graphics gx = Graphics.FromImage(bOut))
+                                {
+                                    gx.SmoothingMode = SmoothingMode.None;
+                                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+                                    using (TextureBrush tb = new TextureBrush(bmp))
+                                    {
+                                        gx.FillPath(tb, gp);
+
+                                        using (Pen pen = new Pen(tb, 1))
+                                            gx.DrawPath(Pens.Gray, gp);
+
+                                        if (drawPath && outerW > 0)
+                                        {
+                                            try
+                                            {
+                                                using (Pen pen = new Pen(tb, outerW))
+                                                {
+                                                    pen.LineJoin = LineJoin.Round;
+                                                    gp.Widen(pen);
+                                                    gx.DrawPath(pen, gp);
+                                                }
+                                            }
+                                            catch (Exception exc)
+                                            {
+                                                Console.WriteLine(exc.ToString());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (dontFill)
+                if (lInner.Count > 0)
+                {
+                    for (int i = 0; i < lInner.Count; i++)
+                    {
+                        if (ChainFinder.IsInnerOutline(lInner[i]))
+                        {
+                            List<PointF> pts = lInner[i].Coord.Select(a => new PointF(a.X, a.Y)).ToList();
+
+                            if (pts.Count > 2)
+                            {
+                                using (GraphicsPath gp = new GraphicsPath())
+                                {
+                                    gp.AddLines(pts.ToArray());
+
+                                    if (gp.PointCount > 0)
+                                    {
+                                        using (Graphics gx = Graphics.FromImage(bOut))
+                                        {
+                                            gx.SmoothingMode = SmoothingMode.None;
+                                            gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                            gx.CompositingMode = CompositingMode.SourceCopy;
+                                            gx.FillPath(Brushes.Transparent, gp);
+                                            if (drawPath)
+                                                gx.DrawPath(Pens.Transparent, gp);
                                         }
                                     }
                                 }
@@ -3371,6 +3469,878 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker5.DoWork += backgroundWorker5_DoWork;
                 //this.backgroundWorker5.ProgressChanged += backgroundWorker5_ProgressChanged;
                 this.backgroundWorker5.RunWorkerCompleted += backgroundWorker5_RunWorkerCompleted;
+            }
+        }
+
+        private unsafe void backgroundWorker6_DoWork(object sender, DoWorkEventArgs e)
+        {
+            object[] o = (object[])e.Argument;
+
+            Bitmap bWork = (Bitmap)o[0];
+            Bitmap bOrig = (Bitmap)o[1];
+            int innerW = (int)o[2];
+            int outerW = (int)o[3];
+
+            int gmm_comp = (int)o[4];
+            double gamma = (double)o[5];
+            int numIters = (int)o[6];
+            bool rectMode = (bool)o[7];
+            Rectangle r = (Rectangle)o[8];
+            bool skipInit = (bool)o[9];
+            bool workOnPaths = (bool)o[10];
+            bool gammaChanged = (bool)o[11];
+            int intMult = (int)o[12];
+            bool quick = (bool)o[13];
+            bool useEightAdj = (bool)o[14];
+            bool useTh = (bool)o[15];
+            double th = (double)o[16];
+            double resPic = (double)o[17];
+            bool initWKpp = (bool)o[18];
+            bool multCapacitiesForTLinks = (bool)o[19];
+            double multTLinkCapacity = (double)o[20];
+            bool castTLInt = (bool)o[21];
+            bool getSourcePart = (bool)o[22];
+            ListSelectionMode selMode = (ListSelectionMode)o[23];
+            bool scribbleMode = (bool)o[24];
+            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[25];
+            double probMult1 = (double)o[26];
+            double kmInitW = (double)o[27];
+            double kmInitH = (double)o[28];
+            bool setPFGToFG = (bool)o[29];
+            bool cgWQE = (bool)o[30];
+            double numItems = (double)o[31];
+            double numCorrect = (double)o[32];
+            double numItems2 = (double)o[33];
+            double numCorrect2 = (double)o[34];
+            bool skipLearn = (bool)o[35];
+
+            Rectangle clipRect = (Rectangle)o[36];
+            bool dontFillPath = (bool)o[37];
+            bool drawNumComp = (bool)o[38];
+            int comp = (int)o[39];
+            int blur = (int)o[40];
+
+            //resize the input bmp
+            Bitmap bU2 = null;
+            if (resPic > 1)
+            {
+                Bitmap bOld = bWork;
+                bU2 = new Bitmap(bWork);
+                bWork = ResampleDown(bWork, ref r, ref clipRect, resPic, scribbleMode, rectMode);
+                if (bOld != null)
+                {
+                    bOld.Dispose();
+                    bOld = null;
+                }
+            }
+
+            Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
+            Bitmap bInner = null;
+
+            using (Bitmap bForeground = RemoveOutlineEx(bWork, innerW, true))
+            using (Bitmap bBackground = ExtendOutlineEx2(bWork, outerW, true, false))
+            {
+                using (Graphics gx = Graphics.FromImage(bTrimap))
+                {
+                    gx.SmoothingMode = SmoothingMode.None;
+                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    gx.Clear(Color.Black);
+                    gx.DrawImage(bBackground, 0, 0);
+                    gx.DrawImage(bForeground, 0, 0);
+                }
+
+                bInner = GetInnerFGPic(bWork, bForeground);
+            }
+
+            //do a check to ensure a correct initialisation of the GC_OP
+            Bitmap bTmp = new Bitmap(bWork);
+            if (r.Width == 0 && r.Height == 0)
+            {
+                this.Invoke(new Action(() => { MessageBox.Show("No Image passed to function. Cancelled operation."); }));
+                if (bU2 != null)
+                    bU2.Dispose();
+                e.Result = new Bitmap(bTmp);
+                return;
+            }
+
+            //create the operator for the GrabcutALike methods
+            //if we have already a gc prrsent, we set its params later
+            if (this._gc == null)
+            {
+                this._gc = new GrabCutOp()
+                {
+                    Bmp = bWork,
+                    Gmm_comp = gmm_comp,
+                    Gamma = gamma,
+                    NumIters = numIters,
+                    RectMode = rectMode,
+                    ScribbleMode = scribbleMode,
+                    Scribbles = scribbles,
+                    Rc = r,
+                    BGW = this.backgroundWorker1,
+                    QuickEstimation = quick,
+                    EightAdj = useEightAdj,
+                    UseThreshold = useTh,
+                    Threshold = th,
+                    MultCapacitiesForTLinks = multCapacitiesForTLinks,
+                    MultTLinkCapacity = multTLinkCapacity,
+                    CastIntCapacitiesForTLinks = castTLInt,
+                    SelectionMode = selMode,
+                    ProbMult1 = probMult1,
+                    KMInitW = kmInitW,
+                    KMInitH = kmInitH,
+                    CGwithQE = cgWQE,
+                    NumItems = numItems,
+                    NumCorrect = numCorrect,
+                    NumItems2 = numItems2,
+                    NumCorrect2 = numCorrect2,
+                };
+
+                this._gc.ShowInfo += _gc_ShowInfo;
+            }
+
+            //now do the initialization
+            //eg create the mask, preclassify the imagedata, compute the smootheness function and init the Gmms
+            if (!skipInit)
+            {
+                int it = this._gc.InitWithTrimap(bTrimap);
+
+                if (this._gc.BGW != null && this._gc.BGW.WorkerSupportsCancellation && this._gc.BGW.CancellationPending)
+                    it = -4;
+
+                if (it != 0)
+                {
+                    if (bU2 != null)
+                        bU2.Dispose();
+
+                    switch (it)
+                    {
+                        case -1:
+                            this.Invoke(new Action(() => { MessageBox.Show("No BGPixels found. Cancelled operation."); }));
+                            e.Result = new Bitmap(bTmp);
+                            return;
+                        case -2:
+                            this.Invoke(new Action(() => { MessageBox.Show("No FGPixels found. Cancelled operation."); }));
+                            e.Result = new Bitmap(bTmp);
+                            return;
+                        case -3:
+                            this.Invoke(new Action(() => { MessageBox.Show("No Image passed to function. Cancelled operation."); }));
+                            e.Result = new Bitmap(bTmp);
+                            return;
+                        case -4:
+                            this.Invoke(new Action(() => { MessageBox.Show("Operation cancelled."); }));
+                            e.Result = new Bitmap(bTmp);
+                            return;
+                        case -5:
+                            this.Invoke(new Action(() => { MessageBox.Show("Mask is null. Cancelled operation."); }));
+                            e.Result = new Bitmap(bTmp);
+                            return;
+                    }
+                }
+            }
+            else
+            {
+                this._gc.Gamma = gamma;
+                this._gc.GammaChanged = gammaChanged;
+                this._gc.NumIters = numIters;
+                this._gc.Rc = r;
+                this._gc.QuickEstimation = quick;
+                this._gc.EightAdj = useEightAdj;
+                this._gc.UseThreshold = useTh;
+                this._gc.Threshold = th;
+                this._gc.MultCapacitiesForTLinks = multCapacitiesForTLinks;
+                this._gc.MultTLinkCapacity = multTLinkCapacity;
+                this._gc.CastIntCapacitiesForTLinks = castTLInt;
+                this._gc.SelectionMode = selMode;
+                this._gc.ProbMult1 = probMult1;
+                this._gc.KMInitW = kmInitW;
+                this._gc.KMInitH = kmInitH;
+                this._gc.CGwithQE = cgWQE;
+                this._gc.NumItems = numItems;
+                this._gc.NumCorrect = numCorrect;
+                this._gc.NumItems2 = numItems2;
+                this._gc.NumCorrect2 = numCorrect2;
+
+                if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
+                {
+                    if (!this._gc.RectMode)
+                        r = new Rectangle(0, 0, bWork.Width, bWork.Height);
+                    this._gc.ReInitScribbles();
+                }
+            }
+
+            //now do the work ...
+            int l = this._gc.RunBoundary();
+
+            if (l != 0)
+            {
+                if (bU2 != null)
+                    bU2.Dispose();
+
+                switch (l)
+                {
+                    case -1:
+                        this.Invoke(new Action(() => { MessageBox.Show("Arrays-Length, or Graph-Length failed test. Cancelled operation."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+
+                    case -25:
+                        this.Invoke(new Action(() => { MessageBox.Show("Graph-Construction failed. Maybe the threshold is too big. Cancelled operation."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+
+                    case 100:
+                        this.Invoke(new Action(() => { MessageBox.Show("Bmp_width or Bmp_height = 0. Cancelled operation."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+
+                    case 101:
+                        this.Invoke(new Action(() => { MessageBox.Show("Operation cancelled."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+
+                    case 102:
+                        this.Invoke(new Action(() => { MessageBox.Show("At least one GMM is null. Cancelled operation."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+
+                    case 103:
+                        this.Invoke(new Action(() => { MessageBox.Show("This Mode only makes sense with RectMode."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+
+                    case 104:
+                        this.Invoke(new Action(() => { MessageBox.Show("This Mode only makes sense with ScribbleMode."); }));
+                        e.Result = new Bitmap(bTmp);
+                        return;
+                }
+            }
+
+            //... and get the result ...
+            List<int> res = this._gc.Result;
+
+            //... and the result image
+            Bitmap bRes = new Bitmap(bWork.Width, bWork.Height);
+
+            int[,] m = this._gc.Mask;
+
+            if ((scribbleMode && !rectMode) || workOnPaths)
+                r = new Rectangle(0, 0, bWork.Width, bWork.Height);
+
+            //lock the bmps for fast processing
+            BitmapData bmData = bRes.LockBits(new Rectangle(0, 0, bRes.Width, bRes.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmWork = bTmp.LockBits(new Rectangle(0, 0, bTmp.Width, bTmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int w = bTmp.Width;
+            int h = bTmp.Height;
+            int stride = bmData.Stride;
+
+            //get the references to the pointer addresses
+            byte* p = (byte*)bmData.Scan0;
+            byte* pWork = (byte*)bmWork.Scan0;
+
+            //for (int i = 0; i < res.Count(); i++)
+            //{
+            //    int j = res[i];
+            //    int x = j % w;
+            //    int y = j / w;
+
+            //    p[x * 4 + y * stride] = pWork[x * 4 + y * stride];
+            //    p[x * 4 + y * stride + 1] = pWork[x * 4 + y * stride + 1];
+            //    p[x * 4 + y * stride + 2] = pWork[x * 4 + y * stride + 2];
+            //    p[x * 4 + y * stride + 3] = pWork[x * 4 + y * stride + 3];
+            //}
+
+            //write the data
+            int ww = m.GetLength(0);
+            int hh = m.GetLength(1);
+
+            for (int y = 0; y < h; y++)
+            {
+                if (y > 0 && y < h)
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (x > 0 && x < w)
+                            if (x < ww && y < hh && r.Contains(x, y) && (m[x, y] == 1 || m[x, y] == 3))
+                            {
+                                p[x * 4 + y * stride] = pWork[x * 4 + y * stride];
+                                p[x * 4 + y * stride + 1] = pWork[x * 4 + y * stride + 1];
+                                p[x * 4 + y * stride + 2] = pWork[x * 4 + y * stride + 2];
+                                p[x * 4 + y * stride + 3] = pWork[x * 4 + y * stride + 3];
+                            }
+                    }
+            }
+
+            //and unlock the bmps
+            bTmp.UnlockBits(bmWork);
+            bRes.UnlockBits(bmData);
+
+            //now do some analysis of the result, to be able to redraw the resultpic with a different set of components
+            Bitmap bResCopy = new Bitmap(bRes);
+            Bitmap bCTransp = new Bitmap(bRes);
+
+            //BU of the original result
+            //this.SetBitmap(ref this._bResCopy, ref bResCopy);
+
+            //use a ChainCode [that works on the - invisible - "cracks" between the pixels, because it is very fast aand reliable]
+            List<ChainCode> c = GetBoundary(bRes, 0, false);
+            c = c.OrderByDescending(x => x.Coord.Count).ToList();
+
+            int comp2 = c.Count;
+
+            if (c.Count > 0)
+            {
+                //if we have a very lot of components, allow the user to restrict the amount
+                if (c.Count > 1000 && (comp > 1000 || !drawNumComp))
+                {
+                    using (frmDrawNumComp frm = new frmDrawNumComp(c.Count))
+                    {
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.checkBox1.Checked)
+                            {
+                                drawNumComp = true;
+                                comp = comp2 = (int)frm.numericUpDown1.Value;
+                            }
+                        }
+                    }
+                }
+
+                //now begin to redraw each component
+                using (Graphics gx = Graphics.FromImage(bRes))
+                {
+                    gx.Clear(Color.Transparent);
+
+                    int amnt = (!drawNumComp) ? c.Count : Math.Min(comp, c.Count);
+
+                    for (int i = 0; i < amnt; i++)
+                    {
+                        using (GraphicsPath gp = new GraphicsPath())
+                        {
+                            PointF[] pts = c[i].Coord.Select(pt => new PointF(pt.X, pt.Y)).ToArray();
+                            //make sure, each path is treated as an "outer-outline"
+                            gp.FillMode = FillMode.Winding;
+                            gp.AddLines(pts);
+                            gp.CloseAllFigures();
+
+                            //tmp try...catch
+                            try
+                            {
+                                using (TextureBrush tb = new TextureBrush(bTmp))
+                                    gx.FillPath(tb, gp);
+
+                                //using (Pen pen = new Pen(Color.Red, 2))
+                                //    gx.DrawPath(pen, gp);
+                            }
+                            catch (Exception exc)
+                            {
+                                Console.WriteLine(exc.ToString());
+                            }
+                        }
+                    }
+                }
+            }
+
+            //now redraw the inner outlines and "transparent" components
+            //we can do this in the easy way with setting graphics.CompositionMode to sourceCopy
+            //because the whole operations are full_pixel_wise (at least for the standard 4-connectivity)
+            if (dontFillPath && c.Count > 0)
+            {
+                int amnt = (!drawNumComp) ? c.Count : Math.Min(comp, c.Count);
+
+                for (int i = 0; i < amnt; i++)
+                {
+                    ChainCode cc = c[i];
+                    if (ChainFinder.IsInnerOutline(cc))
+                        using (GraphicsPath gP = new GraphicsPath())
+                        {
+                            try
+                            {
+                                gP.StartFigure();
+                                PointF[] pts = cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                gP.AddLines(pts);
+
+                                using (Graphics gx = Graphics.FromImage(bRes))
+                                {
+                                    gx.CompositingMode = CompositingMode.SourceCopy;
+                                    gx.FillPath(Brushes.Transparent, gP);
+                                }
+                            }
+                            catch (Exception exc)
+                            {
+                                Console.WriteLine(exc.ToString());
+                            }
+                        }
+                }
+            }
+
+            //get a backup - for later use - of this bmp with the transparent paths
+            //this.SetBitmap(ref this._bResCopyTransp, ref bCTransp);
+
+            bTmp.Dispose();
+
+            Bitmap bDiff = GetDiff(bRes, bInner);
+
+            using (Graphics gx = Graphics.FromImage(bDiff))
+                gx.DrawImage(bInner, 0, 0);
+
+            fipbmp fip = new fipbmp();
+            fip.SmoothByAveragingA(bDiff, blur, this.backgroundWorker6);
+
+            BoundaryMattingOP bmOP = new BoundaryMattingOP();
+            bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1));
+            bmOP.Dispose();
+
+            using (Graphics gx = Graphics.FromImage(bDiff))
+                gx.DrawImage(bInner, 0, 0);
+
+            if (resPic > 1)
+            {
+                Bitmap bOld = bRes;
+
+                bRes = ResampleUp(bDiff, resPic, bU2, dontFillPath, false);
+                //bRes = ResampleUp(bRes, resPic, bU2, dontFillPath, false);
+                //Bitmap bRCopy = ResampleUp(this._bResCopy, resPic, bU2, dontFillPath, false);
+                //Bitmap bRCopy2 = ResampleUp(this._bResCopyTransp, resPic, bU2, true, true);
+
+                //this.SetBitmap(ref this._bResCopy, ref bRCopy);
+                //this.SetBitmap(ref this._bResCopyTransp, ref bRCopy2);
+
+                //bU2.Dispose(); //--> is disposed in ResampleUp
+
+                if (bOld != null)
+                    bOld.Dispose();
+            }
+            else if (resPic <= 1)
+            {
+                Bitmap bOld = bRes;
+                bRes = new Bitmap(bDiff);
+                if (bOld != null)
+                    bOld.Dispose();
+            }
+            //else if (resPic == 1)
+            //{
+            //    //set the list of all found paths [chains] to re_use later
+            //    List<ChainCode> allChains = GetBoundary(this._bResCopyTransp);
+            //    this._allChains = allChains;
+
+            //    if (allChains != null && allChains.Count > 0)
+            //    {
+            //        int area = allChains.Sum(a => a.Area);
+            //        int pxls = w * h;
+
+            //        int fc = pxls / area;
+
+            //        //if we have almost no output, maybe the initialization of the Gmms hasn't been good enough to receive a reasonable result
+            //        //so restart with some different KMeans initialization, if wanted
+            //        if (fc > 1000)
+            //            if (MessageBox.Show("Amount pixels to segmented area ratio is " + fc.ToString() + "." +
+            //                "Rerun with different Initialization of the Gmms?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            //            {
+            //                this._restartDiffInit = true;
+            //            }
+            //    }
+            //}
+
+            bDiff.Dispose();
+            bDiff = null;
+            bInner.Dispose();
+            bInner = null;
+            bWork.Dispose();
+            bWork = null;
+            bOrig.Dispose();
+            bOrig = null;
+            bTrimap.Dispose();
+            bTrimap = null;
+
+            //our result pic
+            e.Result = e.Result = GetAlphaBoundsPic(bRes, 2); //bRes;
+
+            bRes.Dispose();
+            bRes = null;
+        }
+
+        private unsafe Bitmap GetDiff(Bitmap bRes, Bitmap bInner)
+        {
+            int w = bRes.Width;
+            int h = bRes.Height;
+            Bitmap bOut = new Bitmap(w, h);
+
+            BitmapData bmData = bOut.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmWork = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmInner = bInner.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            int stride = bmData.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmData.Scan0;
+                p += y * stride;
+                byte* pWork = (byte*)bmWork.Scan0;
+                pWork += y * stride;
+                byte* pInner = (byte*)bmInner.Scan0;
+                pInner += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pInner[3] > 0 || pWork[3] > 0)
+                    {
+                        p[0] = (byte)Math.Abs(((int)pInner[0] - (int)pWork[0]));
+                        p[1] = (byte)Math.Abs(((int)pInner[1] - (int)pWork[1]));
+                        p[2] = (byte)Math.Abs(((int)pInner[2] - (int)pWork[2]));
+                        p[3] = Math.Max(pInner[3], pWork[3]);
+                    }
+
+                    p += 4;
+                    pWork += 4;
+                    pInner += 4;
+                }
+            });
+
+            bRes.UnlockBits(bmWork);
+            bInner.UnlockBits(bmInner);
+            bOut.UnlockBits(bmData);
+
+            return bOut;
+        }
+
+        private unsafe Bitmap GetInnerFGPic(Bitmap bWork, Bitmap bForeground)
+        {
+            int w = bWork.Width;
+            int h = bWork.Height;
+            Bitmap bRes = new Bitmap(w, h);
+
+            BitmapData bmData = bRes.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData bmWork = bWork.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmFG = bForeground.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            int stride = bmData.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmData.Scan0;
+                p += y * stride;
+                byte* pWork = (byte*)bmWork.Scan0;
+                pWork += y * stride;
+                byte* pFG = (byte*)bmFG.Scan0;
+                pFG += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (pFG[3] > 0)
+                    {
+                        p[0] = pWork[0];
+                        p[1] = pWork[1];
+                        p[2] = pWork[2];
+                        p[3] = pFG[3];
+                    }
+
+                    p += 4;
+                    pWork += 4;
+                    pFG += 4;
+                }
+            });
+
+            bWork.UnlockBits(bmWork);
+            bForeground.UnlockBits(bmFG);
+            bRes.UnlockBits(bmData);
+
+            return bRes;
+        }
+
+        private List<ChainCode> GetBoundary(Bitmap upperImg, int minAlpha, bool grayScale)
+        {
+            List<ChainCode> l = null;
+            Bitmap bmpTmp = null;
+            try
+            {
+                if (AvailMem.AvailMem.checkAvailRam(upperImg.Width * upperImg.Height * 4L))
+                    bmpTmp = new Bitmap(upperImg);
+                else
+                    throw new Exception("Not enough memory.");
+                int nWidth = bmpTmp.Width;
+                int nHeight = bmpTmp.Height;
+                ChainFinder cf = new ChainFinder();
+                lock (this._lockObject)
+                    l = cf.GetOutline(bmpTmp, nWidth, nHeight, minAlpha, grayScale, 0, false, 0, false);
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+            finally
+            {
+                if (bmpTmp != null)
+                {
+                    bmpTmp.Dispose();
+                    bmpTmp = null;
+                }
+            }
+            return l;
+        }
+
+        private Bitmap ResampleDown(Bitmap bWork, ref Rectangle r, ref Rectangle r2, double resPic, bool scribbleMode, bool rectMode)
+        {
+            Bitmap bOut = new Bitmap((int)Math.Ceiling(bWork.Width / resPic), (int)Math.Ceiling(bWork.Height / resPic));
+            if (!scribbleMode || rectMode)
+            {
+                r.X = (int)(r.X / resPic);
+                r.Y = (int)(r.Y / resPic);
+                r.Width = (int)(r.Width / resPic);
+                r.Height = (int)(r.Height / resPic);
+            }
+            r2.X = (int)(r2.X / resPic);
+            r2.Y = (int)(r2.Y / resPic);
+            r2.Width = (int)(r2.Width / resPic);
+            r2.Height = (int)(r2.Height / resPic);
+            using (Graphics gx = Graphics.FromImage(bOut))
+                gx.DrawImage(bWork, 0, 0, bOut.Width, bOut.Height);
+
+            return bOut;
+        }
+
+        private Bitmap ResampleUp(Bitmap bRes, double resPic, Bitmap bOrig, bool dontFillPath, bool disposebOrig)
+        {
+            //take orig image,
+            //get chains from result pic
+            //"cut" (crop) orig image with chains as Mask
+
+            Bitmap bOut = new Bitmap(bOrig.Width, bOrig.Height);
+
+            using (Bitmap bTmp = new Bitmap(bOrig.Width, bOrig.Height))
+            {
+                using (Graphics gx = Graphics.FromImage(bTmp))
+                    gx.DrawImage(bRes, 0, 0, bOut.Width, bOut.Height);
+
+                List<ChainCode> allChains = GetBoundary(bTmp);
+
+                using (TextureBrush tb = new TextureBrush(bOrig))
+                {
+                    foreach (ChainCode c in allChains)
+                    {
+                        using (GraphicsPath gP = new GraphicsPath())
+                        {
+                            try
+                            {
+                                gP.StartFigure();
+                                PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                gP.AddLines(pts);
+
+                                using (Graphics gx = Graphics.FromImage(bOut))
+                                    gx.FillPath(tb, gP);
+                            }
+                            catch (Exception exc)
+                            {
+                                Console.WriteLine(exc.ToString());
+                            }
+                        }
+                    }
+                }
+
+                if (dontFillPath)
+                    foreach (ChainCode c in allChains)
+                    {
+                        if (ChainFinder.IsInnerOutline(c))
+                            using (GraphicsPath gP = new GraphicsPath())
+                            {
+                                try
+                                {
+                                    gP.StartFigure();
+                                    PointF[] pts = c.Coord.Select(a => new PointF(a.X, a.Y)).ToArray();
+                                    gP.AddLines(pts);
+
+                                    using (Graphics gx = Graphics.FromImage(bOut))
+                                    {
+                                        gx.CompositingMode = CompositingMode.SourceCopy;
+                                        gx.FillPath(Brushes.Transparent, gP);
+                                    }
+                                }
+                                catch (Exception exc)
+                                {
+                                    Console.WriteLine(exc.ToString());
+                                }
+                            }
+                    }
+            }
+
+            if (disposebOrig)
+                bOrig.Dispose();
+
+            return bOut;
+        }
+
+        private void _gc_ShowInfo(object sender, string e)
+        {
+            if (InvokeRequired)
+                this.Invoke(new Action(() => this.toolStripStatusLabel4.Text = e));
+            else
+                this.toolStripStatusLabel4.Text = e;
+        }
+
+        private void backgroundWorker6_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (!InvokeRequired)
+            {
+                this.Text = "frmProcOutline";
+                this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
+                if (!this.IsDisposed && this.Visible && !this.toolStripProgressBar1.IsDisposed)
+                    this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
+            }
+            else
+                this.Invoke(new Action(() =>
+                {
+                    this.Text = "frmProcOutline";
+                    if (!this.IsDisposed && this.Visible && !this.toolStripProgressBar1.IsDisposed)
+                        this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
+                    this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
+                }));
+        }
+
+        private void backgroundWorker6_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null)
+            {
+                Bitmap bRes = (Bitmap)e.Result;
+
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bRes, this.helplineRulerCtrl1, "Bmp");
+
+                Bitmap bC = new Bitmap(bRes);
+                this.SetBitmap(ref _bmpRef, ref bC);
+
+                this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                    (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                    (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                _undoOPCache.Add(bRes);
+
+            }
+
+            this.btnPPGo.Text = "Go";
+
+            this.SetControls(true);
+            this.Cursor = Cursors.Default;
+
+            this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
+
+            this.btnTestMethod.Text = "Go";
+
+            this._pic_changed = true;
+
+            if (this._gc != null)
+            {
+                this._gc.ShowInfo -= _gc_ShowInfo;
+                this._gc.Dispose();
+                this._gc = null;
+            }
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+            if (this.Timer3.Enabled)
+                this.Timer3.Stop();
+
+            this.Timer3.Start();
+
+            this.backgroundWorker6.Dispose();
+            this.backgroundWorker6 = new BackgroundWorker();
+            this.backgroundWorker6.WorkerReportsProgress = true;
+            this.backgroundWorker6.WorkerSupportsCancellation = true;
+            this.backgroundWorker6.DoWork += backgroundWorker6_DoWork;
+            this.backgroundWorker6.ProgressChanged += backgroundWorker6_ProgressChanged;
+            this.backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
+        }
+
+        private void btnTestMethod_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker6.IsBusy)
+            {
+                this.backgroundWorker6.CancelAsync();
+                return;
+            }
+
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                this.toolStripProgressBar1.Value = 0;
+                this.toolStripProgressBar1.Visible = true;
+
+                this.btnTestMethod.Text = "Cancel";
+                this.btnTestMethod.Enabled = true;
+
+                int innerW = this._iW;
+                int outerW = this._oW;
+
+                Bitmap bOrig = new Bitmap(this._bmpOrig);
+                Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                int gmm_comp = 2;
+                double gamma = (double)50.0;
+                int numIters = 1;
+                bool rectMode = true;
+                Rectangle r = GetR(bWork, this._oW);
+                bool skipInit = false;
+                bool workOnPaths = false;
+                bool gammaChanged = false;
+                int intMult = 1;
+                bool quick = true;
+                bool useEightAdj = false;
+                bool useTh = true;
+                double th = (double)this.numTh.Value;
+                double resPic = CheckWidthHeight(bWork, true, 1200);
+                bool initWKpp = true;
+                bool multCapacitiesForTLinks = true;
+                double multTLinkCapacity = 2.0;
+                bool castTLInt = true;
+                bool getSourcePart = false;
+                ListSelectionMode selMode = (ListSelectionMode)0;
+                bool scribbleMode = false;
+                Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = null;
+                double probMult1 = 1.0;
+                double kmInitW = 2.0;
+                double kmInitH = 2.0;
+                bool setPFGToFG = false;
+                bool cgWQE = false;
+                double numItems = 0;
+                double numCorrect = 0;
+                double numItems2 = 0;
+                double numCorrect2 = 0;
+                bool skipLearn = false;
+
+                Rectangle clipRect = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                bool dontFillPath = true;
+                bool drawNumComp = true;
+                int comp = 1000;
+
+                int blur = (int)this.numBlur.Value;
+
+                this.backgroundWorker6.RunWorkerAsync(new object[] { bWork, bOrig, innerW, outerW,
+                                    gmm_comp, gamma, numIters, rectMode, r ,skipInit, workOnPaths,
+                                    gammaChanged ,intMult,quick ,useEightAdj ,useTh ,th  ,resPic ,
+                                    initWKpp ,multCapacitiesForTLinks ,multTLinkCapacity ,castTLInt ,
+                                    getSourcePart ,selMode ,scribbleMode ,scribbles ,probMult1,
+                                    kmInitW ,kmInitH , setPFGToFG ,cgWQE ,numItems ,numCorrect ,
+                                    numItems2 ,numCorrect2 ,skipLearn ,clipRect ,dontFillPath ,
+                                    drawNumComp, comp, blur });
+            }
+        }
+
+        private Rectangle GetR(Bitmap bWork, int oW)
+        {
+            List<ChainCode> c = GetBoundary(bWork);
+            using (GraphicsPath gP = new GraphicsPath())
+            {
+                for (int i = 0; i < c.Count; i++)
+                {
+                    gP.AddLines(c[i].Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                    gP.CloseFigure();
+                }
+
+                RectangleF rc = gP.GetBounds();
+                rc.Inflate(oW, oW);
+
+                return new Rectangle((int)Math.Floor(rc.X), (int)Math.Floor(rc.Y), (int)Math.Ceiling(rc.Width), (int)Math.Ceiling(rc.Height));
             }
         }
     }
