@@ -212,7 +212,10 @@ namespace LUBitmapDesigner
         {
             if (this.ShapeList.Count > 1)
             {
+                e.Graphics.TranslateTransform(this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                    this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
                 this.ShapeList[1].Draw(e.Graphics);
+                e.Graphics.ResetTransform();
             }
         }
 
