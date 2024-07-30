@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -640,6 +641,11 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker4.CancelAsync();
                 return;
             }
+            if (this.backgroundWorker6.IsBusy)
+            {
+                this.backgroundWorker6.CancelAsync();
+                return;
+            }
 
             if (this.helplineRulerCtrl1.Bmp != null)
             {
@@ -654,6 +660,8 @@ namespace AvoidAGrabCutEasy
                     this.btnAlphaV.Text = "Cancel";
                     this.btnAlphaV.Enabled = true;
 
+                    this.numSleep.Enabled = this.label2.Enabled = true;
+
                     if (_sw == null)
                         _sw = new Stopwatch();
                     _sw.Reset();
@@ -661,12 +669,14 @@ namespace AvoidAGrabCutEasy
 
                     this.btnOK.Enabled = this.btnCancel.Enabled = false;
 
-                    //int windowSize = (int)this.numWinSz.Value;
-                    //double gamma = (double)this.numGamma.Value;   
-                    //double gamma2 = (double)this.numGamma2.Value;
-                    //int normalDistToCheck = 10;
+                    /*
+                    int windowSize = (int)this.numWinSz.Value;
+                    double gamma = (double)this.numGamma.Value;
+                    int normalDistToCheck = 10;   
+                    double gamma2 = (double)this.numGamma2.Value;
 
-                    //this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, gamma, normalDistToCheck, gamma2 });
+                    this.backgroundWorker3.RunWorkerAsync(new object[] { windowSize, gamma, normalDistToCheck, gamma2 });
+                    */
 
                     if (this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
                     {
@@ -791,9 +801,83 @@ namespace AvoidAGrabCutEasy
                 }
                 else
                 {
+                    MethodMode mm = (MethodMode)System.Enum.Parse(typeof(MethodMode), this.cmbMethodMode.SelectedItem.ToString());
 
-                    BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
-                    this.backgroundWorker2.RunWorkerAsync(new object[] { bt });
+                    if (mm == MethodMode.ModeFeather)
+                    {
+                        BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
+                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt });
+                    }
+                    else
+                    {
+                        if (this.helplineRulerCtrl1.Bmp != null)
+                        {
+                            this.Cursor = Cursors.WaitCursor;
+                            this.SetControls(false);
+
+                            this.toolStripProgressBar1.Value = 0;
+                            this.toolStripProgressBar1.Visible = true;
+
+                            this.btnAlphaV.Text = "Cancel";
+                            this.btnAlphaV.Enabled = true;
+
+                            int innerW = this._iW;
+                            int outerW = this._oW;
+
+                            Bitmap bOrig = new Bitmap(this._bmpOrig);
+                            Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
+                            int gmm_comp = 2;
+                            double gamma = (double)50.0;
+                            int numIters = 1;
+                            bool rectMode = true;
+                            Rectangle r = GetR(bWork, this._oW);
+                            bool skipInit = false;
+                            bool workOnPaths = false;
+                            bool gammaChanged = false;
+                            int intMult = 1;
+                            bool quick = true;
+                            bool useEightAdj = false;
+                            bool useTh = true;
+                            double th = (double)this.numTh.Value;
+                            double resPic = CheckWidthHeight(bWork, true, 1200);
+                            bool initWKpp = true;
+                            bool multCapacitiesForTLinks = true;
+                            double multTLinkCapacity = 2.0;
+                            bool castTLInt = true;
+                            bool getSourcePart = false;
+                            ListSelectionMode selMode = (ListSelectionMode)0;
+                            bool scribbleMode = false;
+                            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = null;
+                            double probMult1 = 1.0;
+                            double kmInitW = 2.0;
+                            double kmInitH = 2.0;
+                            bool setPFGToFG = false;
+                            bool cgWQE = false;
+                            double numItems = 0;
+                            double numCorrect = 0;
+                            double numItems2 = 0;
+                            double numCorrect2 = 0;
+                            bool skipLearn = false;
+
+                            Rectangle clipRect = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                            bool dontFillPath = true;
+                            bool drawNumComp = true;
+                            int comp = 1000;
+
+                            int blur = (int)this.numBlur.Value;
+                            int alphaStartValue = (int)this.numAlphaStart.Value;
+
+                            this.backgroundWorker6.RunWorkerAsync(new object[] { bWork, bOrig, innerW, outerW,
+                                    gmm_comp, gamma, numIters, rectMode, r ,skipInit, workOnPaths,
+                                    gammaChanged, intMult, quick, useEightAdj, useTh, th, resPic,
+                                    initWKpp, multCapacitiesForTLinks, multTLinkCapacity, castTLInt,
+                                    getSourcePart, selMode, scribbleMode, scribbles, probMult1,
+                                    kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
+                                    numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
+                                    drawNumComp, comp, blur, alphaStartValue });
+                        }
+                    }
                 }
             }
         }
@@ -835,8 +919,13 @@ namespace AvoidAGrabCutEasy
 
             this.cmbBlendType.SelectedIndex = 1;
 
+            foreach (string z in System.Enum.GetNames(typeof(MethodMode)))
+                this.cmbMethodMode.Items.Add(z.ToString());
+
+            this.cmbMethodMode.SelectedIndex = 1;
+
             this.rbBoth.Checked = true;
-            //this.cbExpOutlProc.Checked = true;
+            //this.cbBayes.Checked = true;
 
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
 
@@ -1154,9 +1243,12 @@ namespace AvoidAGrabCutEasy
 
             this.label45.Enabled = this.label46.Enabled = this.numBoundOuter.Enabled = this.numBoundInner.Enabled = true;
             this.label52.Enabled = this.cbBlur.Enabled = this.numBlur.Enabled = !ch; //maybe this changes
-            this.label2.Enabled = this.label54.Enabled = ch;
+            this.label54.Enabled = ch;
             this.cbHalfSize.Enabled = this.numError.Enabled = ch;
             this.label9.Enabled = this.numMaxSize.Enabled = ch;
+            this.label4.Enabled = this.numTh.Enabled = !ch;
+
+            cmbMethodMode_SelectedIndexChanged(this.cmbMethodMode, new EventArgs());
 
             int maxWidth = this._maxWidth;
             int oW = (int)this.numBoundOuter.Value;
@@ -4226,7 +4318,7 @@ namespace AvoidAGrabCutEasy
 
             this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
 
-            this.btnTestMethod.Text = "Go";
+            this.btnAlphaV.Text = "Go";
 
             this._pic_changed = true;
 
@@ -4253,83 +4345,6 @@ namespace AvoidAGrabCutEasy
             this.backgroundWorker6.RunWorkerCompleted += backgroundWorker6_RunWorkerCompleted;
         }
 
-        private void btnTestMethod_Click(object sender, EventArgs e)
-        {
-            if (this.backgroundWorker6.IsBusy)
-            {
-                this.backgroundWorker6.CancelAsync();
-                return;
-            }
-
-            if (this.helplineRulerCtrl1.Bmp != null)
-            {
-                this.Cursor = Cursors.WaitCursor;
-                this.SetControls(false);
-
-                this.toolStripProgressBar1.Value = 0;
-                this.toolStripProgressBar1.Visible = true;
-
-                this.btnTestMethod.Text = "Cancel";
-                this.btnTestMethod.Enabled = true;
-
-                int innerW = this._iW;
-                int outerW = this._oW;
-
-                Bitmap bOrig = new Bitmap(this._bmpOrig);
-                Bitmap bWork = new Bitmap(this.helplineRulerCtrl1.Bmp);
-
-                int gmm_comp = 2;
-                double gamma = (double)50.0;
-                int numIters = 1;
-                bool rectMode = true;
-                Rectangle r = GetR(bWork, this._oW);
-                bool skipInit = false;
-                bool workOnPaths = false;
-                bool gammaChanged = false;
-                int intMult = 1;
-                bool quick = true;
-                bool useEightAdj = false;
-                bool useTh = true;
-                double th = (double)this.numTh.Value;
-                double resPic = CheckWidthHeight(bWork, true, 1200);
-                bool initWKpp = true;
-                bool multCapacitiesForTLinks = true;
-                double multTLinkCapacity = 2.0;
-                bool castTLInt = true;
-                bool getSourcePart = false;
-                ListSelectionMode selMode = (ListSelectionMode)0;
-                bool scribbleMode = false;
-                Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = null;
-                double probMult1 = 1.0;
-                double kmInitW = 2.0;
-                double kmInitH = 2.0;
-                bool setPFGToFG = false;
-                bool cgWQE = false;
-                double numItems = 0;
-                double numCorrect = 0;
-                double numItems2 = 0;
-                double numCorrect2 = 0;
-                bool skipLearn = false;
-
-                Rectangle clipRect = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
-                bool dontFillPath = true;
-                bool drawNumComp = true;
-                int comp = 1000;
-
-                int blur = (int)this.numBlur.Value;
-                int alphaStartValue = (int)this.numAlphaStart.Value;
-
-                this.backgroundWorker6.RunWorkerAsync(new object[] { bWork, bOrig, innerW, outerW,
-                                    gmm_comp, gamma, numIters, rectMode, r ,skipInit, workOnPaths,
-                                    gammaChanged, intMult, quick, useEightAdj, useTh, th, resPic,
-                                    initWKpp, multCapacitiesForTLinks, multTLinkCapacity, castTLInt,
-                                    getSourcePart, selMode, scribbleMode, scribbles, probMult1,
-                                    kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
-                                    numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
-                                    drawNumComp, comp, blur, alphaStartValue });
-            }
-        }
-
         private Rectangle GetR(Bitmap bWork, int oW)
         {
             List<ChainCode> c = GetBoundary(bWork);
@@ -4346,6 +4361,13 @@ namespace AvoidAGrabCutEasy
 
                 return new Rectangle((int)Math.Floor(rc.X), (int)Math.Floor(rc.Y), (int)Math.Ceiling(rc.Width), (int)Math.Ceiling(rc.Height));
             }
+        }
+
+        private void cmbMethodMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.label4.Enabled = this.numTh.Enabled = (cmbMethodMode.SelectedIndex == 1 && !this.cbExpOutlProc.Checked);
+            this.label48.Enabled = this.label47.Enabled = this.numNormalDist.Enabled = this.numColDistDist.Enabled =
+                (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
         }
     }
 }

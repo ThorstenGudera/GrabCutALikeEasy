@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="ProcOutline\MatrixEigen.cs" />
     <Compile Include="ProcOutline\MatrixInverse.cs" />
+    <Compile Include="ProcOutline\MethodMode.cs" />
     <Compile Include="ProcOutline\ProgressEventArgs.cs" />
     <Compile Include="ProcOutline\TrimapProblemInfo.cs" />
     <Compile Include="ProcOutline\WindowVal.cs" />
