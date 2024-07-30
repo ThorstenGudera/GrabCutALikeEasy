@@ -867,6 +867,7 @@ namespace AvoidAGrabCutEasy
 
                             int blur = (int)this.numBlur.Value;
                             int alphaStartValue = (int)this.numAlphaStart.Value;
+                            bool doBlur = this.cbBlur.Checked;
 
                             this.backgroundWorker6.RunWorkerAsync(new object[] { bWork, bOrig, innerW, outerW,
                                     gmm_comp, gamma, numIters, rectMode, r ,skipInit, workOnPaths,
@@ -875,7 +876,7 @@ namespace AvoidAGrabCutEasy
                                     getSourcePart, selMode, scribbleMode, scribbles, probMult1,
                                     kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
                                     numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
-                                    drawNumComp, comp, blur, alphaStartValue });
+                                    drawNumComp, comp, blur, alphaStartValue, doBlur });
                         }
                     }
                 }
@@ -3617,6 +3618,7 @@ namespace AvoidAGrabCutEasy
             int comp = (int)o[39];
             int blur = (int)o[40];
             int alphaStartValue = (int)o[41];
+            bool doBlur = (bool)o[42];
 
             //resize the input bmp
             Bitmap bU2 = null;
@@ -3981,8 +3983,11 @@ namespace AvoidAGrabCutEasy
             using (Graphics gx = Graphics.FromImage(bDiff))
                 gx.DrawImage(bInner, 0, 0);
 
-            fipbmp fip = new fipbmp();
-            fip.SmoothByAveragingA(bDiff, blur, this.backgroundWorker6);
+            if (doBlur)
+            {
+                fipbmp fip = new fipbmp();
+                fip.SmoothByAveragingA(bDiff, blur, this.backgroundWorker6);
+            }
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP();
             //bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1), alphaStartValue, innerW);
