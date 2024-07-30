@@ -3888,7 +3888,8 @@ namespace AvoidAGrabCutEasy
             fip.SmoothByAveragingA(bDiff, blur, this.backgroundWorker6);
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP();
-            bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1), alphaStartValue, innerW);
+            //bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1), alphaStartValue, innerW);
+            bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1) + 2, alphaStartValue, innerW);
             bmOP.Dispose();
 
             using (Graphics gx = Graphics.FromImage(bDiff))
