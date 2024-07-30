@@ -3960,7 +3960,7 @@ namespace AvoidAGrabCutEasy
             bTrimap = null;
 
             //our result pic
-            e.Result = e.Result = GetAlphaBoundsPic(bRes, 2); //bRes;
+            e.Result = GetAlphaBoundsPic(bRes, 2); //bRes;
 
             bRes.Dispose();
             bRes = null;
