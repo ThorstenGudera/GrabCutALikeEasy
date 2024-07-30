@@ -380,6 +380,9 @@ namespace AvoidAGrabCutEasy
                 if (this.backgroundWorker5.IsBusy)
                     this.backgroundWorker5.CancelAsync();
 
+                if (this.backgroundWorker6.IsBusy)
+                    this.backgroundWorker6.CancelAsync();
+
                 if (this._bmpBU != null)
                     this._bmpBU.Dispose();
                 if (this._bmpOrig != null)
@@ -1499,8 +1502,10 @@ namespace AvoidAGrabCutEasy
                 {
                     this.Text = "frmProcOutline";
                     if (!this.IsDisposed && this.Visible && !this.toolStripProgressBar1.IsDisposed)
+                    {
                         this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
-                    this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
+                        this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
+                    }
                 }));
         }
 
@@ -3578,7 +3583,7 @@ namespace AvoidAGrabCutEasy
                     ScribbleMode = scribbleMode,
                     Scribbles = scribbles,
                     Rc = r,
-                    BGW = this.backgroundWorker1,
+                    BGW = this.backgroundWorker6,
                     QuickEstimation = quick,
                     EightAdj = useEightAdj,
                     UseThreshold = useTh,
@@ -3594,7 +3599,7 @@ namespace AvoidAGrabCutEasy
                     NumItems = numItems,
                     NumCorrect = numCorrect,
                     NumItems2 = numItems2,
-                    NumCorrect2 = numCorrect2,
+                    NumCorrect2 = numCorrect2
                 };
 
                 this._gc.ShowInfo += _gc_ShowInfo;
@@ -4182,18 +4187,14 @@ namespace AvoidAGrabCutEasy
         {
             if (!InvokeRequired)
             {
-                this.Text = "frmProcOutline";
-                this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
                 if (!this.IsDisposed && this.Visible && !this.toolStripProgressBar1.IsDisposed)
                     this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
             }
             else
                 this.Invoke(new Action(() =>
                 {
-                    this.Text = "frmProcOutline";
                     if (!this.IsDisposed && this.Visible && !this.toolStripProgressBar1.IsDisposed)
-                        this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
-                    this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
+                        this.toolStripProgressBar1.Value = Math.Max(Math.Min(e.ProgressPercentage, this.toolStripProgressBar1.Maximum), 0);
                 }));
         }
 
