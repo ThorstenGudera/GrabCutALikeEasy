@@ -1637,6 +1637,28 @@ namespace AvoidAGrabCutEasy.ProcOutline
             bRet = null;
         }
 
+        public void Feather(Bitmap bmp, int width, int alphaStartValue, int innerWidth)
+        {
+            Bitmap bRet = null;
+
+            BitmapBorderAction b = BitmapBorderAction.Feather;
+            double[] saturation = null;
+            double[] alpha = GetVector(width * 2 + 1, alphaStartValue, innerWidth);
+            BitmapOutlineVariant bov = BitmapOutlineVariant.All;
+
+            bRet = GetOutline(bmp, width, b, saturation, alpha, bov, false, null);
+
+            using (Graphics gx = Graphics.FromImage(bmp))
+            {
+                gx.Clear(Color.Transparent);
+                gx.DrawImage(bRet, 0, 0);
+            }
+
+            if (bRet != null)
+                bRet.Dispose();
+            bRet = null;
+        }
+
         public void Feather(Bitmap bmp, double[] alpha, bool setLastCroppedBitmap, Bitmap lastCroppedPic)
         {
             Bitmap bRet = null;

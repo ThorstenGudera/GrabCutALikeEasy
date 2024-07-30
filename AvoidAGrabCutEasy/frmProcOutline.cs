@@ -3519,6 +3519,7 @@ namespace AvoidAGrabCutEasy
             bool drawNumComp = (bool)o[38];
             int comp = (int)o[39];
             int blur = (int)o[40];
+            int alphaStartValue = (int)o[41];
 
             //resize the input bmp
             Bitmap bU2 = null;
@@ -3887,7 +3888,7 @@ namespace AvoidAGrabCutEasy
             fip.SmoothByAveragingA(bDiff, blur, this.backgroundWorker6);
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP();
-            bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1));
+            bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1), alphaStartValue, innerW);
             bmOP.Dispose();
 
             using (Graphics gx = Graphics.FromImage(bDiff))
@@ -4314,15 +4315,16 @@ namespace AvoidAGrabCutEasy
                 int comp = 1000;
 
                 int blur = (int)this.numBlur.Value;
+                int alphaStartValue = (int)this.numAlphaStart.Value;
 
                 this.backgroundWorker6.RunWorkerAsync(new object[] { bWork, bOrig, innerW, outerW,
                                     gmm_comp, gamma, numIters, rectMode, r ,skipInit, workOnPaths,
-                                    gammaChanged ,intMult,quick ,useEightAdj ,useTh ,th  ,resPic ,
-                                    initWKpp ,multCapacitiesForTLinks ,multTLinkCapacity ,castTLInt ,
-                                    getSourcePart ,selMode ,scribbleMode ,scribbles ,probMult1,
-                                    kmInitW ,kmInitH , setPFGToFG ,cgWQE ,numItems ,numCorrect ,
-                                    numItems2 ,numCorrect2 ,skipLearn ,clipRect ,dontFillPath ,
-                                    drawNumComp, comp, blur });
+                                    gammaChanged, intMult, quick, useEightAdj, useTh, th, resPic,
+                                    initWKpp, multCapacitiesForTLinks, multTLinkCapacity, castTLInt,
+                                    getSourcePart, selMode, scribbleMode, scribbles, probMult1,
+                                    kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
+                                    numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
+                                    drawNumComp, comp, blur, alphaStartValue });
             }
         }
 
