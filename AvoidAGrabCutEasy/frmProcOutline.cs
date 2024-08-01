@@ -1176,11 +1176,12 @@ namespace AvoidAGrabCutEasy
             e.Result = bmp;
         }
 
+        //what we are doing here is to gather all angles that are smaller than a given value, because the "defects" are
+        //visible after feathering at angles in the outline that are small. Then we simply get a small Bitmap from the
+        //input image around that point, prcess this a bit and draw this in the result image. 
         private void RevisitConvexDefects(Bitmap bPrevious, Bitmap bmp, double gamma = 1.0, float opacity = 1.0f, double wMax = 180.0)
         {
-            //#############################################################################
-            // Test
-            //#############################################################################
+            //Get all connected components
             List<ChainCode> c = GetBoundary(bPrevious);
             ChainFinder cf = new ChainFinder();
             cf.AllowNullCells = true;
@@ -1192,8 +1193,10 @@ namespace AvoidAGrabCutEasy
                 bool isInner = ChainFinder.IsInnerOutline(cc);
                 List<Point> pts = cc.Coord;
 
+                //now use a bit of calculus and simple linear algebra
                 if (pts.Count > 4)
                 {
+                    //make sure each point under consideration has not too close neighbors, since we have a chaincode detector in 4-adjacency
                     pts = cf.RemoveColinearity(pts, true, 4);
                     pts = cf.ApproximateLines(pts, 1.5);
                     pts = cf.RemoveColinearity(pts, true, 4);
@@ -1203,6 +1206,7 @@ namespace AvoidAGrabCutEasy
                     List<Point> distB = new List<Point>();
                     List<Point> distA = new List<Point>();
 
+                    //get all angles as radians
                     for (int j = 0; j < pts.Count; j++)
                     {
                         PointF pt = pts[j];
@@ -1249,6 +1253,7 @@ namespace AvoidAGrabCutEasy
                     List<Tuple<int, double>> d = new List<Tuple<int, double>>();
                     List<Tuple<int, Point, Point>> dp = new List<Tuple<int, Point, Point>>();
 
+                    //convert angles to degrees and check, if they should be added
                     for (int j = 0; j < angles.Count; j++)
                     {
                         double w = angles[j] * 180.0 / Math.PI;
@@ -1266,8 +1271,14 @@ namespace AvoidAGrabCutEasy
 
                     //List<List<double[]>> l = GetAlphaTables(bmp, pts, d, dp);
 
+                    //Instead of using a lot of math and arrays for alpha transitions to get the needed values, we
+                    //use a trick and overdraw the parts around the angels with a circular_alpha_gradient_picture from the image
+                    //passed to this method as input.
+
+                    //now get a List of all Bitmaps to be used in this ChainCode, so we can draw all images (for the current ChainCode) in one pass
                     List<Tuple<Point, Bitmap>> bmps = new List<Tuple<Point, Bitmap>>();
 
+                    //Size of bitmap
                     int wh = (this._oW + this._iW) * 4 + 1;
                     int wh2 = wh / 2;
 
@@ -1279,11 +1290,14 @@ namespace AvoidAGrabCutEasy
                         int ex = Math.Min(pt.X + wh2, bmp.Width - 1);
                         int ey = Math.Min(pt.Y + wh2, bmp.Height - 1);
 
+                        //Get the picture
                         Bitmap b = bPrevious.Clone(new Rectangle(sx, sy, ex - sx, ey - sy), PixelFormat.Format32bppArgb);
+                        //Now get the alphaGradient and add the point_to_draw and the bitmap to the list
                         GetCircularAlphaGradient(b, gamma);
                         bmps.Add(Tuple.Create(new Point(sx, sy), b));
                     }
 
+                    //draw out all bmps for this ChainCode
                     using (Graphics gx = Graphics.FromImage(bmp))
                     {
                         for (int j = 0; j < bmps.Count; j++)
@@ -1309,6 +1323,7 @@ namespace AvoidAGrabCutEasy
                         }
                     }
 
+                    //cleanup
                     for (int j = bmps.Count - 1; j >= 0; j--)
                     {
                         Bitmap b = bmps[j].Item2;
@@ -1321,6 +1336,8 @@ namespace AvoidAGrabCutEasy
             //#############################################################################
         }
 
+        //This method is copied and telerik-translated from my PictureTextDesigner program, which is partly written in VB
+        //so this still uses Marshal.Copy to get the Bitmap_Data, instead of using byte-pointers. This will be changed in the next days.
         private unsafe void GetCircularAlphaGradient(Bitmap bmp, double gamma = 1.0)
         {
             AlphaGradientMode gm = AlphaGradientMode.Elliptic;
@@ -1346,6 +1363,9 @@ namespace AvoidAGrabCutEasy
                     byte[] p = new byte[(bmData.Stride * bmData.Height) - 1 + 1];
                     Marshal.Copy(bmData.Scan0, p, 0, p.Length);
 
+                    //to get some infos, how the ellipse relatedd values are computed, see Wikipedia.
+                    //At least, in the german Wiki, there is a good description of using NumericalExcentricity
+                    //and ellipse radiae, see: https://de.wikipedia.org/wiki/Ellipse#Formelsammlung_(Ellipsengleichungen)
                     if (gm.ToString().Contains("Elliptic") || gm.ToString().Contains("Irrsinn"))
                     {
                         double dist = valueFrom - valueTo;
