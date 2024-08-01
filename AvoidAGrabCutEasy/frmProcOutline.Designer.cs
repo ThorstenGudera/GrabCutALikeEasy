@@ -130,6 +130,13 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numGamma2 = new System.Windows.Forms.NumericUpDown();
+            this.cbRestoreDefects = new System.Windows.Forms.CheckBox();
+            this.numOpacity = new System.Windows.Forms.NumericUpDown();
+            this.numWMax = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -167,6 +174,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWMax)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -195,7 +205,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(1268, 722);
+            this.splitContainer1.Size = new System.Drawing.Size(1268, 762);
             this.splitContainer1.SplitterDistance = 835;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -212,7 +222,7 @@
             this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
             this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
             this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 722);
+            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
             this.helplineRulerCtrl1.TabIndex = 0;
             this.helplineRulerCtrl1.Zoom = 1F;
             this.helplineRulerCtrl1.ZoomSetManually = false;
@@ -223,7 +233,7 @@
             this.groupBox2.Controls.Add(this.btnSetGamma);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.numGamma);
-            this.groupBox2.Location = new System.Drawing.Point(9, 539);
+            this.groupBox2.Location = new System.Drawing.Point(9, 590);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(408, 45);
             this.groupBox2.TabIndex = 660;
@@ -275,7 +285,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 631);
+            this.label1.Location = new System.Drawing.Point(13, 682);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 658;
@@ -283,7 +293,7 @@
             // 
             // btmSetBU
             // 
-            this.btmSetBU.Location = new System.Drawing.Point(151, 626);
+            this.btmSetBU.Location = new System.Drawing.Point(151, 677);
             this.btmSetBU.Name = "btmSetBU";
             this.btmSetBU.Size = new System.Drawing.Size(75, 23);
             this.btmSetBU.TabIndex = 657;
@@ -294,7 +304,7 @@
             // Label20
             // 
             this.Label20.AutoSize = true;
-            this.Label20.Location = new System.Drawing.Point(13, 594);
+            this.Label20.Location = new System.Drawing.Point(13, 645);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(53, 13);
             this.Label20.TabIndex = 656;
@@ -310,7 +320,7 @@
             "1",
             "Fit_Width",
             "Fit"});
-            this.cmbZoom.Location = new System.Drawing.Point(72, 591);
+            this.cmbZoom.Location = new System.Drawing.Point(72, 642);
             this.cmbZoom.Name = "cmbZoom";
             this.cmbZoom.Size = new System.Drawing.Size(75, 21);
             this.cmbZoom.TabIndex = 655;
@@ -322,7 +332,7 @@
             this.cbBGColor.AutoSize = true;
             this.cbBGColor.Checked = true;
             this.cbBGColor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBGColor.Location = new System.Drawing.Point(161, 593);
+            this.cbBGColor.Location = new System.Drawing.Point(161, 644);
             this.cbBGColor.Name = "cbBGColor";
             this.cbBGColor.Size = new System.Drawing.Size(65, 17);
             this.cbBGColor.TabIndex = 654;
@@ -334,7 +344,7 @@
             // 
             this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button10.Location = new System.Drawing.Point(334, 626);
+            this.button10.Location = new System.Drawing.Point(334, 677);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 23);
             this.button10.TabIndex = 653;
@@ -346,7 +356,7 @@
             // 
             this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(253, 626);
+            this.button8.Location = new System.Drawing.Point(253, 677);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 652;
@@ -359,7 +369,7 @@
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(334, 591);
+            this.button2.Location = new System.Drawing.Point(334, 642);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 651;
@@ -371,7 +381,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(342, 680);
+            this.btnCancel.Location = new System.Drawing.Point(342, 731);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 645;
@@ -383,7 +393,7 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOK.Location = new System.Drawing.Point(262, 680);
+            this.btnOK.Location = new System.Drawing.Point(262, 731);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 646;
@@ -393,6 +403,13 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label8);
+            this.groupBox4.Controls.Add(this.label7);
+            this.groupBox4.Controls.Add(this.label6);
+            this.groupBox4.Controls.Add(this.numGamma2);
+            this.groupBox4.Controls.Add(this.cbRestoreDefects);
+            this.groupBox4.Controls.Add(this.numOpacity);
+            this.groupBox4.Controls.Add(this.numWMax);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.cmbMethodMode);
             this.groupBox4.Controls.Add(this.label4);
@@ -425,7 +442,7 @@
             this.groupBox4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox4.Location = new System.Drawing.Point(9, 285);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(408, 248);
+            this.groupBox4.Size = new System.Drawing.Size(408, 299);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
@@ -433,7 +450,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(193, 222);
+            this.label5.Location = new System.Drawing.Point(193, 271);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
             this.label5.TabIndex = 678;
@@ -443,7 +460,7 @@
             // 
             this.cmbMethodMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMethodMode.FormattingEnabled = true;
-            this.cmbMethodMode.Location = new System.Drawing.Point(232, 218);
+            this.cmbMethodMode.Location = new System.Drawing.Point(232, 267);
             this.cmbMethodMode.Name = "cmbMethodMode";
             this.cmbMethodMode.Size = new System.Drawing.Size(75, 21);
             this.cmbMethodMode.TabIndex = 677;
@@ -452,7 +469,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 216);
+            this.label4.Location = new System.Drawing.Point(213, 177);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 661;
@@ -461,7 +478,7 @@
             // numTh
             // 
             this.numTh.DecimalPlaces = 6;
-            this.numTh.Location = new System.Drawing.Point(68, 214);
+            this.numTh.Location = new System.Drawing.Point(269, 175);
             this.numTh.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -480,7 +497,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Enabled = false;
-            this.label9.Location = new System.Drawing.Point(196, 187);
+            this.label9.Location = new System.Drawing.Point(7, 270);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 13);
             this.label9.TabIndex = 676;
@@ -497,7 +514,7 @@
             0,
             0,
             65536});
-            this.numMaxSize.Location = new System.Drawing.Point(252, 184);
+            this.numMaxSize.Location = new System.Drawing.Point(63, 267);
             this.numMaxSize.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -859,7 +876,7 @@
             // btnAlphaV
             // 
             this.btnAlphaV.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAlphaV.Location = new System.Drawing.Point(319, 216);
+            this.btnAlphaV.Location = new System.Drawing.Point(319, 265);
             this.btnAlphaV.Name = "btnAlphaV";
             this.btnAlphaV.Size = new System.Drawing.Size(75, 23);
             this.btnAlphaV.TabIndex = 538;
@@ -1432,7 +1449,7 @@
             this.toolStripStatusLabel2,
             this.toolStripProgressBar1,
             this.toolStripStatusLabel4});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 722);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 762);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1268, 39);
             this.statusStrip1.TabIndex = 1;
@@ -1527,11 +1544,111 @@
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(112, 232);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 13);
+            this.label8.TabIndex = 685;
+            this.label8.Text = "opacity";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(224, 205);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 13);
+            this.label7.TabIndex = 684;
+            this.label7.Text = "gamma";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(115, 206);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 683;
+            this.label6.Text = "wMax";
+            this.toolTip1.SetToolTip(this.label6, "Maximum angle");
+            // 
+            // numGamma2
+            // 
+            this.numGamma2.DecimalPlaces = 2;
+            this.numGamma2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numGamma2.Location = new System.Drawing.Point(271, 203);
+            this.numGamma2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numGamma2.Name = "numGamma2";
+            this.numGamma2.Size = new System.Drawing.Size(60, 20);
+            this.numGamma2.TabIndex = 679;
+            this.numGamma2.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // cbRestoreDefects
+            // 
+            this.cbRestoreDefects.AutoSize = true;
+            this.cbRestoreDefects.Checked = true;
+            this.cbRestoreDefects.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 205);
+            this.cbRestoreDefects.Name = "cbRestoreDefects";
+            this.cbRestoreDefects.Size = new System.Drawing.Size(95, 17);
+            this.cbRestoreDefects.TabIndex = 682;
+            this.cbRestoreDefects.Text = "restoreDefects";
+            this.cbRestoreDefects.UseVisualStyleBackColor = true;
+            this.cbRestoreDefects.CheckedChanged += new System.EventHandler(this.cbRestoreDefects_CheckedChanged);
+            // 
+            // numOpacity
+            // 
+            this.numOpacity.DecimalPlaces = 2;
+            this.numOpacity.Location = new System.Drawing.Point(157, 229);
+            this.numOpacity.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numOpacity.Name = "numOpacity";
+            this.numOpacity.Size = new System.Drawing.Size(57, 20);
+            this.numOpacity.TabIndex = 680;
+            this.numOpacity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numWMax
+            // 
+            this.numWMax.DecimalPlaces = 2;
+            this.numWMax.Location = new System.Drawing.Point(156, 203);
+            this.numWMax.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numWMax.Name = "numWMax";
+            this.numWMax.Size = new System.Drawing.Size(57, 20);
+            this.numWMax.TabIndex = 681;
+            this.numWMax.Value = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 761);
+            this.ClientSize = new System.Drawing.Size(1268, 801);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "frmProcOutline";
@@ -1583,6 +1700,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWMax)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1691,5 +1811,12 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmbMethodMode;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown numGamma2;
+        private System.Windows.Forms.CheckBox cbRestoreDefects;
+        private System.Windows.Forms.NumericUpDown numOpacity;
+        private System.Windows.Forms.NumericUpDown numWMax;
     }
 }

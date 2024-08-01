@@ -13,6 +13,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -803,10 +804,15 @@ namespace AvoidAGrabCutEasy
                 {
                     MethodMode mm = (MethodMode)System.Enum.Parse(typeof(MethodMode), this.cmbMethodMode.SelectedItem.ToString());
 
+                    bool restoreDefects = this.cbRestoreDefects.Checked;
+                    double gamma2 = (double)this.numGamma2.Value;
+                    float opacity = (float)this.numOpacity.Value;
+                    double wMax = (double)this.numWMax.Value;
+
                     if (mm == MethodMode.ModeFeather)
                     {
                         BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
-                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt });
+                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax });
                     }
                     else
                     {
@@ -876,7 +882,8 @@ namespace AvoidAGrabCutEasy
                                     getSourcePart, selMode, scribbleMode, scribbles, probMult1,
                                     kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
                                     numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
-                                    drawNumComp, comp, blur, alphaStartValue, doBlur });
+                                    drawNumComp, comp, blur, alphaStartValue, doBlur, restoreDefects,
+                                    gamma2, opacity, wMax });
                         }
                     }
                 }
@@ -1135,6 +1142,10 @@ namespace AvoidAGrabCutEasy
 
             object[] o = (object[])e.Argument;
             BlendType bt = (BlendType)o[0];
+            bool restoreDefects = (bool)o[1];
+            double gamma = (double)o[2];
+            float opacity = (float)o[3];
+            double wMax = (double)o[4];
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP(this.helplineRulerCtrl1.Bmp, this._bmpOrig);
             //bmOP.ShowInfo += _gc_ShowInfo;
@@ -1159,7 +1170,476 @@ namespace AvoidAGrabCutEasy
 
             this._bmOP = bmOP;
 
+            if (restoreDefects)
+                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp, gamma, opacity, wMax);
+
             e.Result = bmp;
+        }
+
+        private void RevisitConvexDefects(Bitmap bPrevious, Bitmap bmp, double gamma = 1.0, float opacity = 1.0f, double wMax = 180.0)
+        {
+            //#############################################################################
+            // Test
+            //#############################################################################
+            List<ChainCode> c = GetBoundary(bPrevious);
+            ChainFinder cf = new ChainFinder();
+            cf.AllowNullCells = true;
+
+            c = c.OrderByDescending(a => a.Coord.Count).ToList();
+
+            foreach (ChainCode cc in c)
+            {
+                bool isInner = ChainFinder.IsInnerOutline(cc);
+                List<Point> pts = cc.Coord;
+
+                if (pts.Count > 4)
+                {
+                    pts = cf.RemoveColinearity(pts, true, 4);
+                    pts = cf.ApproximateLines(pts, 1.5);
+                    pts = cf.RemoveColinearity(pts, true, 4);
+
+                    cc.Coord = pts;
+                    List<double> angles = new List<double>();
+                    List<Point> distB = new List<Point>();
+                    List<Point> distA = new List<Point>();
+
+                    for (int j = 0; j < pts.Count; j++)
+                    {
+                        PointF pt = pts[j];
+                        PointF ptB = pts[(pts.Count + (j - 1)) % pts.Count];
+                        PointF ptA = pts[(j + 1) % pts.Count];
+
+                        if ((pt.X == ptB.X && pt.Y == ptB.Y) || ((pt.X == ptA.X && pt.Y == ptA.Y)))
+                        {
+                            angles.Add(0);
+                            distB.Add(new Point(0, 0));
+                            distA.Add(new Point(0, 0));
+                            continue;
+                        }
+
+                        double distBX = pt.X - ptB.X;
+                        double distBY = pt.Y - ptB.Y;
+
+                        distB.Add(new Point((int)distBX, (int)distBY));
+
+                        double dB = Math.Sqrt(distBX * distBX + distBY * distBY);
+
+                        distBX /= dB;
+                        distBY /= dB;
+
+                        double aB = Math.Atan2(distBY, distBX);
+
+                        double distAX = ptA.X - pt.X;
+                        double distAY = ptA.Y - pt.Y;
+
+                        distA.Add(new Point((int)distAX, (int)distAY));
+
+                        double dA = Math.Sqrt(distAX * distAX + distAY * distAY);
+
+                        distAX /= dA;
+                        distAY /= dA;
+
+                        double aA = Math.Atan2(distAY, distAX);
+
+                        double a = aA - aB;
+
+                        angles.Add(a);
+                    }
+
+                    List<Tuple<int, double>> d = new List<Tuple<int, double>>();
+                    List<Tuple<int, Point, Point>> dp = new List<Tuple<int, Point, Point>>();
+
+                    for (int j = 0; j < angles.Count; j++)
+                    {
+                        double w = angles[j] * 180.0 / Math.PI;
+                        if (w < 0)
+                            w += 360;
+                        if (w > 360)
+                            w -= 360;
+
+                        if (w > 0 && w < wMax)
+                        {
+                            d.Add(Tuple.Create(j, w));
+                            dp.Add(Tuple.Create(j, distB[j], distA[j]));
+                        }
+                    }
+
+                    //List<List<double[]>> l = GetAlphaTables(bmp, pts, d, dp);
+
+                    List<Tuple<Point, Bitmap>> bmps = new List<Tuple<Point, Bitmap>>();
+
+                    int wh = (this._oW + this._iW) * 4 + 1;
+                    int wh2 = wh / 2;
+
+                    for (int j = 0; j < dp.Count; j++)
+                    {
+                        Point pt = pts[dp[j].Item1];
+                        int sx = Math.Max(pt.X - wh2, 0);
+                        int sy = Math.Max(pt.Y - wh2, 0);
+                        int ex = Math.Min(pt.X + wh2, bmp.Width - 1);
+                        int ey = Math.Min(pt.Y + wh2, bmp.Height - 1);
+
+                        Bitmap b = bPrevious.Clone(new Rectangle(sx, sy, ex - sx, ey - sy), PixelFormat.Format32bppArgb);
+                        GetCircularAlphaGradient(b, gamma);
+                        bmps.Add(Tuple.Create(new Point(sx, sy), b));
+                    }
+
+                    using (Graphics gx = Graphics.FromImage(bmp))
+                    {
+                        for (int j = 0; j < bmps.Count; j++)
+                        {
+                            if (opacity == 1.0f)
+                                //gx.FillRectangle(Brushes.Red, new Rectangle(bmps[j].Item1, new Size(wh, wh)));
+                                gx.DrawImage(bmps[j].Item2, bmps[j].Item1);
+                            else
+                            {
+                                ColorMatrix cm = new ColorMatrix();
+                                cm.Matrix33 = opacity;
+
+                                //gx.FillRectangle(Brushes.Red, new Rectangle(bmps[j].Item1, new Size(wh, wh)));
+
+                                using (ImageAttributes ia = new ImageAttributes())
+                                {
+                                    ia.SetColorMatrix(cm);
+                                    gx.DrawImage(bmps[j].Item2,
+                                        new Rectangle(bmps[j].Item1, new Size(wh, wh)),
+                                            0, 0, wh, wh, GraphicsUnit.Pixel, ia);
+                                }
+                            }
+                        }
+                    }
+
+                    for (int j = bmps.Count - 1; j >= 0; j--)
+                    {
+                        Bitmap b = bmps[j].Item2;
+                        bmps.RemoveAt(j);
+                        b.Dispose();
+                        b = null;
+                    }
+                }
+            }
+            //#############################################################################
+        }
+
+        private unsafe void GetCircularAlphaGradient(Bitmap bmp, double gamma = 1.0)
+        {
+            AlphaGradientMode gm = AlphaGradientMode.Elliptic;
+            int valueFrom = 255;
+            int valueTo = 0;
+
+            BitmapData bmData = null;
+
+            try
+            {
+                if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 4L))
+                {
+                    Point mid = new Point(bmp.Width / 2, bmp.Height / 2);
+
+                    bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+                    int scanline = bmData.Stride;
+                    System.IntPtr Scan0 = bmData.Scan0;
+
+                    int nWidth = bmp.Width;
+                    int nHeight = bmp.Height;
+
+                    byte[] p = new byte[(bmData.Stride * bmData.Height) - 1 + 1];
+                    Marshal.Copy(bmData.Scan0, p, 0, p.Length);
+
+                    if (gm.ToString().Contains("Elliptic") || gm.ToString().Contains("Irrsinn"))
+                    {
+                        double dist = valueFrom - valueTo;
+
+                        if (bmp.Width > bmp.Height)
+                        {
+                            int l = mid.X;
+                            int s = mid.Y;
+                            double numEx = Math.Sqrt((l * l) - (s * s)) / l;
+
+                            for (int y = 0; y <= nHeight - 1; y++)
+                            {
+                                for (int x = 0; x <= nWidth - 1; x++)
+                                {
+                                    switch (gm)
+                                    {
+                                        case AlphaGradientMode.Elliptic:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2(trueY, trueX);
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueFrom - (Math.Pow(radius / radiusMax, gamma) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.Elliptic2:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueY), (trueX));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueFrom - ((radius / radiusMax > 0.5 ? (Math.Pow(radius / radiusMax, gamma) - 0.5) * 2.0 : 0.0) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.EllipticRev:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueY), (trueX));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueTo + (Math.Pow(radius / radiusMax, gamma) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.EllipticRev2:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueY), (trueX));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueTo + ((radius / radiusMax > 0.5 ? (Math.Pow(radius / radiusMax, gamma) - 0.5) * 2.0 : 0.0) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.Irrsinn:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueY), (trueX));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = (dist / 255) * ((radius / radiusMax > 0.5 ? (Math.Pow(radius / radiusMax, gamma) - 0.5) * 2.0 : 0.0));
+
+                                                p[x * 4 + y * scanline] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(Math.Abs((255.0 * val) - System.Convert.ToDouble(p[x * 4 + y * scanline]))), 0), 255));
+                                                p[x * 4 + y * scanline + 1] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(Math.Abs((255.0 * val) - System.Convert.ToDouble(p[x * 4 + y * scanline + 1]))), 0), 255));
+                                                p[x * 4 + y * scanline + 2] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(Math.Abs((255.0 * val) - System.Convert.ToDouble(p[x * 4 + y * scanline + 2]))), 0), 255));
+                                                // p(x * 4 + y * scanline + 3) = CByte(Math.Min(Math.Max(CInt(CDbl(val) * CDbl(p(x * 4 + y * scanline + 3)) / 255.0), 0), 255))
+
+                                                break;
+                                            }
+
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int l = mid.Y;
+                            int s = mid.X;
+                            double numEx = Math.Sqrt((l * l) - (s * s)) / l;
+
+                            for (int x = 0; x <= nWidth - 1; x++)
+                            {
+                                for (int y = 0; y <= nHeight - 1; y++)
+                                {
+                                    switch (gm)
+                                    {
+                                        case AlphaGradientMode.Elliptic:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueX), (trueY));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueFrom - (Math.Pow(radius / radiusMax, gamma) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.Elliptic2:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueX), (trueY));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueFrom - ((radius / radiusMax > 0.5 ? (Math.Pow(radius / radiusMax, gamma) - 0.5) * 2.0 : 0.0) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.EllipticRev:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueX), (trueY));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueTo + (Math.Pow(radius / radiusMax, gamma) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.EllipticRev2:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueX), (trueY));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = valueTo + ((radius / radiusMax > 0.5 ? (Math.Pow(radius / radiusMax, gamma) - 0.5) * 2.0 : 0.0) * dist);
+
+                                                p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(val) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                                break;
+                                            }
+
+                                        case AlphaGradientMode.Irrsinn:
+                                            {
+                                                int trueX = x - mid.X;
+                                                int trueY = y - mid.Y;
+                                                double theta = Math.Atan2((trueX), (trueY));
+                                                double xf = mid.X - x;
+                                                double yf = mid.Y - y;
+                                                double el = Math.Sqrt(1.0 - (numEx * numEx * Math.Cos(theta) * Math.Cos(theta)));
+                                                double radiusMax = System.Convert.ToDouble(s) / el;
+                                                double radius = Math.Sqrt((xf * xf) + (yf * yf));
+
+                                                double val = (dist / 255) * ((radius / radiusMax > 0.5 ? (Math.Pow(radius / radiusMax, gamma) - 0.5) * 2.0 : 0.0));
+
+                                                p[x * 4 + y * scanline] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(Math.Abs((255.0 * val) - System.Convert.ToDouble(p[x * 4 + y * scanline]))), 0), 255));
+                                                p[x * 4 + y * scanline + 1] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(Math.Abs((255.0 * val) - System.Convert.ToDouble(p[x * 4 + y * scanline + 1]))), 0), 255));
+                                                p[x * 4 + y * scanline + 2] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(Math.Abs((255.0 * val) - System.Convert.ToDouble(p[x * 4 + y * scanline + 2]))), 0), 255));
+                                                // p(x * 4 + y * scanline + 3) = CByte(Math.Min(Math.Max(CInt(CDbl(val) * CDbl(p(x * 4 + y * scanline + 3)) / 255.0), 0), 255))
+
+                                                break;
+                                            }
+
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        double dist = valueFrom - valueTo;
+
+                        for (int y = 0; y <= nHeight - 1; y++)
+                        {
+                            for (int x = 0; x <= nWidth - 1; x++)
+                            {
+                                switch (gm)
+                                {
+                                    case AlphaGradientMode.HorizontalDown:
+                                        {
+                                            int value = System.Convert.ToInt32(valueFrom - (dist * Math.Pow(System.Convert.ToDouble(x) / System.Convert.ToDouble(nWidth), gamma)));
+                                            p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(value) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                            break;
+                                        }
+
+                                    case AlphaGradientMode.HorizontalUp:
+                                        {
+                                            int value = System.Convert.ToInt32(valueTo + (dist * Math.Pow(System.Convert.ToDouble(x) / System.Convert.ToDouble(nWidth), 1.0 / gamma)));
+                                            p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(value) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                            break;
+                                        }
+
+                                    case AlphaGradientMode.VerticalalDown:
+                                        {
+                                            int value = System.Convert.ToInt32(valueFrom - (dist * Math.Pow(System.Convert.ToDouble(y) / System.Convert.ToDouble(nHeight), gamma)));
+                                            p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(value) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                            break;
+                                        }
+
+                                    case AlphaGradientMode.VerticalUp:
+                                        {
+                                            int value = System.Convert.ToInt32(valueTo + (dist * Math.Pow(System.Convert.ToDouble(y) / System.Convert.ToDouble(nHeight), 1.0 / gamma)));
+                                            p[x * 4 + y * scanline + 3] = System.Convert.ToByte(Math.Min(Math.Max(System.Convert.ToInt32(System.Convert.ToDouble(value) * System.Convert.ToDouble(p[x * 4 + y * scanline + 3]) / 255.0), 0), 255));
+
+                                            break;
+                                        }
+
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    Marshal.Copy(p, 0, bmData.Scan0, p.Length);
+                    bmp.UnlockBits(bmData);
+
+                    p = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                try
+                {
+                    bmp.UnlockBits(bmData);
+                }
+                catch
+                {
+                }
+            }
         }
 
         private void backgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3620,6 +4100,11 @@ namespace AvoidAGrabCutEasy
             int alphaStartValue = (int)o[41];
             bool doBlur = (bool)o[42];
 
+            bool restoreDefects = (bool)o[43];
+            double gamma2 = (double)o[44];
+            float opacity = (float)o[45];
+            double wMax = (double)o[46];
+
             //resize the input bmp
             Bitmap bU2 = null;
             if (resPic > 1)
@@ -4057,10 +4542,15 @@ namespace AvoidAGrabCutEasy
             bTrimap = null;
 
             //our result pic
-            e.Result = GetAlphaBoundsPic(bRes, 2); //bRes;
+            Bitmap bmp2 = GetAlphaBoundsPic(bRes, 2); //bRes;
 
             bRes.Dispose();
             bRes = null;
+
+            if (restoreDefects)
+                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp2, gamma2, opacity, wMax);
+
+            e.Result = bmp2;
         }
 
         private unsafe Bitmap GetDiff(Bitmap bRes, Bitmap bInner)
@@ -4373,6 +4863,12 @@ namespace AvoidAGrabCutEasy
             this.label4.Enabled = this.numTh.Enabled = (cmbMethodMode.SelectedIndex == 1 && !this.cbExpOutlProc.Checked);
             this.label48.Enabled = this.label47.Enabled = this.numNormalDist.Enabled = this.numColDistDist.Enabled =
                 (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
+        }
+
+        private void cbRestoreDefects_CheckedChanged(object sender, EventArgs e)
+        {
+            this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = cbRestoreDefects.Checked;
+            this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = cbRestoreDefects.Checked;
         }
     }
 }
