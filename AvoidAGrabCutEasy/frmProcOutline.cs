@@ -808,11 +808,12 @@ namespace AvoidAGrabCutEasy
                     double gamma2 = (double)this.numGamma2.Value;
                     float opacity = (float)this.numOpacity.Value;
                     double wMax = (double)this.numWMax.Value;
+                    int whFactor = (int)this.numWHFactor.Value;
 
                     if (mm == MethodMode.ModeFeather)
                     {
                         BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
-                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax });
+                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax, whFactor });
                     }
                     else
                     {
@@ -883,7 +884,7 @@ namespace AvoidAGrabCutEasy
                                     kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
                                     numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
                                     drawNumComp, comp, blur, alphaStartValue, doBlur, restoreDefects,
-                                    gamma2, opacity, wMax });
+                                    gamma2, opacity, wMax, whFactor });
                         }
                     }
                 }
@@ -1146,6 +1147,7 @@ namespace AvoidAGrabCutEasy
             double gamma = (double)o[2];
             float opacity = (float)o[3];
             double wMax = (double)o[4];
+            int whFactor = (int)o[5];
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP(this.helplineRulerCtrl1.Bmp, this._bmpOrig);
             //bmOP.ShowInfo += _gc_ShowInfo;
@@ -1171,7 +1173,7 @@ namespace AvoidAGrabCutEasy
             this._bmOP = bmOP;
 
             if (restoreDefects)
-                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp, gamma, opacity, wMax);
+                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp, gamma, opacity, wMax, whFactor);
 
             e.Result = bmp;
         }
@@ -1179,7 +1181,7 @@ namespace AvoidAGrabCutEasy
         //what we are doing here is to gather all angles that are smaller than a given value, because the "defects" are
         //visible after feathering at angles in the outline that are small. Then we simply get a small Bitmap from the
         //input image around that point, prcess this a bit and draw this in the result image. 
-        private void RevisitConvexDefects(Bitmap bPrevious, Bitmap bmp, double gamma = 1.0, float opacity = 1.0f, double wMax = 180.0)
+        private void RevisitConvexDefects(Bitmap bPrevious, Bitmap bmp, double gamma = 1.0, float opacity = 1.0f, double wMax = 180.0, int whFactor = 4)
         {
             //Get all connected components
             List<ChainCode> c = GetBoundary(bPrevious);
@@ -1279,7 +1281,7 @@ namespace AvoidAGrabCutEasy
                     List<Tuple<Point, Bitmap>> bmps = new List<Tuple<Point, Bitmap>>();
 
                     //Size of bitmap
-                    int wh = (this._oW + this._iW) * 4 + 1;
+                    int wh = (this._oW + this._iW) * whFactor + 1;
                     int wh2 = wh / 2;
 
                     for (int j = 0; j < dp.Count; j++)
@@ -4124,6 +4126,7 @@ namespace AvoidAGrabCutEasy
             double gamma2 = (double)o[44];
             float opacity = (float)o[45];
             double wMax = (double)o[46];
+            int whFactor = (int)o[47];
 
             //resize the input bmp
             Bitmap bU2 = null;
@@ -4568,7 +4571,7 @@ namespace AvoidAGrabCutEasy
             bRes = null;
 
             if (restoreDefects)
-                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp2, gamma2, opacity, wMax);
+                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp2, gamma2, opacity, wMax, whFactor);
 
             e.Result = bmp2;
         }
@@ -4889,6 +4892,7 @@ namespace AvoidAGrabCutEasy
         {
             this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = cbRestoreDefects.Checked;
             this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = cbRestoreDefects.Checked;
+            this.label7.Enabled = this.numWHFactor.Enabled = cbRestoreDefects.Checked;
         }
     }
 }

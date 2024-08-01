@@ -46,6 +46,13 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numGamma2 = new System.Windows.Forms.NumericUpDown();
+            this.cbRestoreDefects = new System.Windows.Forms.CheckBox();
+            this.numOpacity = new System.Windows.Forms.NumericUpDown();
+            this.numWMax = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbMethodMode = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -130,13 +137,8 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numGamma2 = new System.Windows.Forms.NumericUpDown();
-            this.cbRestoreDefects = new System.Windows.Forms.CheckBox();
-            this.numOpacity = new System.Windows.Forms.NumericUpDown();
-            this.numWMax = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.numWHFactor = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -144,6 +146,9 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.groupBox5.SuspendLayout();
@@ -174,9 +179,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -403,6 +406,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.numWHFactor);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.label7);
             this.groupBox4.Controls.Add(this.label6);
@@ -446,6 +451,106 @@
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(112, 232);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 13);
+            this.label8.TabIndex = 685;
+            this.label8.Text = "opacity";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(224, 205);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 13);
+            this.label7.TabIndex = 684;
+            this.label7.Text = "gamma";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(115, 206);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 683;
+            this.label6.Text = "wMax";
+            this.toolTip1.SetToolTip(this.label6, "Maximum angle");
+            // 
+            // numGamma2
+            // 
+            this.numGamma2.DecimalPlaces = 2;
+            this.numGamma2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numGamma2.Location = new System.Drawing.Point(277, 203);
+            this.numGamma2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numGamma2.Name = "numGamma2";
+            this.numGamma2.Size = new System.Drawing.Size(60, 20);
+            this.numGamma2.TabIndex = 679;
+            this.numGamma2.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // cbRestoreDefects
+            // 
+            this.cbRestoreDefects.AutoSize = true;
+            this.cbRestoreDefects.Checked = true;
+            this.cbRestoreDefects.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 205);
+            this.cbRestoreDefects.Name = "cbRestoreDefects";
+            this.cbRestoreDefects.Size = new System.Drawing.Size(95, 17);
+            this.cbRestoreDefects.TabIndex = 682;
+            this.cbRestoreDefects.Text = "restoreDefects";
+            this.cbRestoreDefects.UseVisualStyleBackColor = true;
+            this.cbRestoreDefects.CheckedChanged += new System.EventHandler(this.cbRestoreDefects_CheckedChanged);
+            // 
+            // numOpacity
+            // 
+            this.numOpacity.DecimalPlaces = 2;
+            this.numOpacity.Location = new System.Drawing.Point(157, 229);
+            this.numOpacity.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numOpacity.Name = "numOpacity";
+            this.numOpacity.Size = new System.Drawing.Size(57, 20);
+            this.numOpacity.TabIndex = 680;
+            this.numOpacity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numWMax
+            // 
+            this.numWMax.DecimalPlaces = 2;
+            this.numWMax.Location = new System.Drawing.Point(156, 203);
+            this.numWMax.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numWMax.Name = "numWMax";
+            this.numWMax.Size = new System.Drawing.Size(57, 20);
+            this.numWMax.TabIndex = 681;
+            this.numWMax.Value = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
             // 
             // label5
             // 
@@ -1544,102 +1649,35 @@
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
-            // label8
+            // label10
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(112, 232);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 13);
-            this.label8.TabIndex = 685;
-            this.label8.Text = "opacity";
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(225, 232);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(56, 13);
+            this.label10.TabIndex = 687;
+            this.label10.Text = "mult factor";
+            this.toolTip1.SetToolTip(this.label10, "factor to multiüply innerWidth plus outerWidth,\r\nto get the size of the Bitmaps t" +
+        "hat are drawn over \r\nthe defect parts");
             // 
-            // label7
+            // numWHFactor
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(224, 205);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 13);
-            this.label7.TabIndex = 684;
-            this.label7.Text = "gamma";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(115, 206);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 13);
-            this.label6.TabIndex = 683;
-            this.label6.Text = "wMax";
-            this.toolTip1.SetToolTip(this.label6, "Maximum angle");
-            // 
-            // numGamma2
-            // 
-            this.numGamma2.DecimalPlaces = 2;
-            this.numGamma2.Increment = new decimal(new int[] {
-            1,
+            this.numWHFactor.Location = new System.Drawing.Point(289, 230);
+            this.numWHFactor.Maximum = new decimal(new int[] {
+            24,
             0,
             0,
-            65536});
-            this.numGamma2.Location = new System.Drawing.Point(271, 203);
-            this.numGamma2.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numGamma2.Name = "numGamma2";
-            this.numGamma2.Size = new System.Drawing.Size(60, 20);
-            this.numGamma2.TabIndex = 679;
-            this.numGamma2.Value = new decimal(new int[] {
+            0});
+            this.numWHFactor.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            // 
-            // cbRestoreDefects
-            // 
-            this.cbRestoreDefects.AutoSize = true;
-            this.cbRestoreDefects.Checked = true;
-            this.cbRestoreDefects.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 205);
-            this.cbRestoreDefects.Name = "cbRestoreDefects";
-            this.cbRestoreDefects.Size = new System.Drawing.Size(95, 17);
-            this.cbRestoreDefects.TabIndex = 682;
-            this.cbRestoreDefects.Text = "restoreDefects";
-            this.cbRestoreDefects.UseVisualStyleBackColor = true;
-            this.cbRestoreDefects.CheckedChanged += new System.EventHandler(this.cbRestoreDefects_CheckedChanged);
-            // 
-            // numOpacity
-            // 
-            this.numOpacity.DecimalPlaces = 2;
-            this.numOpacity.Location = new System.Drawing.Point(157, 229);
-            this.numOpacity.Maximum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numOpacity.Name = "numOpacity";
-            this.numOpacity.Size = new System.Drawing.Size(57, 20);
-            this.numOpacity.TabIndex = 680;
-            this.numOpacity.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numWMax
-            // 
-            this.numWMax.DecimalPlaces = 2;
-            this.numWMax.Location = new System.Drawing.Point(156, 203);
-            this.numWMax.Maximum = new decimal(new int[] {
-            360,
-            0,
-            0,
-            0});
-            this.numWMax.Name = "numWMax";
-            this.numWMax.Size = new System.Drawing.Size(57, 20);
-            this.numWMax.TabIndex = 681;
-            this.numWMax.Value = new decimal(new int[] {
-            180,
+            this.numWHFactor.Name = "numWHFactor";
+            this.numWHFactor.Size = new System.Drawing.Size(48, 20);
+            this.numWHFactor.TabIndex = 686;
+            this.numWHFactor.Value = new decimal(new int[] {
+            4,
             0,
             0,
             0});
@@ -1666,6 +1704,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.groupBox5.ResumeLayout(false);
@@ -1700,9 +1741,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1818,5 +1857,7 @@
         private System.Windows.Forms.CheckBox cbRestoreDefects;
         private System.Windows.Forms.NumericUpDown numOpacity;
         private System.Windows.Forms.NumericUpDown numWMax;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown numWHFactor;
     }
 }
