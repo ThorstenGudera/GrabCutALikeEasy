@@ -1295,7 +1295,7 @@ namespace AvoidAGrabCutEasy
                         int ey = Math.Min(pt.Y + wh2, bmp.Height - 1);
 
                         //Get the picture
-                        Bitmap b = bPrevious.Clone(new Rectangle(sx, sy, ex - sx, ey - sy), PixelFormat.Format32bppArgb);
+                        Bitmap b = bPrevious.Clone(new Rectangle(sx, sy, Math.Max(ex - sx, 1), Math.Max(ey - sy, 1)), PixelFormat.Format32bppArgb);
                         //Now get the alphaGradient and add the point_to_draw and the bitmap to the list
                         GetCircularAlphaGradient(b, gamma);
                         bmps.Add(Tuple.Create(new Point(sx, sy), b));
@@ -1653,9 +1653,8 @@ namespace AvoidAGrabCutEasy
                     p = null;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message);
                 try
                 {
                     bmp.UnlockBits(bmData);
