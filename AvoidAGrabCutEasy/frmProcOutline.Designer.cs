@@ -46,6 +46,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.numWHFactor = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -137,8 +139,6 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            this.label10 = new System.Windows.Forms.Label();
-            this.numWHFactor = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -146,6 +146,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWMax)).BeginInit();
@@ -179,7 +180,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -451,6 +451,39 @@
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(225, 232);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(56, 13);
+            this.label10.TabIndex = 687;
+            this.label10.Text = "mult factor";
+            this.toolTip1.SetToolTip(this.label10, "factor to multiüply innerWidth plus outerWidth,\r\nto get the size of the Bitmaps t" +
+        "hat are drawn over \r\nthe defect parts");
+            // 
+            // numWHFactor
+            // 
+            this.numWHFactor.Location = new System.Drawing.Point(289, 230);
+            this.numWHFactor.Maximum = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            this.numWHFactor.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numWHFactor.Name = "numWHFactor";
+            this.numWHFactor.Size = new System.Drawing.Size(48, 20);
+            this.numWHFactor.TabIndex = 686;
+            this.numWHFactor.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
             // 
             // label8
             // 
@@ -1446,10 +1479,10 @@
             this.numPPEpsilon2.Size = new System.Drawing.Size(61, 20);
             this.numPPEpsilon2.TabIndex = 537;
             this.numPPEpsilon2.Value = new decimal(new int[] {
-            1,
+            15,
             0,
             0,
-            0});
+            65536});
             // 
             // numPPEpsilon
             // 
@@ -1469,10 +1502,10 @@
             this.numPPEpsilon.Size = new System.Drawing.Size(61, 20);
             this.numPPEpsilon.TabIndex = 537;
             this.numPPEpsilon.Value = new decimal(new int[] {
-            1,
+            15,
             0,
             0,
-            0});
+            65536});
             // 
             // groupBox1
             // 
@@ -1649,39 +1682,6 @@
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(225, 232);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(56, 13);
-            this.label10.TabIndex = 687;
-            this.label10.Text = "mult factor";
-            this.toolTip1.SetToolTip(this.label10, "factor to multiüply innerWidth plus outerWidth,\r\nto get the size of the Bitmaps t" +
-        "hat are drawn over \r\nthe defect parts");
-            // 
-            // numWHFactor
-            // 
-            this.numWHFactor.Location = new System.Drawing.Point(289, 230);
-            this.numWHFactor.Maximum = new decimal(new int[] {
-            24,
-            0,
-            0,
-            0});
-            this.numWHFactor.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numWHFactor.Name = "numWHFactor";
-            this.numWHFactor.Size = new System.Drawing.Size(48, 20);
-            this.numWHFactor.TabIndex = 686;
-            this.numWHFactor.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1704,6 +1704,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWMax)).EndInit();
@@ -1741,7 +1742,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
