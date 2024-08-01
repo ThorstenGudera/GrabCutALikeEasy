@@ -1282,7 +1282,7 @@ namespace AvoidAGrabCutEasy
 
                     //Size of bitmap
                     int wh = (this._oW + this._iW) * whFactor + 1;
-                    if((wh & 0x01) == 1) 
+                    if((wh & 0x01) != 1) 
                         wh++;
                     int wh2 = wh / 2;
                
