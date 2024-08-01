@@ -4895,7 +4895,7 @@ namespace AvoidAGrabCutEasy
         {
             this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
             this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
-            this.label7.Enabled = this.numWHFactor.Enabled = this.numOpacity.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+            this.label10.Enabled = this.numWHFactor.Enabled = this.numOpacity.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
         }
     }
 }
