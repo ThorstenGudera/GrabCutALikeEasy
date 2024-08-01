@@ -40,8 +40,9 @@ Usage:
 [Optional]
 - On the right pane, check the draw on result checkbox and draw with the mouse onto regions that should be the type you selected from the combobox (eg. Background, Foregound etc)
 - Click onto the Go-button again
+- Process the outline
 
-
+If you implement this in a performance optimized technology and language, you could get the segmentation [almost] in real-time.
 
 Disclaimer:
 
