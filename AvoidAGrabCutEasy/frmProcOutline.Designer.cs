@@ -539,8 +539,6 @@
             // cbRestoreDefects
             // 
             this.cbRestoreDefects.AutoSize = true;
-            this.cbRestoreDefects.Checked = true;
-            this.cbRestoreDefects.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbRestoreDefects.Location = new System.Drawing.Point(15, 205);
             this.cbRestoreDefects.Name = "cbRestoreDefects";
             this.cbRestoreDefects.Size = new System.Drawing.Size(95, 17);

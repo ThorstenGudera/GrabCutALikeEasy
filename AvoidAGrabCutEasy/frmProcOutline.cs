@@ -377,8 +377,8 @@ namespace AvoidAGrabCutEasy
                     this.backgroundWorker3.CancelAsync();
 
                 if (this.backgroundWorker4.IsBusy)
-                    this.backgroundWorker4.CancelAsync();   
-                
+                    this.backgroundWorker4.CancelAsync();
+
                 if (this.backgroundWorker5.IsBusy)
                     this.backgroundWorker5.CancelAsync();
 
@@ -1282,10 +1282,10 @@ namespace AvoidAGrabCutEasy
 
                     //Size of bitmap
                     int wh = (this._oW + this._iW) * whFactor + 1;
-                    if((wh & 0x01) != 1) 
+                    if ((wh & 0x01) != 1)
                         wh++;
                     int wh2 = wh / 2;
-               
+
                     for (int j = 0; j < dp.Count; j++)
                     {
                         Point pt = pts[dp[j].Item1];
@@ -1754,6 +1754,7 @@ namespace AvoidAGrabCutEasy
             this.label4.Enabled = this.numTh.Enabled = !ch;
 
             cmbMethodMode_SelectedIndexChanged(this.cmbMethodMode, new EventArgs());
+            cbRestoreDefects_CheckedChanged(this.cbRestoreDefects, new EventArgs());
 
             int maxWidth = this._maxWidth;
             int oW = (int)this.numBoundOuter.Value;
@@ -2043,7 +2044,7 @@ namespace AvoidAGrabCutEasy
             object[] o = (object[])e.Argument;
             int windowSize = (int)o[0];
             double gamma = (double)o[1];
-            int normalDistToCheck = (int)o[2];  
+            int normalDistToCheck = (int)o[2];
             double gamma2 = (double)o[3];
 
             if (this.helplineRulerCtrl1.Bmp != null && this._bmpOrig != null)
@@ -2074,7 +2075,7 @@ namespace AvoidAGrabCutEasy
             }
         }
 
-        private Bitmap ExperimentalOutlineProc(Bitmap bOrig, Bitmap trWork, int windowSize, double gamma,  double gamma2, int normalDistToCheck)
+        private Bitmap ExperimentalOutlineProc(Bitmap bOrig, Bitmap trWork, int windowSize, double gamma, double gamma2, int normalDistToCheck)
         {
             Bitmap fg = new Bitmap(this.helplineRulerCtrl1.Bmp);
 
@@ -4892,9 +4893,9 @@ namespace AvoidAGrabCutEasy
 
         private void cbRestoreDefects_CheckedChanged(object sender, EventArgs e)
         {
-            this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = cbRestoreDefects.Checked;
-            this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = cbRestoreDefects.Checked;
-            this.label7.Enabled = this.numWHFactor.Enabled = cbRestoreDefects.Checked;
+            this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+            this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+            this.label7.Enabled = this.numWHFactor.Enabled = this.numOpacity.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
         }
     }
 }
