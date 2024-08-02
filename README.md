@@ -44,6 +44,10 @@ Usage:
 
 If you implement this in a performance optimized technology and language, you could get the segmentation [almost] in real-time.
 
+I'll look, if I can set up a mathematical model for this. 
+What we need to do is to build a functional (to minimize), comparing (e.g.) the threshold function to some ideal state. 
+But I havnt't found a set of values for modelling this ideal state (yet) ... 
+
 Disclaimer:
 
 The code is free for academic/research purpose. Use at your own risk and we are not responsible for any loss resulting from this code.
