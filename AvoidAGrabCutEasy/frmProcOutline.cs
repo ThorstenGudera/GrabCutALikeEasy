@@ -826,14 +826,15 @@ namespace AvoidAGrabCutEasy
 
                     bool restoreDefects = this.cbRestoreDefects.Checked;
                     double gamma2 = (double)this.numGamma2.Value;
-                    float opacity = (float)this.numOpacity.Value;
+                    float opacity = (float)this.numOpacity.Value; 
+                    double wMin = (double)this.numWMin.Value;
                     double wMax = (double)this.numWMax.Value;
                     int whFactor = (int)this.numWHFactor.Value;
 
                     if (mm == MethodMode.ModeFeather)
                     {
                         BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
-                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax, whFactor });
+                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax, whFactor, wMin });
                     }
                     else
                     {
@@ -904,7 +905,7 @@ namespace AvoidAGrabCutEasy
                                     kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
                                     numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
                                     drawNumComp, comp, blur, alphaStartValue, doBlur, restoreDefects,
-                                    gamma2, opacity, wMax, whFactor });
+                                    gamma2, opacity, wMax, whFactor, wMin });
                         }
                     }
                 }
@@ -1168,6 +1169,7 @@ namespace AvoidAGrabCutEasy
             float opacity = (float)o[3];
             double wMax = (double)o[4];
             int whFactor = (int)o[5];
+            double wMin = (double)o[6];
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP(this.helplineRulerCtrl1.Bmp, this._bmpOrig);
             //bmOP.ShowInfo += _gc_ShowInfo;
@@ -1193,7 +1195,7 @@ namespace AvoidAGrabCutEasy
             this._bmOP = bmOP;
 
             if (restoreDefects)
-                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp, gamma, opacity, wMax, whFactor);
+                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp, gamma, opacity, wMax, whFactor, wMin);
 
             e.Result = bmp;
         }
@@ -1201,7 +1203,7 @@ namespace AvoidAGrabCutEasy
         //what we are doing here is to gather all angles that are smaller than a given value, because the "defects" are
         //visible after feathering at angles in the outline that are small. Then we simply get a small Bitmap from the
         //input image around that point, prcess this a bit and draw this in the result image. 
-        private void RevisitConvexDefects(Bitmap bPrevious, Bitmap bmp, double gamma = 1.0, float opacity = 1.0f, double wMax = 180.0, int whFactor = 4)
+        private void RevisitConvexDefects(Bitmap bPrevious, Bitmap bmp, double gamma = 1.0, float opacity = 1.0f, double wMax = 180.0, int whFactor = 4, double wMin = 0)
         {
             //Get all connected components
             List<ChainCode> c = GetBoundary(bPrevious);
@@ -1290,7 +1292,10 @@ namespace AvoidAGrabCutEasy
                         if (w > 360)
                             w -= 360;
 
-                        if (w > 0 && w < wMax)
+                        double wMn = Math.Min(wMin, wMax);
+                        double wMa = Math.Max(wMin, wMax);
+
+                        if (w >= wMn && w < wMa)
                         {
                             d.Add(Tuple.Create(j, w));
                             dp.Add(Tuple.Create(j, distB[j], distA[j]));
@@ -4162,6 +4167,7 @@ namespace AvoidAGrabCutEasy
             float opacity = (float)o[45];
             double wMax = (double)o[46];
             int whFactor = (int)o[47];
+            double wMin = (double)o[48];
 
             //resize the input bmp
             Bitmap bU2 = null;
@@ -4606,7 +4612,7 @@ namespace AvoidAGrabCutEasy
             bRes = null;
 
             if (restoreDefects)
-                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp2, gamma2, opacity, wMax, whFactor);
+                RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bmp2, gamma2, opacity, wMax, whFactor, wMin);
 
             e.Result = bmp2;
         }
@@ -4925,8 +4931,8 @@ namespace AvoidAGrabCutEasy
 
         private void cbRestoreDefects_CheckedChanged(object sender, EventArgs e)
         {
-            this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
-            this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+            this.label12.Enabled = this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+            this.numWMin.Enabled = this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
             this.label10.Enabled = this.numWHFactor.Enabled = this.numOpacity.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
         }
 
