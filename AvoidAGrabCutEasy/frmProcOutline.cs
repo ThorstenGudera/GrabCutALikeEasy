@@ -673,6 +673,9 @@ namespace AvoidAGrabCutEasy
                 this.Cursor = Cursors.WaitCursor;
                 this.SetControls(false);
 
+                if (this._rectsList != null && this._rectsList.Count > 0)
+                    this._rectsList.Clear();
+
                 if (this.cbExpOutlProc.Checked)
                 {
                     this.toolStripProgressBar1.Value = 0;
