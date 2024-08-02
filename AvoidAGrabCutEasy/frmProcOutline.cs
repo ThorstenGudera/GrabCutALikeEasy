@@ -1291,8 +1291,8 @@ namespace AvoidAGrabCutEasy
                         Point pt = pts[dp[j].Item1];
                         int sx = Math.Max(pt.X - wh2, 0);
                         int sy = Math.Max(pt.Y - wh2, 0);
-                        int ex = Math.Min(pt.X + wh2, bmp.Width - 1);
-                        int ey = Math.Min(pt.Y + wh2, bmp.Height - 1);
+                        int ex = Math.Min(pt.X + wh2, bmp.Width);
+                        int ey = Math.Min(pt.Y + wh2, bmp.Height);
 
                         //Get the picture
                         Bitmap b = bPrevious.Clone(new Rectangle(sx, sy, Math.Max(ex - sx, 1), Math.Max(ey - sy, 1)), PixelFormat.Format32bppArgb);
