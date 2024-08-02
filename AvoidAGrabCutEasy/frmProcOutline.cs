@@ -4937,11 +4937,144 @@ namespace AvoidAGrabCutEasy
             this.label12.Enabled = this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
             this.numWMin.Enabled = this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
             this.label10.Enabled = this.numWHFactor.Enabled = this.numOpacity.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+            this.btnPrecompAngles.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
         }
 
         private void cbShowAngles_CheckedChanged(object sender, EventArgs e)
         {
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private void btnPrecompAngles_Click(object sender, EventArgs e)
+        {
+            double wMin = (double)this.numWMin.Value;
+            double wMax = (double)this.numWMax.Value;
+            int whFactor = (int)this.numWHFactor.Value;
+
+            PrecomuteConvexDefectsAngles(this.helplineRulerCtrl1.Bmp, wMax, whFactor, wMin);
+
+            this.cbShowAngles.Checked = true;
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+        }
+
+        private void PrecomuteConvexDefectsAngles(Bitmap bPrevious, double wMax = 180.0, int whFactor = 4, double wMin = 0)
+        {
+            //Get all connected components
+            List<ChainCode> c = GetBoundary(bPrevious);
+            ChainFinder cf = new ChainFinder();
+            cf.AllowNullCells = true;
+
+            c = c.OrderByDescending(a => a.Coord.Count).ToList();
+
+            if (this._rectsList == null)
+                this._rectsList = new List<List<Rectangle>>();
+            this._rectsList.Clear();
+
+            foreach (ChainCode cc in c)
+            {
+                bool isInner = ChainFinder.IsInnerOutline(cc);
+                List<Point> pts = cc.Coord;
+
+                List<Rectangle> rects = new List<Rectangle>();
+
+                //now use a bit of calculus and simple linear algebra
+                if (pts.Count > 4)
+                {
+                    //make sure each point under consideration has not too close neighbors, since we have a chaincode detector in 4-adjacency
+                    pts = cf.RemoveColinearity(pts, true, 4);
+                    pts = cf.ApproximateLines(pts, 1.5);
+                    pts = cf.RemoveColinearity(pts, true, 4);
+
+                    cc.Coord = pts;
+                    List<double> angles = new List<double>();
+                    List<Point> distB = new List<Point>();
+                    List<Point> distA = new List<Point>();
+
+                    //get all angles as radians
+                    for (int j = 0; j < pts.Count; j++)
+                    {
+                        PointF pt = pts[j];
+                        PointF ptB = pts[(pts.Count + (j - 1)) % pts.Count];
+                        PointF ptA = pts[(j + 1) % pts.Count];
+
+                        if ((pt.X == ptB.X && pt.Y == ptB.Y) || ((pt.X == ptA.X && pt.Y == ptA.Y)))
+                        {
+                            angles.Add(0);
+                            distB.Add(new Point(0, 0));
+                            distA.Add(new Point(0, 0));
+                            continue;
+                        }
+
+                        double distBX = pt.X - ptB.X;
+                        double distBY = pt.Y - ptB.Y;
+
+                        distB.Add(new Point((int)distBX, (int)distBY));
+
+                        double dB = Math.Sqrt(distBX * distBX + distBY * distBY);
+
+                        distBX /= dB;
+                        distBY /= dB;
+
+                        double aB = Math.Atan2(distBY, distBX);
+
+                        double distAX = ptA.X - pt.X;
+                        double distAY = ptA.Y - pt.Y;
+
+                        distA.Add(new Point((int)distAX, (int)distAY));
+
+                        double dA = Math.Sqrt(distAX * distAX + distAY * distAY);
+
+                        distAX /= dA;
+                        distAY /= dA;
+
+                        double aA = Math.Atan2(distAY, distAX);
+
+                        double a = aA - aB;
+
+                        angles.Add(a);
+                    }
+
+                    List<Tuple<int, Point, Point>> dp = new List<Tuple<int, Point, Point>>();
+
+                    //convert angles to degrees and check, if they should be added
+                    for (int j = 0; j < angles.Count; j++)
+                    {
+                        double w = angles[j] * 180.0 / Math.PI;
+                        if (w < 0)
+                            w += 360;
+                        if (w > 360)
+                            w -= 360;
+
+                        double wMn = Math.Min(wMin, wMax);
+                        double wMa = Math.Max(wMin, wMax);
+
+                        if (w >= wMn && w < wMa)
+                        {
+                            dp.Add(Tuple.Create(j, distB[j], distA[j]));
+                        }
+                    }
+
+                    List<Point> rectPoints = new List<Point>();
+
+                    //Size of bitmap
+                    int wh = (this._oW + this._iW) * whFactor + 1;
+                    if ((wh & 0x01) != 1)
+                        wh++;
+                    int wh2 = wh / 2;
+
+                    for (int j = 0; j < dp.Count; j++)
+                    {
+                        Point pt = pts[dp[j].Item1];
+                        int sx = Math.Max(pt.X - wh2, 0);
+                        int sy = Math.Max(pt.Y - wh2, 0);
+
+                        rects.Add(new Rectangle(new Point(sx, sy), new Size(wh, wh)));
+                    }
+                }
+
+                this._rectsList.Add(rects);
+            }
+            //#############################################################################
         }
     }
 }

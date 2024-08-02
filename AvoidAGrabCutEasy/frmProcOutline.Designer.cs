@@ -35,6 +35,8 @@
             this.btnSetGamma = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.numGamma = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.btmSetBU = new System.Windows.Forms.Button();
             this.Label20 = new System.Windows.Forms.Label();
@@ -51,17 +53,17 @@
             this.numWHFactor = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.numGamma2 = new System.Windows.Forms.NumericUpDown();
             this.cbRestoreDefects = new System.Windows.Forms.CheckBox();
             this.numOpacity = new System.Windows.Forms.NumericUpDown();
+            this.numWMin = new System.Windows.Forms.NumericUpDown();
             this.numWMax = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbMethodMode = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.numTh = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbEditTrimap = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -140,21 +142,21 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            this.numWMin = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
+            this.btnPrecompAngles = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTh)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSleep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numError)).BeginInit();
@@ -183,7 +185,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWMin)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -287,6 +288,47 @@
             this.numGamma.TabIndex = 511;
             this.numGamma.Value = new decimal(new int[] {
             1,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Enabled = false;
+            this.label9.Location = new System.Drawing.Point(19, 20);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(50, 13);
+            this.label9.TabIndex = 676;
+            this.label9.Text = "Max Size";
+            this.toolTip1.SetToolTip(this.label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - " +
+        "then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, " +
+        "due to processing time.");
+            // 
+            // numMaxSize
+            // 
+            this.numMaxSize.Enabled = false;
+            this.numMaxSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numMaxSize.Location = new System.Drawing.Point(75, 17);
+            this.numMaxSize.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numMaxSize.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numMaxSize.Name = "numMaxSize";
+            this.numMaxSize.Size = new System.Drawing.Size(61, 20);
+            this.numMaxSize.TabIndex = 675;
+            this.numMaxSize.Value = new decimal(new int[] {
+            1200,
             0,
             0,
             0});
@@ -412,6 +454,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btnPrecompAngles);
             this.groupBox4.Controls.Add(this.cbShowAngles);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.numWHFactor);
@@ -462,7 +505,7 @@
             // cbShowAngles
             // 
             this.cbShowAngles.AutoSize = true;
-            this.cbShowAngles.Location = new System.Drawing.Point(27, 269);
+            this.cbShowAngles.Location = new System.Drawing.Point(15, 269);
             this.cbShowAngles.Name = "cbShowAngles";
             this.cbShowAngles.Size = new System.Drawing.Size(83, 17);
             this.cbShowAngles.TabIndex = 688;
@@ -521,6 +564,15 @@
             this.label7.Size = new System.Drawing.Size(41, 13);
             this.label7.TabIndex = 684;
             this.label7.Text = "gamma";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(147, 206);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(32, 13);
+            this.label12.TabIndex = 683;
+            this.label12.Text = "wMin";
             // 
             // label6
             // 
@@ -584,6 +636,19 @@
             0,
             0});
             // 
+            // numWMin
+            // 
+            this.numWMin.DecimalPlaces = 2;
+            this.numWMin.Location = new System.Drawing.Point(188, 203);
+            this.numWMin.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numWMin.Name = "numWMin";
+            this.numWMin.Size = new System.Drawing.Size(57, 20);
+            this.numWMin.TabIndex = 681;
+            // 
             // numWMax
             // 
             this.numWMax.DecimalPlaces = 2;
@@ -605,7 +670,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(193, 271);
+            this.label5.Location = new System.Drawing.Point(197, 271);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
             this.label5.TabIndex = 678;
@@ -615,7 +680,7 @@
             // 
             this.cmbMethodMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMethodMode.FormattingEnabled = true;
-            this.cmbMethodMode.Location = new System.Drawing.Point(232, 267);
+            this.cmbMethodMode.Location = new System.Drawing.Point(236, 267);
             this.cmbMethodMode.Name = "cmbMethodMode";
             this.cmbMethodMode.Size = new System.Drawing.Size(75, 21);
             this.cmbMethodMode.TabIndex = 677;
@@ -647,47 +712,6 @@
             0,
             0,
             65536});
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Enabled = false;
-            this.label9.Location = new System.Drawing.Point(19, 20);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(50, 13);
-            this.label9.TabIndex = 676;
-            this.label9.Text = "Max Size";
-            this.toolTip1.SetToolTip(this.label9, "Maximum size of the long picture-side.\r\nBigger pictures will be resampled down - " +
-        "then processed -\r\nand re-resampled up again.\r\nRealMinCut MaxSize is fix at 300, " +
-        "due to processing time.");
-            // 
-            // numMaxSize
-            // 
-            this.numMaxSize.Enabled = false;
-            this.numMaxSize.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numMaxSize.Location = new System.Drawing.Point(75, 17);
-            this.numMaxSize.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numMaxSize.Minimum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numMaxSize.Name = "numMaxSize";
-            this.numMaxSize.Size = new System.Drawing.Size(61, 20);
-            this.numMaxSize.TabIndex = 675;
-            this.numMaxSize.Value = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
             // 
             // groupBox5
             // 
@@ -1699,27 +1723,16 @@
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
-            // numWMin
+            // btnPrecompAngles
             // 
-            this.numWMin.DecimalPlaces = 2;
-            this.numWMin.Location = new System.Drawing.Point(188, 203);
-            this.numWMin.Maximum = new decimal(new int[] {
-            360,
-            0,
-            0,
-            0});
-            this.numWMin.Name = "numWMin";
-            this.numWMin.Size = new System.Drawing.Size(57, 20);
-            this.numWMin.TabIndex = 681;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(147, 206);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(32, 13);
-            this.label12.TabIndex = 683;
-            this.label12.Text = "wMin";
+            this.btnPrecompAngles.Enabled = false;
+            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 265);
+            this.btnPrecompAngles.Name = "btnPrecompAngles";
+            this.btnPrecompAngles.Size = new System.Drawing.Size(84, 23);
+            this.btnPrecompAngles.TabIndex = 689;
+            this.btnPrecompAngles.Text = "precompNow";
+            this.btnPrecompAngles.UseVisualStyleBackColor = true;
+            this.btnPrecompAngles.Click += new System.EventHandler(this.btnPrecompAngles_Click);
             // 
             // frmProcOutline
             // 
@@ -1741,14 +1754,15 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numWMin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTh)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSleep)).EndInit();
@@ -1781,7 +1795,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWMin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1902,5 +1915,6 @@
         private System.Windows.Forms.CheckBox cbShowAngles;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown numWMin;
+        private System.Windows.Forms.Button btnPrecompAngles;
     }
 }
