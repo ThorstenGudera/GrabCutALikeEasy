@@ -55,6 +55,7 @@ namespace AvoidAGrabCutEasy
         private Bitmap _bmpRef;
         private GrabCutOp _gc;
         private object _lockObject = new object();
+        private List<List<Rectangle>> _rectsList;
 
         public Bitmap FBitmap
         {
@@ -144,7 +145,26 @@ namespace AvoidAGrabCutEasy
 
         private void helplineRulerCtrl1_Paint(object sender, PaintEventArgs e)
         {
+            if (this.cbShowAngles.Checked && this._rectsList != null && this._rectsList.Count > 0)
+            {
+                for (int i = 0; i < this._rectsList.Count; i++)
+                {
+                    List<Rectangle> rectangles = this._rectsList[i];
 
+                    if (rectangles.Count > 0)
+                    {
+                        for (int j = 0; j < rectangles.Count; j++)
+                        {
+                            Rectangle rc = new Rectangle((int)(rectangles[j].X * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
+                                (int)(rectangles[j].Y * this.helplineRulerCtrl1.Zoom) + this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y,
+                                (int)(rectangles[j].Width * this.helplineRulerCtrl1.Zoom),
+                                (int)(rectangles[j].Height * this.helplineRulerCtrl1.Zoom));
+                            using (SolidBrush sb = new SolidBrush(Color.FromArgb(64, Color.Red)))
+                                e.Graphics.FillRectangle(sb, rc);
+                        }
+                    }
+                }
+            }
         }
 
         private void helplineRulerCtrl1_DBPanelDblClicked(object sender, HelplineRulerControl.ZoomEventArgs e)
@@ -1190,10 +1210,16 @@ namespace AvoidAGrabCutEasy
 
             c = c.OrderByDescending(a => a.Coord.Count).ToList();
 
+            if (this._rectsList == null)
+                this._rectsList = new List<List<Rectangle>>();
+            this._rectsList.Clear();
+
             foreach (ChainCode cc in c)
             {
                 bool isInner = ChainFinder.IsInnerOutline(cc);
                 List<Point> pts = cc.Coord;
+
+                List<Rectangle> rects = new List<Rectangle>();
 
                 //now use a bit of calculus and simple linear algebra
                 if (pts.Count > 4)
@@ -1307,8 +1333,11 @@ namespace AvoidAGrabCutEasy
                         for (int j = 0; j < bmps.Count; j++)
                         {
                             if (opacity == 1.0f)
+                            {
                                 //gx.FillRectangle(Brushes.Red, new Rectangle(bmps[j].Item1, new Size(wh, wh)));
                                 gx.DrawImage(bmps[j].Item2, bmps[j].Item1);
+                                rects.Add(new Rectangle(bmps[j].Item1, new Size(wh, wh)));
+                            }
                             else
                             {
                                 ColorMatrix cm = new ColorMatrix();
@@ -1323,6 +1352,8 @@ namespace AvoidAGrabCutEasy
                                         new Rectangle(bmps[j].Item1, new Size(wh, wh)),
                                             0, 0, wh, wh, GraphicsUnit.Pixel, ia);
                                 }
+
+                                rects.Add(new Rectangle(bmps[j].Item1, new Size(wh, wh)));
                             }
                         }
                     }
@@ -1336,6 +1367,8 @@ namespace AvoidAGrabCutEasy
                         b = null;
                     }
                 }
+
+                this._rectsList.Add(rects);
             }
             //#############################################################################
         }
@@ -4895,6 +4928,11 @@ namespace AvoidAGrabCutEasy
             this.label6.Enabled = this.label7.Enabled = this.label8.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
             this.numWMax.Enabled = this.numGamma2.Enabled = this.numWMax.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
             this.label10.Enabled = this.numWHFactor.Enabled = this.numOpacity.Enabled = (cbRestoreDefects.Checked && !this.cbExpOutlProc.Checked);
+        }
+
+        private void cbShowAngles_CheckedChanged(object sender, EventArgs e)
+        {
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
         }
     }
 }

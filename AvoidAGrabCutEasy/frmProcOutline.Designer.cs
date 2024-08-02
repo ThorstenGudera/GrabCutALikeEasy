@@ -139,6 +139,7 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
+            this.cbShowAngles = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -406,6 +407,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbShowAngles);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.numWHFactor);
             this.groupBox4.Controls.Add(this.label8);
@@ -1680,6 +1682,18 @@
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
+            // cbShowAngles
+            // 
+            this.cbShowAngles.AutoSize = true;
+            this.cbShowAngles.Location = new System.Drawing.Point(22, 228);
+            this.cbShowAngles.Name = "cbShowAngles";
+            this.cbShowAngles.Size = new System.Drawing.Size(83, 17);
+            this.cbShowAngles.TabIndex = 688;
+            this.cbShowAngles.Text = "showAngles";
+            this.toolTip1.SetToolTip(this.cbShowAngles, "showProcessedAngles");
+            this.cbShowAngles.UseVisualStyleBackColor = true;
+            this.cbShowAngles.CheckedChanged += new System.EventHandler(this.cbShowAngles_CheckedChanged);
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1857,5 +1871,6 @@
         private System.Windows.Forms.NumericUpDown numWMax;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numWHFactor;
+        private System.Windows.Forms.CheckBox cbShowAngles;
     }
 }
