@@ -1029,15 +1029,18 @@ namespace AvoidAGrabCutEasy
                 double[] fsl = new double[dH.Length];
                 for (int j = 1; j < dH.Length - 1; j++)
                 {
-                    double diff = (dH[j + 1] - dH[j - 1]) / dm / 2.0;
-                    //double diff = (dH[j]) / dm;
+                    double diff = (dH[j + 1] - dH[j - 1]) / 2.0 / dm;
                     fsl[j] = diff;
                 }
 
                 List<double> dli = fsl.Reverse().ToList();
 
-                double th = dli.IndexOf(dli.Where(x => x > 0 && x < 0.04).First()) -
-                                        dli.IndexOf(dli.Where(a => a != 0).First()) + this.AutoThresholdAddition;
+                IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
+                IEnumerable<double> f2 = dli.Where(a => a != 0);
+                double th = this.MaxAllowedAutoThreshold;
+
+                if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
+                    th = (dli.IndexOf(f1.First()) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition;
 
                 if (th < this.MaxAllowedAutoThreshold)
                 {
