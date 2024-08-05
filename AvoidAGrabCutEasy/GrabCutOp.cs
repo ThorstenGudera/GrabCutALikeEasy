@@ -73,6 +73,8 @@ namespace AvoidAGrabCutEasy
         public double KMInitH { get; internal set; } = 2;
         public BoykovKolmogorov AlgBK { get; internal set; }
         public bool AutoThreshold { get; internal set; }
+        public double MaxAllowedAutoThreshold { get; internal set; } = 16.1;
+        public double AutoThresholdAddition { get; internal set; } = 6.5;
 
         public event EventHandler<string> ShowInfo;
 
@@ -973,73 +975,79 @@ namespace AvoidAGrabCutEasy
             }
 
             //test for automated finding of threshold... (first attempt)
-            
-            //if (this.AutoThreshold)
-            //{
-            //    double dMin = Math.Log(d.Except(d.Where(a => a == 0)).Min());
-            //    double dMax = Math.Log(d.Except(d.Where(a => a == 0)).Max());
-            //    double d2Min = Math.Log(d2.Except(d2.Where(a => a == 0)).Min());
-            //    double d2Max = Math.Log(d2.Except(d2.Where(a => a == 0)).Max());
+            #region autoThreshold
+            if (this.AutoThreshold)
+            {
+                double dMin = Math.Log(d.Except(d.Where(a => a == 0)).Min());
+                double dMax = Math.Log(d.Except(d.Where(a => a == 0)).Max());
+                double d2Min = Math.Log(d2.Except(d2.Where(a => a == 0)).Min());
+                double d2Max = Math.Log(d2.Except(d2.Where(a => a == 0)).Max());
 
-            //    double fMin = Math.Min(dMin, d2Min);
-            //    double fMax = Math.Max(dMax, d2Max);
+                double fMin = Math.Min(dMin, d2Min);
+                double fMax = Math.Max(dMax, d2Max);
 
-            //    double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
+                double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
 
-            //    int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
-            //    int[] d2H = new int[dH.Length];
+                int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
+                int[] d2H = new int[dH.Length];
 
-            //    double af = -this.Threshold - dMin;
+                double af = -this.Threshold - dMin;
 
-            //    for (int i = 0; i < l; i++)
-            //    {
-            //        if (d[i] != 0)
-            //        {
-            //            int dl = (int)(Math.Log(d[i]) - dMin);
-            //            if (dH.Length > dl)
-            //                dH[dl]++;
-            //        }
-            //        if (d2[i] != 0)
-            //        {
-            //            int d2l = (int)(Math.Log(d2[i]) - d2Min);
-            //            if (d2H.Length > d2l)
-            //                d2H[d2l]++;
-            //        }
-            //    }
+                for (int i = 0; i < l; i++)
+                {
+                    if (d[i] != 0)
+                    {
+                        int dl = (int)(Math.Log(d[i]) - dMin);
+                        if (dH.Length > dl)
+                            dH[dl]++;
+                    }
+                    if (d2[i] != 0)
+                    {
+                        int d2l = (int)(Math.Log(d2[i]) - d2Min);
+                        if (d2H.Length > d2l)
+                            d2H[d2l]++;
+                    }
+                }
 
-            //    //using (Bitmap bmp47 = new Bitmap(dH.Length, 1000))
-            //    //{
-            //    //double sf = 1000.0 / dH.Max();
+                //using (Bitmap bmp47 = new Bitmap(dH.Length, 1000))
+                //{
+                //double sf = 1000.0 / dH.Max();
 
-            //    //using (Graphics gx = Graphics.FromImage(bmp47))
-            //    //{
-            //    //    for (int j = 0; j < dH.Length; j++)
-            //    //        gx.DrawLine(Pens.Red, new Point(j, 0), new Point(j, (int)(dH[j] * sf)));
-            //    //}
+                //using (Graphics gx = Graphics.FromImage(bmp47))
+                //{
+                //    for (int j = 0; j < dH.Length; j++)
+                //        gx.DrawLine(Pens.Red, new Point(j, 0), new Point(j, (int)(dH[j] * sf)));
+                //}
 
-            //    //Form fff = new Form();
-            //    //fff.BackgroundImage = bmp47;
-            //    //fff.BackgroundImageLayout = ImageLayout.Stretch;
-            //    //fff.ShowDialog();  
-            //    //}
+                //Form fff = new Form();
+                //fff.BackgroundImage = bmp47;
+                //fff.BackgroundImageLayout = ImageLayout.Stretch;
+                //fff.ShowDialog();  
+                //}
 
-            //    double dm = dH.Sum();
-            //    double[] fsl = new double[dH.Length];
-            //    for (int j = 1; j < dH.Length - 1; j++)
-            //    {
-            //        double diff = (dH[j + 1] - dH[j - 1]) / dm / 2.0;
-            //        //double diff = (dH[j]) / dm;
-            //        fsl[j] = diff;
-            //    }
+                double dm = dH.Sum();
+                double[] fsl = new double[dH.Length];
+                for (int j = 1; j < dH.Length - 1; j++)
+                {
+                    double diff = (dH[j + 1] - dH[j - 1]) / dm / 2.0;
+                    //double diff = (dH[j]) / dm;
+                    fsl[j] = diff;
+                }
 
-            //    List<double> dli = fsl.Reverse().ToList();
+                List<double> dli = fsl.Reverse().ToList();
 
-            //    this.Threshold = dli.IndexOf(dli.Where(x => x > 0 && x < 0.04).First()) -
-            //                            dli.IndexOf(dli.Where(a => a != 0).First()) + 6.5;
+                double th = dli.IndexOf(dli.Where(x => x > 0 && x < 0.04).First()) -
+                                        dli.IndexOf(dli.Where(a => a != 0).First()) + this.AutoThresholdAddition;
 
-            //    MessageBox.Show(this.Threshold.ToString());
-            //}
-            
+                if (th < this.MaxAllowedAutoThreshold)
+                {
+                    this.Threshold = th;
+                    OnShowInfo(this.Threshold.ToString());
+                    //temp
+                    MessageBox.Show(this.Threshold.ToString());
+                }
+            }
+            #endregion //autoThreshold
             //end test
 
             int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];

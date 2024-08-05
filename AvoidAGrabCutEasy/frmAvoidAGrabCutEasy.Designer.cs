@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.btnCompose = new System.Windows.Forms.Button();
             this.btnCache = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btnOutline = new System.Windows.Forms.Button();
@@ -112,8 +114,9 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.label12 = new System.Windows.Forms.Label();
-            this.btnCompose = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cbAutoThreshold = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQATH)).BeginInit();
@@ -133,10 +136,12 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.btnCompose);
             this.panel1.Controls.Add(this.btnCache);
@@ -211,6 +216,25 @@
             this.panel1.TabIndex = 0;
             this.panel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDoubleClick);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(945, 80);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(50, 13);
+            this.label12.TabIndex = 679;
+            this.label12.Text = "compose";
+            // 
+            // btnCompose
+            // 
+            this.btnCompose.Location = new System.Drawing.Point(1001, 75);
+            this.btnCompose.Name = "btnCompose";
+            this.btnCompose.Size = new System.Drawing.Size(75, 23);
+            this.btnCompose.TabIndex = 678;
+            this.btnCompose.Text = "Go";
+            this.btnCompose.UseVisualStyleBackColor = true;
+            this.btnCompose.Click += new System.EventHandler(this.btnCompose_Click);
             // 
             // btnCache
             // 
@@ -1216,24 +1240,34 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // label12
+            // panel2
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(945, 80);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(50, 13);
-            this.label12.TabIndex = 679;
-            this.label12.Text = "compose";
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label13);
+            this.panel2.Controls.Add(this.cbAutoThreshold);
+            this.panel2.Location = new System.Drawing.Point(628, 1);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 26);
+            this.panel2.TabIndex = 680;
             // 
-            // btnCompose
+            // label13
             // 
-            this.btnCompose.Location = new System.Drawing.Point(1001, 75);
-            this.btnCompose.Name = "btnCompose";
-            this.btnCompose.Size = new System.Drawing.Size(75, 23);
-            this.btnCompose.TabIndex = 678;
-            this.btnCompose.Text = "Go";
-            this.btnCompose.UseVisualStyleBackColor = true;
-            this.btnCompose.Click += new System.EventHandler(this.btnCompose_Click);
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(9, 6);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(87, 13);
+            this.label13.TabIndex = 677;
+            this.label13.Text = "currently testing: ";
+            // 
+            // cbAutoThreshold
+            // 
+            this.cbAutoThreshold.AutoSize = true;
+            this.cbAutoThreshold.Location = new System.Drawing.Point(102, 5);
+            this.cbAutoThreshold.Name = "cbAutoThreshold";
+            this.cbAutoThreshold.Size = new System.Drawing.Size(93, 17);
+            this.cbAutoThreshold.TabIndex = 676;
+            this.cbAutoThreshold.Text = "auto threshold";
+            this.cbAutoThreshold.UseVisualStyleBackColor = true;
             // 
             // frmAvoidAGrabCutEasy
             // 
@@ -1270,6 +1304,8 @@
             this.splitContainer1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1361,5 +1397,8 @@
         private System.Windows.Forms.Button btnCache;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnCompose;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox cbAutoThreshold;
     }
 }
