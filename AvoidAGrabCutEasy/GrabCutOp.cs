@@ -1037,12 +1037,12 @@ namespace AvoidAGrabCutEasy
 
                 IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
                 IEnumerable<double> f2 = dli.Where(a => a != 0);
-                double th = this.MaxAllowedAutoThreshold;
+                double th = this.MaxAllowedAutoThreshold + 1e-7;
 
                 if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
                     th = (dli.IndexOf(f1.First()) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition;
 
-                if (th < this.MaxAllowedAutoThreshold)
+                if (th <= this.MaxAllowedAutoThreshold)
                 {
                     this.Threshold = th;
                     OnShowInfo(this.Threshold.ToString());
