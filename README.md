@@ -44,9 +44,7 @@ Usage:
 
 If you implement this in a performance optimized technology and language, you could get the segmentation [almost] in real-time.
 
-I'll look, if I can set up a mathematical model for this. 
-What we need to do is to build a functional (to minimize), or simply a function of the method we choose, like thresholding, comparing (e.g.) the threshold function (results or changes) to an ideal state, being some ideal state, built of the (best) parts that are set to zero in the unknown_fg_part and the unknown_bg_part, respecting, that we take (the sign of) the quotient of fg and bg-values to determine, whats taken as result... 
-But I havnt't found a set of values for modelling this ideal state, or a property of this ideal state, that we could compare to our method, or method-parameters respectively ... 
+I'll look, if I can set up a mathematical model for this, which may give us a way to estimate the ideal parameter (e.g. threshold) value(s). 
 
 Disclaimer:
 
