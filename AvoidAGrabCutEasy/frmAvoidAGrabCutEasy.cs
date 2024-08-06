@@ -1418,7 +1418,7 @@ namespace AvoidAGrabCutEasy
                     double kmInitH = this._KMeansInitH;
 
                     int comp = (int)this.numMaxComponents.Value;
-                    bool autoThrreshold = this.cbAutoThreshold.Checked;
+                    bool autoThreshold = this.cbAutoThreshold.Checked;
 
                     //now start the work
                     this.backgroundWorker1.RunWorkerAsync(new object[] { bWork, gmm_comp, gamma, num_Iters,
@@ -1426,7 +1426,7 @@ namespace AvoidAGrabCutEasy
                         wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG, cgWQE,
-                        numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThrreshold });
+                        numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold });
                 }
             }
         }
@@ -1480,7 +1480,7 @@ namespace AvoidAGrabCutEasy
             bool dontFillPath = true;
             bool drawNumComp = true;
             int comp = (int)o[36];
-            bool autoThrreshold = (bool)o[37];
+            bool autoThreshold = (bool)o[37];
 
             //if we have a large pic that will be resized during these OPs
             //we need to resize also the scribbles, if present
@@ -1554,7 +1554,7 @@ namespace AvoidAGrabCutEasy
                     NumCorrect2 = numCorrect2,
                     MaxIter = this._algMaxIter,
                     QATH = this._algQATH,
-                    AutoThreshold = autoThrreshold
+                    AutoThreshold = autoThreshold
                 };
 
                 this._gc.ShowInfo += _gc_ShowInfo;
@@ -1621,7 +1621,7 @@ namespace AvoidAGrabCutEasy
                 this._gc.NumCorrect = numCorrect;
                 this._gc.NumItems2 = numItems2;
                 this._gc.NumCorrect2 = numCorrect2;
-                this._gc.AutoThreshold = autoThrreshold;
+                this._gc.AutoThreshold = autoThreshold;
 
                 if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                 {

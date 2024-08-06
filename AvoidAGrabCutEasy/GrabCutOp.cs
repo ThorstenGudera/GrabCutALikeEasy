@@ -974,80 +974,74 @@ namespace AvoidAGrabCutEasy
                 return -1;
             }
 
-            //test for automated finding of threshold... (first attempt)
+            //test for automated finding of threshold... (first attempt, this is bound to change)
             #region autoThreshold
-            if (this.AutoThreshold)
+            if (this.UseThreshold && this.AutoThreshold)
             {
-                double dMin = Math.Log(d.Except(d.Where(a => a == 0)).Min());
-                double dMax = Math.Log(d.Except(d.Where(a => a == 0)).Max());
-                double d2Min = Math.Log(d2.Except(d2.Where(a => a == 0)).Min());
-                double d2Max = Math.Log(d2.Except(d2.Where(a => a == 0)).Max());
+                IEnumerable<double> dv = d.Where(a => a == 0);
+                IEnumerable<double> d2v = d2.Where(a => a == 0);
 
-                double fMin = Math.Min(dMin, d2Min);
-                double fMax = Math.Max(dMax, d2Max);
-
-                double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
-
-                int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
-                int[] d2H = new int[dH.Length];
-
-                double af = -this.Threshold - dMin;
-
-                for (int i = 0; i < l; i++)
+                if (dv != null && d2v != null) //dont test for count > 0, .Except(...) works with empty sets //dv.Count() > 0 && d2v.Count() > 0
                 {
-                    if (d[i] != 0)
+                    double dMin = Math.Log(d.Except(dv).Min());
+                    double dMax = Math.Log(d.Except(dv).Max());
+                    double d2Min = Math.Log(d2.Except(d2v).Min());
+                    double d2Max = Math.Log(d2.Except(d2v).Max());
+
+                    double fMin = Math.Min(dMin, d2Min);
+                    double fMax = Math.Max(dMax, d2Max);
+
+                    double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
+
+                    int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
+                    int[] d2H = new int[dH.Length];
+
+                    double af = -this.Threshold - dMin;
+
+                    for (int i = 0; i < l; i++)
                     {
-                        int dl = (int)(Math.Log(d[i]) - dMin);
-                        if (dH.Length > dl)
-                            dH[dl]++;
+                        if (d[i] != 0)
+                        {
+                            int dl = (int)(Math.Log(d[i]) - dMin);
+                            if (dH.Length > dl)
+                                dH[dl]++;
+                        }
+                        if (d2[i] != 0)
+                        {
+                            int d2l = (int)(Math.Log(d2[i]) - d2Min);
+                            if (d2H.Length > d2l)
+                                d2H[d2l]++;
+                        }
                     }
-                    if (d2[i] != 0)
+
+                    double dm = dH.Sum();
+                    double[] fsl = new double[dH.Length];
+                    for (int j = 1; j < dH.Length - 1; j++)
                     {
-                        int d2l = (int)(Math.Log(d2[i]) - d2Min);
-                        if (d2H.Length > d2l)
-                            d2H[d2l]++;
+                        double diff = (dH[j + 1] - dH[j - 1]) / 2.0 / dm;
+                        fsl[j] = diff;
                     }
-                }
 
-                //using (Bitmap bmp47 = new Bitmap(dH.Length, 1000))
-                //{
-                //double sf = 1000.0 / dH.Max();
+                    List<double> dli = fsl.Reverse().ToList();
 
-                //using (Graphics gx = Graphics.FromImage(bmp47))
-                //{
-                //    for (int j = 0; j < dH.Length; j++)
-                //        gx.DrawLine(Pens.Red, new Point(j, 0), new Point(j, (int)(dH[j] * sf)));
-                //}
+                    IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
+                    IEnumerable<double> f2 = dli.Where(a => a != 0);
+                    double th = this.MaxAllowedAutoThreshold + 1e-7;
 
-                //Form fff = new Form();
-                //fff.BackgroundImage = bmp47;
-                //fff.BackgroundImageLayout = ImageLayout.Stretch;
-                //fff.ShowDialog();  
-                //}
+                    //you could use such a construct to return quite good values,
+                    //but its made simply of testing some combination of values without a model behind
+                    double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
 
-                double dm = dH.Sum();
-                double[] fsl = new double[dH.Length];
-                for (int j = 1; j < dH.Length - 1; j++)
-                {
-                    double diff = (dH[j + 1] - dH[j - 1]) / 2.0 / dm;
-                    fsl[j] = diff;
-                }
+                    if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
+                        th = (dli.IndexOf(f1.First()) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition; // addATh;
 
-                List<double> dli = fsl.Reverse().ToList();
-
-                IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
-                IEnumerable<double> f2 = dli.Where(a => a != 0);
-                double th = this.MaxAllowedAutoThreshold + 1e-7;
-
-                if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
-                    th = (dli.IndexOf(f1.First()) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition;
-
-                if (th <= this.MaxAllowedAutoThreshold)
-                {
-                    this.Threshold = th;
-                    OnShowInfo(this.Threshold.ToString());
-                    //temp
-                    MessageBox.Show(this.Threshold.ToString());
+                    if (th <= this.MaxAllowedAutoThreshold)
+                    {
+                        this.Threshold = th;
+                        OnShowInfo(this.Threshold.ToString());
+                        //temp
+                        MessageBox.Show(this.Threshold.ToString());
+                    }
                 }
             }
             #endregion //autoThreshold
@@ -1106,7 +1100,7 @@ namespace AvoidAGrabCutEasy
                 return innerList;
             }, (innerList) =>
             {
-                //make sure, the edges get the correct capacities, means, add both chonks of data in the same processing cycles
+                //make sure, the edges get the correct capacities, means, add both chunks of data in the same processing cycles
                 lock (this._lockObject)
                 {
                     edges.AddRange(innerList.Edges);
@@ -2541,7 +2535,7 @@ namespace AvoidAGrabCutEasy
                 return innerList;
             }, (innerList) =>
             {
-                //make sure, the edges get the correct capacities, means, add both chonks of data in the same processing cycles
+                //make sure, the edges get the correct capacities, means, add both chunks of data in the same processing cycles
                 lock (this._lockObject)
                 {
                     edges.AddRange(innerList.Edges);
