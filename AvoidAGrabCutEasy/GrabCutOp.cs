@@ -978,6 +978,7 @@ namespace AvoidAGrabCutEasy
             #region autoThreshold
             if (this.UseThreshold && this.AutoThreshold)
             {
+                //get extreme vals
                 IEnumerable<double> dv = d.Where(a => a == 0);
                 IEnumerable<double> d2v = d2.Where(a => a == 0);
 
@@ -991,6 +992,7 @@ namespace AvoidAGrabCutEasy
                     double fMin = Math.Min(dMin, d2Min);
                     double fMax = Math.Max(dMax, d2Max);
 
+                    //setup a histogram
                     double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
 
                     int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
@@ -1014,6 +1016,7 @@ namespace AvoidAGrabCutEasy
                         }
                     }
 
+                    //get kind of a derivative
                     double dm = dH.Sum();
                     double[] fsl = new double[dH.Length];
                     for (int j = 1; j < dH.Length - 1; j++)
@@ -1024,6 +1027,10 @@ namespace AvoidAGrabCutEasy
 
                     List<double> dli = fsl.Reverse().ToList();
 
+                    //now get (in reversed direction) some critical positions in the lists
+                    //I try to find a difference which is the beginning of the
+                    //curve (histogram counts for the single bins) to start getting exponentially up
+                    //and also pay respect to the fact that usually the last bins of the Histogram are empty
                     IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
                     IEnumerable<double> f2 = dli.Where(a => a != 0);
                     double th = this.MaxAllowedAutoThreshold + 1e-7;
@@ -1032,6 +1039,7 @@ namespace AvoidAGrabCutEasy
                     //but its made simply of testing some combination of values without a model behind
                     double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
 
+                    //get the amount of non-empty bins from the end of the list up to the bin where the threshold is met (x < 0.04)
                     if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
                         th = (dli.IndexOf(f1.First()) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition; // addATh;
 
