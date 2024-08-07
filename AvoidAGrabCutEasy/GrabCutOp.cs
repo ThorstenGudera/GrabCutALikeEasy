@@ -1039,16 +1039,47 @@ namespace AvoidAGrabCutEasy
                     //but its made simply of testing some combination of values without a model behind
                     double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
 
+                    double cGC = 0;
+                    double ga = 0;
+                    int addOne = 0;
+                    int subOne = 0;
+
                     //get the amount of non-empty bins from the end of the list up to the bin where the threshold is met (x < 0.04)
                     if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
-                        th = (dli.IndexOf(f1.First()) - dli.IndexOf(f2.First())) + this.AutoThresholdAddition; // addATh;
+                    {
+                        //do a second test and add, or subtract 1 from the intermediate result [things and values might change]
+                        int indx = dli.IndexOf(f1.First());
+
+                        int cG = 0;
+                        for (int j = 0; j < dH.Length - indx - 1; j++)
+                            cG += dH[j];
+                        cG += dH[dH.Length - indx] / 2;
+                        cGC = (double)cG / dm;
+                        ga = (double)dH[dH.Length - indx] / dm;
+
+                        //Console.WriteLine("rel pos: " + cGC.ToString()); 
+                        //Console.WriteLine("rel amount: " + ga.ToString());
+
+                        addOne = 0;
+                        if (cGC > 0.64)
+                            addOne++;
+                        if (ga < 0.1)
+                            addOne++;
+                        if (dli.Count() > 1 && indx > 0 && dli[indx - 1] > 0.085)
+                            addOne++;
+                        subOne = 0;
+                        if (f1.Count() > 1 && indx < dli.Count() - 1 && dli[indx + 1] < 0.004) //this will probably be changed to a test for ">"
+                            subOne++;
+                        th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
+                    }
 
                     if (th <= this.MaxAllowedAutoThreshold)
                     {
                         this.Threshold = th;
                         OnShowInfo(this.Threshold.ToString());
                         //temp
-                        MessageBox.Show(this.Threshold.ToString());
+                        MessageBox.Show(this.Threshold.ToString() + "\nrel pos: " + cGC.ToString() + "\nrel amount: " + ga.ToString() +
+                            "\naddOne: " + addOne.ToString() + "\nsubOne: " + subOne.ToString());
                     }
                 }
             }
