@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cbAutoThreshold = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.btnCompose = new System.Windows.Forms.Button();
             this.btnCache = new System.Windows.Forms.Button();
@@ -114,10 +117,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.cbAutoThreshold = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQATH)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAlgMaxIter)).BeginInit();
@@ -136,7 +137,6 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -217,6 +217,35 @@
             this.panel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDoubleClick);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label13);
+            this.panel2.Controls.Add(this.cbAutoThreshold);
+            this.panel2.Location = new System.Drawing.Point(628, 1);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 26);
+            this.panel2.TabIndex = 680;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(9, 6);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(87, 13);
+            this.label13.TabIndex = 677;
+            this.label13.Text = "currently testing: ";
+            // 
+            // cbAutoThreshold
+            // 
+            this.cbAutoThreshold.AutoSize = true;
+            this.cbAutoThreshold.Location = new System.Drawing.Point(102, 5);
+            this.cbAutoThreshold.Name = "cbAutoThreshold";
+            this.cbAutoThreshold.Size = new System.Drawing.Size(93, 17);
+            this.cbAutoThreshold.TabIndex = 676;
+            this.cbAutoThreshold.Text = "auto threshold";
+            this.cbAutoThreshold.UseVisualStyleBackColor = true;
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -278,7 +307,6 @@
             this.cbSetPFGToFG.Text = "PFGToFG";
             this.toolTip1.SetToolTip(this.cbSetPFGToFG, "set all \"probably foreground\" values to \"foreground\" in mask");
             this.cbSetPFGToFG.UseVisualStyleBackColor = true;
-            this.cbSetPFGToFG.Visible = false;
             // 
             // label11
             // 
@@ -372,7 +400,6 @@
             this.cbSkipLearn.TabIndex = 665;
             this.cbSkipLearn.Text = "skipLearn";
             this.cbSkipLearn.UseVisualStyleBackColor = true;
-            this.cbSkipLearn.Visible = false;
             // 
             // label1
             // 
@@ -1240,35 +1267,6 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // panel2
-            // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.label13);
-            this.panel2.Controls.Add(this.cbAutoThreshold);
-            this.panel2.Location = new System.Drawing.Point(628, 1);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 26);
-            this.panel2.TabIndex = 680;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(9, 6);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(87, 13);
-            this.label13.TabIndex = 677;
-            this.label13.Text = "currently testing: ";
-            // 
-            // cbAutoThreshold
-            // 
-            this.cbAutoThreshold.AutoSize = true;
-            this.cbAutoThreshold.Location = new System.Drawing.Point(102, 5);
-            this.cbAutoThreshold.Name = "cbAutoThreshold";
-            this.cbAutoThreshold.Size = new System.Drawing.Size(93, 17);
-            this.cbAutoThreshold.TabIndex = 676;
-            this.cbAutoThreshold.Text = "auto threshold";
-            this.cbAutoThreshold.UseVisualStyleBackColor = true;
-            // 
             // frmAvoidAGrabCutEasy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1285,6 +1283,8 @@
             this.Load += new System.EventHandler(this.frmGrabCut_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQATH)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAlgMaxIter)).EndInit();
@@ -1304,8 +1304,6 @@
             this.splitContainer1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

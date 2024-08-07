@@ -2337,6 +2337,7 @@ namespace AvoidAGrabCutEasy
         {
             this._drawImgOverlay = cbDraw.Checked;
             this.cbSkipLearn.Enabled = cbDraw.Checked;
+            this.cbSkipLearn.Checked = cbDraw.Checked;
             this.helplineRulerCtrl2.dbPanel1.Invalidate();
         }
 
