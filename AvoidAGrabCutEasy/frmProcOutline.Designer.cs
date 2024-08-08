@@ -48,6 +48,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnPrecompAngles = new System.Windows.Forms.Button();
             this.cbShowAngles = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numWHFactor = new System.Windows.Forms.NumericUpDown();
@@ -142,7 +143,9 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            this.btnPrecompAngles = new System.Windows.Forms.Button();
+            this.btnOnlyRestore = new System.Windows.Forms.Button();
+            this.cbOnlyRestore = new System.Windows.Forms.CheckBox();
+            this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -243,7 +246,7 @@
             this.groupBox2.Controls.Add(this.numGamma);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.numMaxSize);
-            this.groupBox2.Location = new System.Drawing.Point(9, 590);
+            this.groupBox2.Location = new System.Drawing.Point(9, 604);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(408, 45);
             this.groupBox2.TabIndex = 660;
@@ -336,7 +339,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 682);
+            this.label1.Location = new System.Drawing.Point(13, 696);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 658;
@@ -344,7 +347,7 @@
             // 
             // btmSetBU
             // 
-            this.btmSetBU.Location = new System.Drawing.Point(151, 677);
+            this.btmSetBU.Location = new System.Drawing.Point(151, 691);
             this.btmSetBU.Name = "btmSetBU";
             this.btmSetBU.Size = new System.Drawing.Size(75, 23);
             this.btmSetBU.TabIndex = 657;
@@ -355,7 +358,7 @@
             // Label20
             // 
             this.Label20.AutoSize = true;
-            this.Label20.Location = new System.Drawing.Point(13, 645);
+            this.Label20.Location = new System.Drawing.Point(13, 659);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(53, 13);
             this.Label20.TabIndex = 656;
@@ -371,7 +374,7 @@
             "1",
             "Fit_Width",
             "Fit"});
-            this.cmbZoom.Location = new System.Drawing.Point(72, 642);
+            this.cmbZoom.Location = new System.Drawing.Point(72, 656);
             this.cmbZoom.Name = "cmbZoom";
             this.cmbZoom.Size = new System.Drawing.Size(75, 21);
             this.cmbZoom.TabIndex = 655;
@@ -383,7 +386,7 @@
             this.cbBGColor.AutoSize = true;
             this.cbBGColor.Checked = true;
             this.cbBGColor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBGColor.Location = new System.Drawing.Point(161, 644);
+            this.cbBGColor.Location = new System.Drawing.Point(161, 658);
             this.cbBGColor.Name = "cbBGColor";
             this.cbBGColor.Size = new System.Drawing.Size(65, 17);
             this.cbBGColor.TabIndex = 654;
@@ -395,7 +398,7 @@
             // 
             this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button10.Location = new System.Drawing.Point(334, 677);
+            this.button10.Location = new System.Drawing.Point(334, 691);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 23);
             this.button10.TabIndex = 653;
@@ -407,7 +410,7 @@
             // 
             this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(253, 677);
+            this.button8.Location = new System.Drawing.Point(253, 691);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 652;
@@ -420,7 +423,7 @@
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(334, 642);
+            this.button2.Location = new System.Drawing.Point(334, 656);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 651;
@@ -432,7 +435,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(342, 731);
+            this.btnCancel.Location = new System.Drawing.Point(342, 734);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 645;
@@ -444,7 +447,7 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOK.Location = new System.Drawing.Point(262, 731);
+            this.btnOK.Location = new System.Drawing.Point(262, 734);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 646;
@@ -454,6 +457,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btnOnlyRestore);
+            this.groupBox4.Controls.Add(this.cbOnlyRestore);
             this.groupBox4.Controls.Add(this.btnPrecompAngles);
             this.groupBox4.Controls.Add(this.cbShowAngles);
             this.groupBox4.Controls.Add(this.label10);
@@ -495,17 +500,28 @@
             this.groupBox4.Controls.Add(this.numBoundInner);
             this.groupBox4.Controls.Add(this.label46);
             this.groupBox4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox4.Location = new System.Drawing.Point(9, 285);
+            this.groupBox4.Location = new System.Drawing.Point(9, 279);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(408, 299);
+            this.groupBox4.Size = new System.Drawing.Size(408, 315);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
             // 
+            // btnPrecompAngles
+            // 
+            this.btnPrecompAngles.Enabled = false;
+            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 257);
+            this.btnPrecompAngles.Name = "btnPrecompAngles";
+            this.btnPrecompAngles.Size = new System.Drawing.Size(84, 23);
+            this.btnPrecompAngles.TabIndex = 689;
+            this.btnPrecompAngles.Text = "precompNow";
+            this.btnPrecompAngles.UseVisualStyleBackColor = true;
+            this.btnPrecompAngles.Click += new System.EventHandler(this.btnPrecompAngles_Click);
+            // 
             // cbShowAngles
             // 
             this.cbShowAngles.AutoSize = true;
-            this.cbShowAngles.Location = new System.Drawing.Point(15, 269);
+            this.cbShowAngles.Location = new System.Drawing.Point(15, 261);
             this.cbShowAngles.Name = "cbShowAngles";
             this.cbShowAngles.Size = new System.Drawing.Size(83, 17);
             this.cbShowAngles.TabIndex = 688;
@@ -670,7 +686,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(197, 271);
+            this.label5.Location = new System.Drawing.Point(197, 287);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
             this.label5.TabIndex = 678;
@@ -680,7 +696,7 @@
             // 
             this.cmbMethodMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMethodMode.FormattingEnabled = true;
-            this.cmbMethodMode.Location = new System.Drawing.Point(236, 267);
+            this.cmbMethodMode.Location = new System.Drawing.Point(236, 283);
             this.cmbMethodMode.Name = "cmbMethodMode";
             this.cmbMethodMode.Size = new System.Drawing.Size(75, 21);
             this.cmbMethodMode.TabIndex = 677;
@@ -1055,7 +1071,7 @@
             // btnAlphaV
             // 
             this.btnAlphaV.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAlphaV.Location = new System.Drawing.Point(319, 265);
+            this.btnAlphaV.Location = new System.Drawing.Point(319, 281);
             this.btnAlphaV.Name = "btnAlphaV";
             this.btnAlphaV.Size = new System.Drawing.Size(75, 23);
             this.btnAlphaV.TabIndex = 538;
@@ -1162,7 +1178,7 @@
             this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox3.Location = new System.Drawing.Point(45, 58);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(364, 220);
+            this.groupBox3.Size = new System.Drawing.Size(364, 214);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "outline shape";
@@ -1723,16 +1739,33 @@
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
             // 
-            // btnPrecompAngles
+            // btnOnlyRestore
             // 
-            this.btnPrecompAngles.Enabled = false;
-            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 265);
-            this.btnPrecompAngles.Name = "btnPrecompAngles";
-            this.btnPrecompAngles.Size = new System.Drawing.Size(84, 23);
-            this.btnPrecompAngles.TabIndex = 689;
-            this.btnPrecompAngles.Text = "precompNow";
-            this.btnPrecompAngles.UseVisualStyleBackColor = true;
-            this.btnPrecompAngles.Click += new System.EventHandler(this.btnPrecompAngles_Click);
+            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 256);
+            this.btnOnlyRestore.Name = "btnOnlyRestore";
+            this.btnOnlyRestore.Size = new System.Drawing.Size(75, 23);
+            this.btnOnlyRestore.TabIndex = 691;
+            this.btnOnlyRestore.Text = "restore";
+            this.btnOnlyRestore.UseVisualStyleBackColor = true;
+            this.btnOnlyRestore.Click += new System.EventHandler(this.btnOnlyRestore_Click);
+            // 
+            // cbOnlyRestore
+            // 
+            this.cbOnlyRestore.AutoSize = true;
+            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 261);
+            this.cbOnlyRestore.Name = "cbOnlyRestore";
+            this.cbOnlyRestore.Size = new System.Drawing.Size(80, 17);
+            this.cbOnlyRestore.TabIndex = 690;
+            this.cbOnlyRestore.Text = "only restore";
+            this.cbOnlyRestore.UseVisualStyleBackColor = true;
+            this.cbOnlyRestore.CheckedChanged += new System.EventHandler(this.cbOnlyRestore_CheckedChanged);
+            // 
+            // backgroundWorker7
+            // 
+            this.backgroundWorker7.WorkerReportsProgress = true;
+            this.backgroundWorker7.WorkerSupportsCancellation = true;
+            this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
+            this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
             // frmProcOutline
             // 
@@ -1916,5 +1949,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown numWMin;
         private System.Windows.Forms.Button btnPrecompAngles;
+        private System.Windows.Forms.Button btnOnlyRestore;
+        private System.Windows.Forms.CheckBox cbOnlyRestore;
+        internal System.ComponentModel.BackgroundWorker backgroundWorker7;
     }
 }

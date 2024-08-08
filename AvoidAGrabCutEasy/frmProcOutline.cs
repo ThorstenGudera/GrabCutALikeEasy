@@ -963,6 +963,7 @@ namespace AvoidAGrabCutEasy
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
 
             DisableBoundControls(this.cbExpOutlProc.Checked);
+            this.btnOnlyRestore.Enabled = false;
         }
 
         private void SetControls(bool e)
@@ -5075,6 +5076,118 @@ namespace AvoidAGrabCutEasy
                 this._rectsList.Add(rects);
             }
             //#############################################################################
+        }
+
+        private void cbOnlyRestore_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (Control ct in this.groupBox4.Controls)
+                ct.Enabled = !cbOnlyRestore.Checked;
+
+            cbOnlyRestore.Enabled = true;
+
+            if (!this.cbOnlyRestore.Checked)
+            {
+                DisableBoundControls(this.cbExpOutlProc.Checked);
+                this.btnOnlyRestore.Enabled = false;
+            }
+            else
+            {
+                this.cbRestoreDefects.Enabled = this.label8.Enabled = true;
+                this.label6.Enabled = this.label7.Enabled = this.label10.Enabled = this.label12.Enabled = true;
+                this.numOpacity.Enabled = this.numWMin.Enabled = this.numWMax.Enabled = true;
+                this.numGamma2.Enabled = this.numWHFactor.Enabled = true;
+                this.btnOnlyRestore.Enabled = this.cbShowAngles.Enabled = this.btnPrecompAngles.Enabled = true;
+            }
+        }
+
+        private void btnOnlyRestore_Click(object sender, EventArgs e)
+        {
+            if (this.backgroundWorker7.IsBusy)
+            {
+                this.backgroundWorker7.CancelAsync();
+                return;
+            }
+
+            if (this.helplineRulerCtrl1.Bmp != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.SetControls(false);
+
+                this.btnOnlyRestore.Text = "Cancel";
+                this.btnOnlyRestore.Enabled = true;
+
+                double gamma2 = (double)this.numGamma2.Value;
+                float opacity = (float)this.numOpacity.Value;
+                double wMin = (double)this.numWMin.Value;
+                double wMax = (double)this.numWMax.Value;
+                int whFactor = (int)this.numWHFactor.Value;
+
+                this.backgroundWorker7.RunWorkerAsync(new object[] { this.helplineRulerCtrl1.Bmp, gamma2, opacity, wMin, wMax, whFactor });
+            }
+        }
+
+        private void backgroundWorker7_DoWork(object sender, DoWorkEventArgs e)
+        {
+            object[] o = (object[])e.Argument;
+
+            Bitmap bWork = new Bitmap((Bitmap)o[0]);
+            double gamma = (double)o[1];
+            float opacity = (float)o[2];
+            double wMin = (double)o[3];
+            double wMax = (double)o[4];
+            int whFactor = (int)o[5];
+
+            RevisitConvexDefects(this.helplineRulerCtrl1.Bmp, bWork, gamma, opacity, wMax, whFactor, wMin);
+
+            e.Result = bWork;
+        }
+
+        private void backgroundWorker7_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Bitmap bmp = null;
+
+            if (e.Result != null)
+                bmp = (Bitmap)e.Result;
+
+            if (bmp != null)
+            {
+                this.SetBitmap(this.helplineRulerCtrl1.Bmp, bmp, this.helplineRulerCtrl1, "Bmp");
+
+                Bitmap bC = new Bitmap(bmp);
+                this.SetBitmap(ref _bmpRef, ref bC);
+
+                this.helplineRulerCtrl1.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
+                this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                    (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                    (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+
+                _undoOPCache.Add(bmp);
+            }
+
+            this.btnOnlyRestore.Text = "restore";
+
+            this.SetControls(true);
+            this.Cursor = Cursors.Default;
+
+            this.cbExpOutlProc_CheckedChanged(this.cbExpOutlProc, new EventArgs());
+
+            this._pic_changed = true;
+
+            this.helplineRulerCtrl1.dbPanel1.Invalidate();
+
+            //if (this.Timer3.Enabled)
+            //    this.Timer3.Stop();
+
+            //this.Timer3.Start();
+
+            this.backgroundWorker7.Dispose();
+            this.backgroundWorker7 = new BackgroundWorker();
+            this.backgroundWorker7.WorkerReportsProgress = true;
+            this.backgroundWorker7.WorkerSupportsCancellation = true;
+            this.backgroundWorker7.DoWork += backgroundWorker7_DoWork;
+            //this.backgroundWorker7.ProgressChanged += backgroundWorker7_ProgressChanged;
+            this.backgroundWorker7.RunWorkerCompleted += backgroundWorker7_RunWorkerCompleted;
         }
     }
 }
