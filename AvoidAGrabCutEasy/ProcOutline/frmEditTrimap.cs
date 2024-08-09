@@ -404,7 +404,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
         private void DrawToBmp()
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl1.Bmp != null && this._allPoints != null && this._allPoints.Count > 0)
             {
                 Bitmap bmp = new Bitmap(this._bmpBU);
                 using (Graphics gx = Graphics.FromImage(bmp))

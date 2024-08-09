@@ -48,6 +48,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnOnlyRestore = new System.Windows.Forms.Button();
+            this.cbOnlyRestore = new System.Windows.Forms.CheckBox();
             this.btnPrecompAngles = new System.Windows.Forms.Button();
             this.cbShowAngles = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -143,8 +145,6 @@
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
-            this.btnOnlyRestore = new System.Windows.Forms.Button();
-            this.cbOnlyRestore = new System.Windows.Forms.CheckBox();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -506,6 +506,27 @@
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
+            // 
+            // btnOnlyRestore
+            // 
+            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 256);
+            this.btnOnlyRestore.Name = "btnOnlyRestore";
+            this.btnOnlyRestore.Size = new System.Drawing.Size(75, 23);
+            this.btnOnlyRestore.TabIndex = 691;
+            this.btnOnlyRestore.Text = "restore";
+            this.btnOnlyRestore.UseVisualStyleBackColor = true;
+            this.btnOnlyRestore.Click += new System.EventHandler(this.btnOnlyRestore_Click);
+            // 
+            // cbOnlyRestore
+            // 
+            this.cbOnlyRestore.AutoSize = true;
+            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 261);
+            this.cbOnlyRestore.Name = "cbOnlyRestore";
+            this.cbOnlyRestore.Size = new System.Drawing.Size(80, 17);
+            this.cbOnlyRestore.TabIndex = 690;
+            this.cbOnlyRestore.Text = "only restore";
+            this.cbOnlyRestore.UseVisualStyleBackColor = true;
+            this.cbOnlyRestore.CheckedChanged += new System.EventHandler(this.cbOnlyRestore_CheckedChanged);
             // 
             // btnPrecompAngles
             // 
@@ -1105,7 +1126,7 @@
             // 
             this.numBoundOuter.Location = new System.Drawing.Point(130, 21);
             this.numBoundOuter.Maximum = new decimal(new int[] {
-            25,
+            50,
             0,
             0,
             0});
@@ -1123,7 +1144,7 @@
             // 
             this.numBoundInner.Location = new System.Drawing.Point(223, 21);
             this.numBoundInner.Maximum = new decimal(new int[] {
-            25,
+            50,
             0,
             0,
             0});
@@ -1738,27 +1759,6 @@
             this.backgroundWorker6.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker6_DoWork);
             this.backgroundWorker6.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker6_ProgressChanged);
             this.backgroundWorker6.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker6_RunWorkerCompleted);
-            // 
-            // btnOnlyRestore
-            // 
-            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 256);
-            this.btnOnlyRestore.Name = "btnOnlyRestore";
-            this.btnOnlyRestore.Size = new System.Drawing.Size(75, 23);
-            this.btnOnlyRestore.TabIndex = 691;
-            this.btnOnlyRestore.Text = "restore";
-            this.btnOnlyRestore.UseVisualStyleBackColor = true;
-            this.btnOnlyRestore.Click += new System.EventHandler(this.btnOnlyRestore_Click);
-            // 
-            // cbOnlyRestore
-            // 
-            this.cbOnlyRestore.AutoSize = true;
-            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 261);
-            this.cbOnlyRestore.Name = "cbOnlyRestore";
-            this.cbOnlyRestore.Size = new System.Drawing.Size(80, 17);
-            this.cbOnlyRestore.TabIndex = 690;
-            this.cbOnlyRestore.Text = "only restore";
-            this.cbOnlyRestore.UseVisualStyleBackColor = true;
-            this.cbOnlyRestore.CheckedChanged += new System.EventHandler(this.cbOnlyRestore_CheckedChanged);
             // 
             // backgroundWorker7
             // 

@@ -43,7 +43,7 @@ namespace AvoidAGrabCutEasy
         private string m_CachePathAddition;
         private DefaultSmoothenOP _dsOP;
         private BoundaryMattingOP _bmOP;
-        private int _maxWidth = 50;
+        private int _maxWidth = 100;
         private int _oW = 0;
         private int _iW = 0;
         private Stopwatch _sw;
