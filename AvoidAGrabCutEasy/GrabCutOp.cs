@@ -75,6 +75,9 @@ namespace AvoidAGrabCutEasy
         public bool AutoThreshold { get; internal set; }
         public double MaxAllowedAutoThreshold { get; internal set; } = 16.1;
         public double AutoThresholdAddition { get; internal set; } = 6.5;
+        public int KMeansInitIters { get; internal set; } = 10;
+        public int KMeansIters { get; internal set; } = 0;
+        public bool kMInitRnd { get; internal set; } = false;
 
         public event EventHandler<string> ShowInfo;
 
@@ -563,15 +566,15 @@ namespace AvoidAGrabCutEasy
             if (this.BGW != null && this.BGW.WorkerReportsProgress)
                 this.BGW.ReportProgress(0);
             this._bgGmm = new GMM_bgr(this._bgValues.ToArray(), this._BGIndexes.ToArray(), this.Gmm_comp, 3 /* b, g, r */,
-                0, true, this.SelectionMode, 10, this._w, this._h, this.KMInitW,
-                this.KMInitH, false, false, 1, false, this.BGW);
+                this.KMeansIters, true, this.SelectionMode, this.KMeansInitIters, this._w, this._h, this.KMInitW,
+                this.KMInitH, this.kMInitRnd, false, 1, false, this.BGW);
             //if (this.BGW != null && this.BGW.WorkerReportsProgress)
             //    this.BGW.ReportProgress(50);
             if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
                 this.BGW.CancelAsync();
             this._fgGmm = new GMM_bgr(this._fgValues.ToArray(), this._FGIndexes.ToArray(), this.Gmm_comp, 3,
-                0, true, this.SelectionMode, 10, this._w, this._h, this.KMInitW,
-                this.KMInitH, false, false, 1, false, this.BGW);
+                this.KMeansIters, true, this.SelectionMode, this.KMeansInitIters, this._w, this._h, this.KMInitW,
+                this.KMInitH, this.kMInitRnd, false, 1, false, this.BGW);
             if (this.BGW != null && this.BGW.WorkerReportsProgress)
                 this.BGW.ReportProgress(100);
         }

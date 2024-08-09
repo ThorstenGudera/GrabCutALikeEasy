@@ -101,6 +101,10 @@ namespace AvoidAGrabCutEasy
         private Bitmap _b4Copy;
         private double _KMeansInitW = 2;
         private double _KMeansInitH = 2;
+        private ListSelectionMode _KMeansSelMode = 0;
+        private int _KMeansInitIters = 10;
+        private bool _kMInitRnd = false;
+        private int _KMeansIters = 0;
         private int _numShiftX;
         private int _numShiftY;
 
@@ -1403,7 +1407,7 @@ namespace AvoidAGrabCutEasy
                     bool castTLInt = cbCastTLInt.Checked;
                     bool getSourcePart = false;
 
-                    ListSelectionMode selMode = ListSelectionMode.Min;
+                    ListSelectionMode selMode = this._KMeansSelMode;
 
                     double probMult1 = (double)this.numProbMult1.Value;
 
@@ -1417,6 +1421,10 @@ namespace AvoidAGrabCutEasy
                     double kmInitW = this._KMeansInitW;
                     double kmInitH = this._KMeansInitH;
 
+                    int KMeansInitIters = this._KMeansInitIters;
+                    bool kMInitRnd = this._kMInitRnd;
+                    int KMeansIters = this._KMeansIters;
+
                     int comp = (int)this.numMaxComponents.Value;
                     bool autoThreshold = this.cbAutoThreshold.Checked;
 
@@ -1426,7 +1434,8 @@ namespace AvoidAGrabCutEasy
                         wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG, cgWQE,
-                        numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold });
+                        numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
+                        KMeansInitIters, kMInitRnd, KMeansIters });
                 }
             }
         }
@@ -1481,6 +1490,10 @@ namespace AvoidAGrabCutEasy
             bool drawNumComp = true;
             int comp = (int)o[36];
             bool autoThreshold = (bool)o[37];
+
+            int KMeansInitIters = (int)o[38];
+            bool kMInitRnd = (bool)o[39];
+            int KMeansIters = (int)o[40];
 
             //if we have a large pic that will be resized during these OPs
             //we need to resize also the scribbles, if present
@@ -1554,7 +1567,10 @@ namespace AvoidAGrabCutEasy
                     NumCorrect2 = numCorrect2,
                     MaxIter = this._algMaxIter,
                     QATH = this._algQATH,
-                    AutoThreshold = autoThreshold
+                    AutoThreshold = autoThreshold,
+                    KMeansInitIters = KMeansInitIters,
+                    kMInitRnd = kMInitRnd,
+                    KMeansIters = KMeansIters
                 };
 
                 this._gc.ShowInfo += _gc_ShowInfo;
@@ -1622,6 +1638,9 @@ namespace AvoidAGrabCutEasy
                 this._gc.NumItems2 = numItems2;
                 this._gc.NumCorrect2 = numCorrect2;
                 this._gc.AutoThreshold = autoThreshold;
+                this._gc.KMeansInitIters = KMeansInitIters;
+                this._gc.kMInitRnd = kMInitRnd;
+                this._gc.KMeansIters = KMeansIters;
 
                 if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                 {
@@ -2637,7 +2656,7 @@ namespace AvoidAGrabCutEasy
                     bool castTLInt = cbCastTLInt.Checked;
                     bool getSourcePart = false;
 
-                    ListSelectionMode selMode = ListSelectionMode.Min;
+                    ListSelectionMode selMode = this._KMeansSelMode;
 
                     double probMult1 = (double)this.numProbMult1.Value;
 
@@ -2651,12 +2670,20 @@ namespace AvoidAGrabCutEasy
                     double kmInitW = this._KMeansInitW;
                     double kmInitH = this._KMeansInitH;
 
+                    int KMeansInitIters = this._KMeansInitIters;
+                    bool kMInitRnd = this._kMInitRnd;
+                    int KMeansIters = this._KMeansIters;
+
+                    int comp = (int)this.numMaxComponents.Value;
+                    bool autoThreshold = this.cbAutoThreshold.Checked;
+
                     this.backgroundWorker2.RunWorkerAsync(new object[] { bWork, gmm_comp, gamma, num_Iters,
                         rectMode, r, autoBias, skipInit, workOnPaths,
                         wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG, cgWQE,
-                        numItems, numCorrect, numItems2, numCorrect2, skipLearn });
+                        numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
+                        KMeansInitIters, kMInitRnd, KMeansIters });
                 }
             }
         }
@@ -2703,13 +2730,19 @@ namespace AvoidAGrabCutEasy
             double numCorrect2 = (double)o[34];
             bool skipLearn = (bool)o[35];
 
+            int comp = (int)o[36];
+            bool autoThreshold = (bool)o[37];
+
+            int KMeansInitIters = (int)o[38];
+            bool kMInitRnd = (bool)o[39];
+            int KMeansIters = (int)o[40];
+
             if (scribbleMode && !rectMode)
                 r = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
             Rectangle clipRect = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
             bool dontFillPath = true;
             bool drawNumComp = true;
-            int comp = 10;
 
             if (scribbleMode && resPic > 1)
             {
@@ -2776,7 +2809,11 @@ namespace AvoidAGrabCutEasy
                     NumItems2 = numItems2,
                     NumCorrect2 = numCorrect2,
                     MaxIter = this._algMaxIter,
-                    QATH = this._algQATH
+                    QATH = this._algQATH,
+                    AutoThreshold = autoThreshold,
+                    KMeansInitIters = KMeansInitIters,
+                    kMInitRnd = kMInitRnd,
+                    KMeansIters = KMeansIters
                 };
 
                 this._gc.ShowInfo += _gc_ShowInfo;
@@ -2841,6 +2878,10 @@ namespace AvoidAGrabCutEasy
                 this._gc.NumCorrect = numCorrect;
                 this._gc.NumItems2 = numItems2;
                 this._gc.NumCorrect2 = numCorrect2;
+                this._gc.AutoThreshold = autoThreshold;
+                this._gc.KMeansInitIters = KMeansInitIters;
+                this._gc.kMInitRnd = kMInitRnd;
+                this._gc.KMeansIters = KMeansIters;
 
                 if (!workOnPaths && this._gc.ScribbleMode && this._gc.Scribbles != null && this._gc.Scribbles.Count > 0)
                 {
@@ -3521,6 +3562,30 @@ namespace AvoidAGrabCutEasy
                         Bitmap bC = new Bitmap(bmp);
                         this.SetBitmap(ref this._bmpBU, ref bC);
                     }
+                }
+            }
+        }
+
+        private void btnInitSettings_Click(object sender, EventArgs e)
+        {
+            using (frmKMeansSettings frm = new frmKMeansSettings())
+            {
+                frm.cmbSelMode.SelectedIndex = (int)this._KMeansSelMode;
+                frm.numKMeansIters.Value = (decimal)this._KMeansIters;
+                frm.numInitIters.Value = (decimal)this._KMeansInitIters;
+                frm.numInitW.Value = (decimal)this._KMeansInitW;
+                frm.numInitH.Value = (decimal)this._KMeansInitH;
+                frm.cbInitRnd.Checked = this._kMInitRnd;
+
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    ListSelectionMode selMode = (ListSelectionMode)System.Enum.Parse(typeof(ListSelectionMode), frm.cmbSelMode.SelectedItem.ToString());
+                    this._KMeansSelMode = selMode;
+                    this._KMeansIters = (int)frm.numKMeansIters.Value;
+                    this._KMeansInitIters = (int)frm.numInitIters.Value;
+                    this._KMeansInitW = (double)frm.numInitW.Value;
+                    this._KMeansInitH = (double)frm.numInitH.Value;
+                    this._kMInitRnd = frm.cbInitRnd.Checked;
                 }
             }
         }

@@ -84,6 +84,12 @@
     <Compile Include="frmDrawNumComp.Designer.cs">
       <DependentUpon>frmDrawNumComp.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmKMeansSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKMeansSettings.Designer.cs">
+      <DependentUpon>frmKMeansSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmProcOutline.cs">
       <SubType>Form</SubType>
     </Compile>

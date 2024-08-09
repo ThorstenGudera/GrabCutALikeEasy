@@ -117,6 +117,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnInitSettings = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
@@ -141,6 +142,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnInitSettings);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.btnCompose);
@@ -239,6 +241,8 @@
             // cbAutoThreshold
             // 
             this.cbAutoThreshold.AutoSize = true;
+            this.cbAutoThreshold.Checked = true;
+            this.cbAutoThreshold.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbAutoThreshold.Location = new System.Drawing.Point(102, 5);
             this.cbAutoThreshold.Name = "cbAutoThreshold";
             this.cbAutoThreshold.Size = new System.Drawing.Size(93, 17);
@@ -1267,6 +1271,16 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
+            // btnInitSettings
+            // 
+            this.btnInitSettings.Location = new System.Drawing.Point(511, 6);
+            this.btnInitSettings.Name = "btnInitSettings";
+            this.btnInitSettings.Size = new System.Drawing.Size(75, 23);
+            this.btnInitSettings.TabIndex = 681;
+            this.btnInitSettings.Text = "KM-settings";
+            this.btnInitSettings.UseVisualStyleBackColor = true;
+            this.btnInitSettings.Click += new System.EventHandler(this.btnInitSettings_Click);
+            // 
             // frmAvoidAGrabCutEasy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1398,5 +1412,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox cbAutoThreshold;
+        private System.Windows.Forms.Button btnInitSettings;
     }
 }
