@@ -678,6 +678,7 @@ namespace AvoidAGrabCutEasy
 
                 if (this.cbExpOutlProc.Checked)
                 {
+                    //Closed_Form Matte
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
 
@@ -836,11 +837,15 @@ namespace AvoidAGrabCutEasy
 
                     if (mm == MethodMode.ModeFeather)
                     {
+                        //Feather (extended)
+                        bool desaturate = this.cbDesaturate.Checked;
                         BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
-                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax, whFactor, wMin });
+                        this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax, whFactor, wMin, desaturate });
                     }
                     else
                     {
+                        //Run a grabcutWithoutMinCut again with current segmentation picture as fg and a stronger threshold
+                        //compare and process the differences
                         if (this.helplineRulerCtrl1.Bmp != null)
                         {
                             this.Cursor = Cursors.WaitCursor;
@@ -1174,13 +1179,14 @@ namespace AvoidAGrabCutEasy
             double wMax = (double)o[4];
             int whFactor = (int)o[5];
             double wMin = (double)o[6];
+            bool desaturate = (bool)o[7];
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP(this.helplineRulerCtrl1.Bmp, this._bmpOrig);
             //bmOP.ShowInfo += _gc_ShowInfo;
             bmOP.BGW = this.backgroundWorker2;
 
             bmOP.Init((int)this.numNormalDist.Value, (int)this.numBoundInner.Value, (int)this.numBoundOuter.Value,
-                (float)Math.Min(this.numColDistDist.Value, this.numBoundOuter.Value), (double)this.numAlphaStart.Value, bt);
+                (float)Math.Min(this.numColDistDist.Value, this.numBoundOuter.Value), (double)this.numAlphaStart.Value, bt, desaturate);
 
             ColorSource cs = ColorSource.OuterPixels;
             double numFactorOuterPx = (double)this.numFactorOuterPx.Value;
@@ -4931,6 +4937,7 @@ namespace AvoidAGrabCutEasy
             this.label4.Enabled = this.numTh.Enabled = (cmbMethodMode.SelectedIndex == 1 && !this.cbExpOutlProc.Checked);
             this.label48.Enabled = this.label47.Enabled = this.numNormalDist.Enabled = this.numColDistDist.Enabled =
                 (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
+            this.cbDesaturate.Enabled = (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
         }
 
         private void cbRestoreDefects_CheckedChanged(object sender, EventArgs e)

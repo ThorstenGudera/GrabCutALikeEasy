@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSetGamma = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -146,6 +145,8 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
+            this.cbDesaturate = new System.Windows.Forms.CheckBox();
+            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -219,25 +220,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1268, 762);
             this.splitContainer1.SplitterDistance = 835;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // helplineRulerCtrl1
-            // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // groupBox2
             // 
@@ -457,6 +439,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbDesaturate);
             this.groupBox4.Controls.Add(this.btnOnlyRestore);
             this.groupBox4.Controls.Add(this.cbOnlyRestore);
             this.groupBox4.Controls.Add(this.btnPrecompAngles);
@@ -707,7 +690,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(197, 287);
+            this.label5.Location = new System.Drawing.Point(183, 287);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
             this.label5.TabIndex = 678;
@@ -716,10 +699,11 @@
             // cmbMethodMode
             // 
             this.cmbMethodMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMethodMode.DropDownWidth = 95;
             this.cmbMethodMode.FormattingEnabled = true;
-            this.cmbMethodMode.Location = new System.Drawing.Point(236, 283);
+            this.cmbMethodMode.Location = new System.Drawing.Point(222, 283);
             this.cmbMethodMode.Name = "cmbMethodMode";
-            this.cmbMethodMode.Size = new System.Drawing.Size(75, 21);
+            this.cmbMethodMode.Size = new System.Drawing.Size(89, 21);
             this.cmbMethodMode.TabIndex = 677;
             this.cmbMethodMode.SelectedIndexChanged += new System.EventHandler(this.cmbMethodMode_SelectedIndexChanged);
             // 
@@ -1767,6 +1751,36 @@
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
+            // cbDesaturate
+            // 
+            this.cbDesaturate.AutoSize = true;
+            this.cbDesaturate.Enabled = false;
+            this.cbDesaturate.Location = new System.Drawing.Point(74, 285);
+            this.cbDesaturate.Name = "cbDesaturate";
+            this.cbDesaturate.Size = new System.Drawing.Size(98, 17);
+            this.cbDesaturate.TabIndex = 692;
+            this.cbDesaturate.Text = "also desaturate";
+            this.cbDesaturate.UseVisualStyleBackColor = true;
+            // 
+            // helplineRulerCtrl1
+            // 
+            this.helplineRulerCtrl1.Bmp = null;
+            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.helplineRulerCtrl1.DontDoLayout = false;
+            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
+            this.helplineRulerCtrl1.DontPaintBaseImg = false;
+            this.helplineRulerCtrl1.DontProcDoubleClick = false;
+            this.helplineRulerCtrl1.IgnoreZoom = false;
+            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
+            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
+            this.helplineRulerCtrl1.TabIndex = 0;
+            this.helplineRulerCtrl1.Zoom = 1F;
+            this.helplineRulerCtrl1.ZoomSetManually = false;
+            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1952,5 +1966,6 @@
         private System.Windows.Forms.Button btnOnlyRestore;
         private System.Windows.Forms.CheckBox cbOnlyRestore;
         internal System.ComponentModel.BackgroundWorker backgroundWorker7;
+        private System.Windows.Forms.CheckBox cbDesaturate;
     }
 }

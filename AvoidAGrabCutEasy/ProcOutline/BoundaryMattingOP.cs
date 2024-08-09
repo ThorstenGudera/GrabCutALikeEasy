@@ -32,6 +32,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
         private float _measureDist = 2f;
         private double _alphaStartValue = 192.0;
         private BlendType _blendType;
+        private bool _desaturate;
         private double[] _kernelVector;
         private Bitmap _lastCroppedPic;
 
@@ -45,7 +46,8 @@ namespace AvoidAGrabCutEasy.ProcOutline
         {
         }
 
-        public void Init(int normalDistToCheck, int widthInside, int widthOutside, float measureColDistDist, double alphaStartValue, BlendType blendType)
+        public void Init(int normalDistToCheck, int widthInside, int widthOutside, float measureColDistDist, 
+            double alphaStartValue, BlendType blendType, bool desaturate)
         {
             this._normalDistToCheck = normalDistToCheck;
             this._widthInside = widthInside;
@@ -53,6 +55,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
             this._measureDist = measureColDistDist;
             this._alphaStartValue = alphaStartValue;
             this._blendType = blendType;
+            this._desaturate = desaturate;
 
             if (this.BmpWork != null)
             {
@@ -1594,12 +1597,48 @@ namespace AvoidAGrabCutEasy.ProcOutline
             bRet = null;
         }
 
+        public void Feather(Bitmap bmp, int width, int alphaStartValue, int innerWidth)
+        {
+            Bitmap bRet = null;
+
+            BitmapBorderAction b = BitmapBorderAction.Feather;
+            double[] saturation = null;
+
+            if (this._desaturate)
+            {
+                b = BitmapBorderAction.DesaturateAndFeather;
+                saturation = GetVector(width * 2 + 1);
+            }
+
+            double[] alpha = GetVector(width * 2 + 1, alphaStartValue, innerWidth);
+            BitmapOutlineVariant bov = BitmapOutlineVariant.All;
+
+            bRet = GetOutline(bmp, width, b, saturation, alpha, bov, false, null);
+
+            using (Graphics gx = Graphics.FromImage(bmp))
+            {
+                gx.Clear(Color.Transparent);
+                gx.DrawImage(bRet, 0, 0);
+            }
+
+            if (bRet != null)
+                bRet.Dispose();
+            bRet = null;
+        }
+
         public void Feather(Bitmap bmp, int width, bool setLastCroppedBitmap, Bitmap lastCroppedPic)
         {
             Bitmap bRet = null;
 
             BitmapBorderAction b = BitmapBorderAction.Feather;
             double[] saturation = null;
+
+            if (this._desaturate)
+            {
+                b = BitmapBorderAction.DesaturateAndFeather;
+                saturation = GetVector(width * 2 + 1);
+            }
+
             double[] alpha = GetVector(width * 2 + 1);
             BitmapOutlineVariant bov = BitmapOutlineVariant.All;
 
@@ -1622,31 +1661,17 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
             BitmapBorderAction b = BitmapBorderAction.Feather;
             double[] saturation = null;
+
+            if (this._desaturate)
+            {
+                b = BitmapBorderAction.DesaturateAndFeather;
+                saturation = new double[alpha.Length];
+                alpha.CopyTo(saturation, 0);
+            }
+
             BitmapOutlineVariant bov = BitmapOutlineVariant.All;
 
             bRet = GetOutline(bmp, alpha.Length, b, saturation, alpha, bov, false, null);
-
-            using (Graphics gx = Graphics.FromImage(bmp))
-            {
-                gx.Clear(Color.Transparent);
-                gx.DrawImage(bRet, 0, 0);
-            }
-
-            if (bRet != null)
-                bRet.Dispose();
-            bRet = null;
-        }
-
-        public void Feather(Bitmap bmp, int width, int alphaStartValue, int innerWidth)
-        {
-            Bitmap bRet = null;
-
-            BitmapBorderAction b = BitmapBorderAction.Feather;
-            double[] saturation = null;
-            double[] alpha = GetVector(width * 2 + 1, alphaStartValue, innerWidth);
-            BitmapOutlineVariant bov = BitmapOutlineVariant.All;
-
-            bRet = GetOutline(bmp, width, b, saturation, alpha, bov, false, null);
 
             using (Graphics gx = Graphics.FromImage(bmp))
             {
