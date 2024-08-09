@@ -834,11 +834,11 @@ namespace AvoidAGrabCutEasy
                     double wMin = (double)this.numWMin.Value;
                     double wMax = (double)this.numWMax.Value;
                     int whFactor = (int)this.numWHFactor.Value;
+                    bool desaturate = this.cbDesaturate.Checked;
 
                     if (mm == MethodMode.ModeFeather)
                     {
                         //Feather (extended)
-                        bool desaturate = this.cbDesaturate.Checked;
                         BlendType bt = (BlendType)System.Enum.Parse(typeof(BlendType), this.cmbBlendType.SelectedItem.ToString());
                         this.backgroundWorker2.RunWorkerAsync(new object[] { bt, restoreDefects, gamma2, opacity, wMax, whFactor, wMin, desaturate });
                     }
@@ -913,7 +913,7 @@ namespace AvoidAGrabCutEasy
                                     kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
                                     numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
                                     drawNumComp, comp, blur, alphaStartValue, doBlur, restoreDefects,
-                                    gamma2, opacity, wMax, whFactor, wMin });
+                                    gamma2, opacity, wMax, whFactor, wMin, desaturate });
                         }
                     }
                 }
@@ -4179,6 +4179,8 @@ namespace AvoidAGrabCutEasy
             int whFactor = (int)o[47];
             double wMin = (double)o[48];
 
+            bool desaturate = (bool)o[49];
+
             //resize the input bmp
             Bitmap bU2 = null;
             if (resPic > 1)
@@ -4550,6 +4552,8 @@ namespace AvoidAGrabCutEasy
 
             BoundaryMattingOP bmOP = new BoundaryMattingOP();
             //bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1), alphaStartValue, innerW);
+            if (desaturate)
+                bmOP.SetDesaturate(desaturate);
             bmOP.Feather(bDiff, (int)Math.Max(innerW * (resPic > 1 ? resPic : 1), 1) + 2, alphaStartValue, innerW);
             bmOP.Dispose();
 
@@ -4937,7 +4941,7 @@ namespace AvoidAGrabCutEasy
             this.label4.Enabled = this.numTh.Enabled = (cmbMethodMode.SelectedIndex == 1 && !this.cbExpOutlProc.Checked);
             this.label48.Enabled = this.label47.Enabled = this.numNormalDist.Enabled = this.numColDistDist.Enabled =
                 (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
-            this.cbDesaturate.Enabled = (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
+            //this.cbDesaturate.Enabled = (cmbMethodMode.SelectedIndex == 0 && !this.cbExpOutlProc.Checked);
         }
 
         private void cbRestoreDefects_CheckedChanged(object sender, EventArgs e)

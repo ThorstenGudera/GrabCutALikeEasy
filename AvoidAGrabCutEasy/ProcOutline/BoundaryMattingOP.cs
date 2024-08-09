@@ -2585,5 +2585,10 @@ namespace AvoidAGrabCutEasy.ProcOutline
 
             return null;
         }
+
+        internal void SetDesaturate(bool desaturate)
+        {
+            this._desaturate = desaturate;
+        }
     }
 }
