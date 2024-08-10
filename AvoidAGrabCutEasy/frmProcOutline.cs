@@ -872,7 +872,6 @@ namespace AvoidAGrabCutEasy
                             bool workOnPaths = false;
                             bool gammaChanged = false;
                             int intMult = 1;
-                            bool quick = true;
                             bool useEightAdj = false;
                             bool useTh = true;
                             double th = (double)this.numTh.Value;
@@ -906,7 +905,7 @@ namespace AvoidAGrabCutEasy
 
                             this.backgroundWorker6.RunWorkerAsync(new object[] { bWork, bOrig, innerW, outerW,
                                     gmm_comp, gamma, numIters, rectMode, r ,skipInit, workOnPaths,
-                                    gammaChanged, intMult, quick, useEightAdj, useTh, th, resPic,
+                                    gammaChanged, intMult, useEightAdj, useTh, th, resPic,
                                     initWKpp, multCapacitiesForTLinks, multTLinkCapacity, castTLInt,
                                     getSourcePart, selMode, scribbleMode, scribbles, probMult1,
                                     kmInitW, kmInitH, setPFGToFG, numItems, numCorrect,
@@ -4138,42 +4137,42 @@ namespace AvoidAGrabCutEasy
             bool workOnPaths = (bool)o[10];
             bool gammaChanged = (bool)o[11];
             int intMult = (int)o[12];
-            bool quick = (bool)o[13];
-            bool useEightAdj = (bool)o[14];
-            bool useTh = (bool)o[15];
-            double th = (double)o[16];
-            double resPic = (double)o[17];
-            bool initWKpp = (bool)o[18];
-            bool multCapacitiesForTLinks = (bool)o[19];
-            double multTLinkCapacity = (double)o[20];
-            bool castTLInt = (bool)o[21];
-            bool getSourcePart = (bool)o[22];
-            ListSelectionMode selMode = (ListSelectionMode)o[23];
-            bool scribbleMode = (bool)o[24];
-            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[25];
-            double probMult1 = (double)o[26];
-            double kmInitW = (double)o[27];
-            double kmInitH = (double)o[28];
-            bool setPFGToFG = (bool)o[29];
-            double numItems = (double)o[30];
-            double numCorrect = (double)o[31];
-            double numItems2 = (double)o[32];
-            double numCorrect2 = (double)o[33];
-            bool skipLearn = (bool)o[34];
-            Rectangle clipRect = (Rectangle)o[35];
-            bool dontFillPath = (bool)o[36];
-            bool drawNumComp = (bool)o[37];
-            int comp = (int)o[38];
-            int blur = (int)o[39];
-            int alphaStartValue = (int)o[40];
-            bool doBlur = (bool)o[41];
-            bool restoreDefects = (bool)o[42];
-            double gamma2 = (double)o[43];
-            float opacity = (float)o[44];
-            double wMax = (double)o[45];
-            int whFactor = (int)o[46];
-            double wMin = (double)o[47];
-            bool desaturate = (bool)o[48];
+            bool quick = true;
+            bool useEightAdj = (bool)o[13];
+            bool useTh = (bool)o[14];
+            double th = (double)o[15];
+            double resPic = (double)o[16];
+            bool initWKpp = (bool)o[17];
+            bool multCapacitiesForTLinks = (bool)o[18];
+            double multTLinkCapacity = (double)o[19];
+            bool castTLInt = (bool)o[20];
+            bool getSourcePart = (bool)o[21];
+            ListSelectionMode selMode = (ListSelectionMode)o[22];
+            bool scribbleMode = (bool)o[23];
+            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[24];
+            double probMult1 = (double)o[25];
+            double kmInitW = (double)o[26];
+            double kmInitH = (double)o[27];
+            bool setPFGToFG = (bool)o[28];
+            double numItems = (double)o[29];
+            double numCorrect = (double)o[30];
+            double numItems2 = (double)o[31];
+            double numCorrect2 = (double)o[32];
+            bool skipLearn = (bool)o[33];
+            Rectangle clipRect = (Rectangle)o[34];
+            bool dontFillPath = (bool)o[35];
+            bool drawNumComp = (bool)o[36];
+            int comp = (int)o[37];
+            int blur = (int)o[38];
+            int alphaStartValue = (int)o[39];
+            bool doBlur = (bool)o[40];
+            bool restoreDefects = (bool)o[41];
+            double gamma2 = (double)o[42];
+            float opacity = (float)o[43];
+            double wMax = (double)o[44];
+            int whFactor = (int)o[45];
+            double wMin = (double)o[46];
+            bool desaturate = (bool)o[47];
 
             //resize the input bmp
             Bitmap bU2 = null;

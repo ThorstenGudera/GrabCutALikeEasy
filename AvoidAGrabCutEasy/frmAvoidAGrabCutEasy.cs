@@ -1369,7 +1369,6 @@ namespace AvoidAGrabCutEasy
                     gammaChanged |= xi - this._oldXi != 0;
                     this._oldGamma = gamma;
                     this._oldXi = xi;
-                    bool quick = this.cbQuickEst.Checked;
                     bool useEightAdj = this.cbEightAdj.Checked;
                     bool useTh = this.cbUseTh.Checked;
                     double th = useTh ? (double)this.numDblMult.Value : 0;
@@ -1383,8 +1382,6 @@ namespace AvoidAGrabCutEasy
                     ListSelectionMode selMode = this._KMeansSelMode;
 
                     double probMult1 = (double)this.numProbMult1.Value;
-
-
 
                     double numItems = this._items;
                     double numCorrect = this._correctItems;
@@ -1404,7 +1401,7 @@ namespace AvoidAGrabCutEasy
                     //now start the work
                     this.backgroundWorker1.RunWorkerAsync(new object[] { bWork, gmm_comp, gamma, num_Iters,
                         rectMode, r, autoBias, skipInit, workOnPaths,
-                        wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
+                        wh, gammaChanged, intMult, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG,
                         numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
@@ -1429,29 +1426,29 @@ namespace AvoidAGrabCutEasy
             int wh = (int)o[9];
             bool gammaChanged = (bool)o[10];
             int intMult = (int)o[11];
-            bool quick = (bool)o[12];
-            bool useEightAdj = (bool)o[13];
-            bool useTh = (bool)o[14];
-            double th = (double)o[15];
-            double xi = (double)o[16];
-            double resPic = (double)o[17];
-            bool initWKpp = (bool)o[18];
-            bool multCapacitiesForTLinks = (bool)o[19];
-            double multTLinkCapacity = (double)o[20];
-            bool castTLInt = (bool)o[21];
-            bool getSourcePart = (bool)o[22];
-            ListSelectionMode selMode = (ListSelectionMode)o[23];
-            bool scribbleMode = (bool)o[24];
-            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[25];
-            double probMult1 = (double)o[26];
-            double kmInitW = (double)o[27];
-            double kmInitH = (double)o[28];
-            bool setPFGToFG = (bool)o[29];
-            double numItems = (double)o[30];
-            double numCorrect = (double)o[31];
-            double numItems2 = (double)o[32];
-            double numCorrect2 = (double)o[33];
-            bool skipLearn = (bool)o[34];
+            bool quick = true;
+            bool useEightAdj = (bool)o[12];
+            bool useTh = (bool)o[13];
+            double th = (double)o[14];
+            double xi = (double)o[15];
+            double resPic = (double)o[16];
+            bool initWKpp = (bool)o[17];
+            bool multCapacitiesForTLinks = (bool)o[18];
+            double multTLinkCapacity = (double)o[19];
+            bool castTLInt = (bool)o[20];
+            bool getSourcePart = (bool)o[21];
+            ListSelectionMode selMode = (ListSelectionMode)o[22];
+            bool scribbleMode = (bool)o[23];
+            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[24];
+            double probMult1 = (double)o[25];
+            double kmInitW = (double)o[26];
+            double kmInitH = (double)o[27];
+            bool setPFGToFG = (bool)o[28];
+            double numItems = (double)o[29];
+            double numCorrect = (double)o[30];
+            double numItems2 = (double)o[31];
+            double numCorrect2 = (double)o[32];
+            bool skipLearn = (bool)o[33];
 
             if (scribbleMode && !rectMode)
                 r = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -1459,11 +1456,11 @@ namespace AvoidAGrabCutEasy
             Rectangle clipRect = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
             bool dontFillPath = true;
             bool drawNumComp = true;
-            int comp = (int)o[35];
-            bool autoThreshold = (bool)o[36];
-            int KMeansInitIters = (int)o[37];
-            bool kMInitRnd = (bool)o[38];
-            int KMeansIters = (int)o[39];
+            int comp = (int)o[34];
+            bool autoThreshold = (bool)o[35];
+            int KMeansInitIters = (int)o[36];
+            bool kMInitRnd = (bool)o[37];
+            int KMeansIters = (int)o[38];
 
             //if we have a large pic that will be resized during these OPs
             //we need to resize also the scribbles, if present
@@ -2613,7 +2610,6 @@ namespace AvoidAGrabCutEasy
                     gammaChanged |= xi - this._oldXi != 0;
                     this._oldGamma = gamma;
                     this._oldXi = xi;
-                    bool quick = this.cbQuickEst.Checked;
                     bool useEightAdj = this.cbEightAdj.Checked;
                     bool useTh = this.cbUseTh.Checked;
                     double th = useTh ? (double)this.numDblMult.Value : 0;
@@ -2647,7 +2643,7 @@ namespace AvoidAGrabCutEasy
 
                     this.backgroundWorker2.RunWorkerAsync(new object[] { bWork, gmm_comp, gamma, num_Iters,
                         rectMode, r, autoBias, skipInit, workOnPaths,
-                        wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
+                        wh, gammaChanged, intMult, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
                         scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG,
                         numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
@@ -2672,34 +2668,34 @@ namespace AvoidAGrabCutEasy
             int wh = (int)o[9];
             bool gammaChanged = (bool)o[10];
             int intMult = (int)o[11];
-            bool quick = (bool)o[12];
-            bool useEightAdj = (bool)o[13];
-            bool useTh = (bool)o[14];
-            double th = (double)o[15];
-            double xi = (double)o[16];
-            double resPic = (double)o[17];
-            bool initWKpp = (bool)o[18];
-            bool multCapacitiesForTLinks = (bool)o[19];
-            double multTLinkCapacity = (double)o[20];
-            bool castTLInt = (bool)o[21];
-            bool getSourcePart = (bool)o[22];
-            ListSelectionMode selMode = (ListSelectionMode)o[23];
-            bool scribbleMode = (bool)o[24];
-            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[25];
-            double probMult1 = (double)o[26];
-            double kmInitW = (double)o[27];
-            double kmInitH = (double)o[28];
-            bool setPFGToFG = (bool)o[29];
-            double numItems = (double)o[30];
-            double numCorrect = (double)o[31];
-            double numItems2 = (double)o[32];
-            double numCorrect2 = (double)o[33];
-            bool skipLearn = (bool)o[34];
-            int comp = (int)o[35];
-            bool autoThreshold = (bool)o[36];
-            int KMeansInitIters = (int)o[37];
-            bool kMInitRnd = (bool)o[38];
-            int KMeansIters = (int)o[39];
+            bool quick = false;
+            bool useEightAdj = (bool)o[12];
+            bool useTh = (bool)o[13];
+            double th = (double)o[14];
+            double xi = (double)o[15];
+            double resPic = (double)o[16];
+            bool initWKpp = (bool)o[17];
+            bool multCapacitiesForTLinks = (bool)o[18];
+            double multTLinkCapacity = (double)o[19];
+            bool castTLInt = (bool)o[20];
+            bool getSourcePart = (bool)o[21];
+            ListSelectionMode selMode = (ListSelectionMode)o[22];
+            bool scribbleMode = (bool)o[23];
+            Dictionary<int, Dictionary<int, List<List<Point>>>> scribbles = (Dictionary<int, Dictionary<int, List<List<Point>>>>)o[24];
+            double probMult1 = (double)o[25];
+            double kmInitW = (double)o[26];
+            double kmInitH = (double)o[27];
+            bool setPFGToFG = (bool)o[28];
+            double numItems = (double)o[29];
+            double numCorrect = (double)o[30];
+            double numItems2 = (double)o[31];
+            double numCorrect2 = (double)o[32];
+            bool skipLearn = (bool)o[33];
+            int comp = (int)o[34];
+            bool autoThreshold = (bool)o[35];
+            int KMeansInitIters = (int)o[36];
+            bool kMInitRnd = (bool)o[37];
+            int KMeansIters = (int)o[38];
 
             if (scribbleMode && !rectMode)
                 r = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
