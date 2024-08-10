@@ -1257,6 +1257,143 @@ namespace AvoidAGrabCutEasy
             for (int j = 0; j < d.Length; j++)
                 d[j] *= this.ProbMult1;
 
+            double[] d2 = null;
+
+            //test for automated finding of threshold... (first attempt, this is bound to change)
+            #region autoThreshold
+            if (this.UseThreshold && this.AutoThreshold)
+            {
+                double[] d2Tmp = this._fgGmm.CalcProb(prVals);
+                //for (int j = 0; j < d2Tmp.Length; j++)
+                //    d2Tmp[j] *= this.ProbMult2;
+
+                //get extreme vals
+                IEnumerable<double> dv = d.Where(a => a == 0);
+                IEnumerable<double> d2v = d2Tmp.Where(a => a == 0);
+
+                if (dv != null && d2v != null) //dont test for count > 0, .Except(...) works with empty sets //dv.Count() > 0 && d2v.Count() > 0
+                {
+                    IEnumerable<double> dExDV = d.Except(dv);
+                    IEnumerable<double> d2ExD2V = d2Tmp.Except(d2v);
+
+                    if (dExDV != null && d2ExD2V != null && dExDV.Count() > 0 && d2ExD2V.Count() > 0)
+                    {
+                        double dMin = Math.Log(dExDV.Min());
+                        double dMax = Math.Log(dExDV.Max());
+                        double d2Min = Math.Log(d2ExD2V.Min());
+                        double d2Max = Math.Log(d2ExD2V.Max());
+
+                        double fMin = Math.Min(dMin, d2Min);
+                        double fMax = Math.Max(dMax, d2Max);
+
+                        if (!double.IsInfinity(dMin) && !double.IsInfinity(dMax) &&
+                            !double.IsInfinity(d2Min) && !double.IsInfinity(d2Max) &&
+                            !double.IsNaN(dMin) && !double.IsNaN(dMax) &&
+                            !double.IsNaN(d2Min) && !double.IsNaN(d2Max))
+                        {
+                            //setup a histogram
+                            double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
+
+                            int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
+                            int[] d2H = new int[dH.Length];
+
+                            double af = -this.Threshold - dMin;
+
+                            for (int i = 0; i < d.Length; i++)
+                            {
+                                if (d[i] != 0)
+                                {
+                                    int dl = (int)(Math.Log(d[i]) - dMin);
+                                    if (dH.Length > dl)
+                                        dH[dl]++;
+                                }
+                                if (d2Tmp[i] != 0)
+                                {
+                                    int d2l = (int)(Math.Log(d2Tmp[i]) - d2Min);
+                                    if (d2H.Length > d2l)
+                                        d2H[d2l]++;
+                                }
+                            }
+
+                            //get kind of a derivative
+                            double dm = dH.Sum();
+                            double[] fsl = new double[dH.Length];
+                            for (int j = 1; j < dH.Length - 1; j++)
+                            {
+                                double diff = (dH[j + 1] - dH[j - 1]) / 2.0 / dm;
+                                fsl[j] = diff;
+                            }
+
+                            List<double> dli = fsl.Reverse().ToList();
+
+                            //now get (in reversed direction) some critical positions in the lists
+                            //I try to find a difference which is the beginning of the
+                            //curve (histogram counts for the single bins) to start getting exponentially up
+                            //and also pay respect to the fact that usually the last bins of the Histogram are empty
+                            IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
+                            IEnumerable<double> f2 = dli.Where(a => a != 0);
+                            double th = this.MaxAllowedAutoThreshold + 1e-7;
+
+                            //you could use such a construct to return quite good values,
+                            //but its made simply of testing some combination of values without a model behind
+                            double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
+
+                            double cGC = 0;
+                            double ga = 0;
+                            int addOne = 0;
+                            int subOne = 0;
+
+                            //get the amount of non-empty bins from the end of the list up to the bin where the threshold is met (x < 0.04)
+                            if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
+                            {
+                                //do a second test and add, or subtract 1 from the intermediate result [things and values might change]
+                                int indx = dli.IndexOf(f1.First());
+
+                                int cG = 0;
+                                for (int j = 0; j < dH.Length - indx - 1; j++)
+                                    cG += dH[j];
+                                cG += dH[dH.Length - indx] / 2;
+                                cGC = (double)cG / dm;
+                                ga = (double)dH[dH.Length - indx] / dm;
+
+                                //Console.WriteLine("rel pos: " + cGC.ToString()); 
+                                //Console.WriteLine("rel amount: " + ga.ToString());
+
+                                addOne = 0;
+                                if (cGC > 0.64)
+                                    addOne++;
+                                if (ga < 0.1)
+                                    addOne++;
+                                if (dli.Count() > 1 && indx > 0 && dli[indx - 1] > 0.085)
+                                    addOne++;
+                                subOne = 0;
+                                if (f1.Count() > 1 && indx < dli.Count() - 1 && dli[indx + 1] < 0.004) //this will probably be changed to a test for ">"
+                                    subOne++;
+                                th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
+                            }
+
+                            if (th <= this.MaxAllowedAutoThreshold)
+                            {
+                                this.Threshold = th;
+                                OnShowInfo(this.Threshold.ToString());
+                                //temp
+                                MessageBox.Show(this.Threshold.ToString() + "\n\nrel pos: " + cGC.ToString() + "\nrel amount: " + ga.ToString() +
+                                    "\naddOne: " + addOne.ToString() + "\nsubOne: " + subOne.ToString());
+                            }
+                        }
+                        else
+                            MessageBox.Show("At least one value is either infinity or NaN.");
+                    }
+                    else
+                        MessageBox.Show("At least one sequence has no elements.");
+                }
+
+                if (d2Tmp != null && d2Tmp.Length > 0)
+                    d2 = d2Tmp;
+            }
+            #endregion //autoThreshold
+            //end test
+
             int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
 
             int l = d.Length;
@@ -1290,7 +1427,11 @@ namespace AvoidAGrabCutEasy
 
             v = pRIndexes.Select(ind => Tuple.Create(ind.X + ind.Y * w, this._sink));
             edges.AddRange(v);
-            d = this._fgGmm.CalcProb(prVals);
+
+            if (d2 != null && d2.Length > 0)
+                d = d2;
+            else
+                d = this._fgGmm.CalcProb(prVals);
 
             l = d.Length;
             Parallel.For(0, l, i =>
