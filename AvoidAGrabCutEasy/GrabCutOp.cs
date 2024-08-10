@@ -1601,46 +1601,15 @@ namespace AvoidAGrabCutEasy
         }
 
         //now do some processing of the results and the used arrays (mask etc)
-        //this method will be shortened, since the truncated mincut options have been removed
         private unsafe void EstimateSegmentation()
         {
             int w = this._w;
             int h = this._h;
             List<int> r = new List<int>();
-            if (QuickEstimation && this._result2 != null)
-            {
-                for (int i = 0; i < this._result2.Length; i++)
-                    if (this._result2[i] == 1)
-                        r.Add(i);
-            }
-            else
-            {
-                PushRelabelFifo f = new PushRelabelFifo(_dg, _source, _sink);
-                //PushRelabelGT f = new PushRelabelGT(_dg, _source, _sink);
-                f.GetSourcePartition = false;
-                f.NumItems = this.NumItems;
-                f.NumCorrect = this.NumCorrect;
-                f.NumItems2 = this.NumItems2;
-                f.NumCorrect2 = this.NumCorrect2;
-                f.residualGraph = this._rG;
-                f.ShowInfo += F_ShowInfo;
-                f.MaxIter = this.MaxIter;
-                f.QATH = this.QATH;
 
-                this.Alg = f;
-
-                f.FIFOPushRelabel(this.QuickEstimation, this.BGW);
-
-                r = f.Result;
-
-                //ShowRToBmp(r);
-            }
-
-            this._dg = null;
-            this._rG = null;
-
-            this._dg = null;
-            this._rG = null;
+            for (int i = 0; i < this._result2.Length; i++)
+                if (this._result2[i] == 1)
+                    r.Add(i);
 
             if (r != null)
             {
@@ -1660,10 +1629,7 @@ namespace AvoidAGrabCutEasy
 
                 int l = z.Count;
 
-                //OnShowInfo("UpdatingMask");
-
                 //set the values in the mask
-
                 //for (int j = 0; j < l; j++)
                 Parallel.For(0, l, j =>
                 {
@@ -1687,8 +1653,6 @@ namespace AvoidAGrabCutEasy
                 //do a pre-classification for the next iteration, if needed
                 Classify();
                 this.Result = z;
-
-                //ShowMaskToBmp();
 
                 //Console.WriteLine((r.Count == pRIndexes.Count).ToString());
             }
