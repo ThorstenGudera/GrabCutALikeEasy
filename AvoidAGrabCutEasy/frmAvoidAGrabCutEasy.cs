@@ -1214,14 +1214,8 @@ namespace AvoidAGrabCutEasy
         }
 
         private void cbQuickEst_CheckedChanged(object sender, EventArgs e)
-        {
-            cbCGwQE_CheckedChanged(this.cbCGwQE, new EventArgs());
-        }
-
-        private void cbCGwQE_CheckedChanged(object sender, EventArgs e)
-        {
-            this.btnAddAtEachNum.Enabled = (this.cbCGwQE.Checked && this.cbQuickEst.Checked) || !this.cbQuickEst.Checked;
-            this.btnMinCut.Enabled = !this.cbQuickEst.Checked && !this.cbCGwQE.Checked;
+        {        
+            this.btnMinCut.Enabled = !this.cbQuickEst.Checked;
         }
 
         private void btnRect_Click(object sender, EventArgs e)
@@ -1274,27 +1268,6 @@ namespace AvoidAGrabCutEasy
             this._eX = (int)((double)num.Value * (double)this.helplineRulerCtrl1.Zoom);
 
             this.helplineRulerCtrl1.dbPanel1.Invalidate();
-        }
-
-        private void btnAddAtEachNum_Click(object sender, EventArgs e)
-        {
-            using (frmAddCorrectRelation frm = new frmAddCorrectRelation())
-            {
-                frm.numItems.Value = (decimal)this._items;
-                frm.numCorrect.Value = (decimal)this._correctItems;
-
-                frm.numItems2.Value = (decimal)this._items2;
-                frm.numCorrect2.Value = (decimal)this._correctItems2;
-
-                if (frm.ShowDialog() == DialogResult.OK)
-                {
-                    this._items = (double)frm.numItems.Value;
-                    this._correctItems = (double)frm.numCorrect.Value;
-
-                    this._items2 = (double)frm.numItems2.Value;
-                    this._correctItems2 = (double)frm.numCorrect2.Value;
-                }
-            }
         }
 
         private void numAlgMaxIter_ValueChanged(object sender, EventArgs e)
@@ -1411,7 +1384,7 @@ namespace AvoidAGrabCutEasy
 
                     double probMult1 = (double)this.numProbMult1.Value;
 
-                    bool cgWQE = this.cbCGwQE.Checked;
+
 
                     double numItems = this._items;
                     double numCorrect = this._correctItems;
@@ -1433,9 +1406,9 @@ namespace AvoidAGrabCutEasy
                         rectMode, r, autoBias, skipInit, workOnPaths,
                         wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
-                        scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG, cgWQE,
+                        scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG,
                         numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
-                        KMeansInitIters, kMInitRnd, KMeansIters });
+                        KMeansInitIters, kMInitRnd, KMeansIters});
                 }
             }
         }
@@ -1451,7 +1424,6 @@ namespace AvoidAGrabCutEasy
             bool rectMode = (bool)o[4];
             Rectangle r = (Rectangle)o[5];
             bool autoBias = (bool)o[6];
-
             bool skipInit = (bool)o[7];
             bool workOnPaths = (bool)o[8];
             int wh = (int)o[9];
@@ -1475,12 +1447,11 @@ namespace AvoidAGrabCutEasy
             double kmInitW = (double)o[27];
             double kmInitH = (double)o[28];
             bool setPFGToFG = (bool)o[29];
-            bool cgWQE = (bool)o[30];
-            double numItems = (double)o[31];
-            double numCorrect = (double)o[32];
-            double numItems2 = (double)o[33];
-            double numCorrect2 = (double)o[34];
-            bool skipLearn = (bool)o[35];
+            double numItems = (double)o[30];
+            double numCorrect = (double)o[31];
+            double numItems2 = (double)o[32];
+            double numCorrect2 = (double)o[33];
+            bool skipLearn = (bool)o[34];
 
             if (scribbleMode && !rectMode)
                 r = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -1488,12 +1459,11 @@ namespace AvoidAGrabCutEasy
             Rectangle clipRect = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
             bool dontFillPath = true;
             bool drawNumComp = true;
-            int comp = (int)o[36];
-            bool autoThreshold = (bool)o[37];
-
-            int KMeansInitIters = (int)o[38];
-            bool kMInitRnd = (bool)o[39];
-            int KMeansIters = (int)o[40];
+            int comp = (int)o[35];
+            bool autoThreshold = (bool)o[36];
+            int KMeansInitIters = (int)o[37];
+            bool kMInitRnd = (bool)o[38];
+            int KMeansIters = (int)o[39];
 
             //if we have a large pic that will be resized during these OPs
             //we need to resize also the scribbles, if present
@@ -1560,7 +1530,6 @@ namespace AvoidAGrabCutEasy
                     ProbMult1 = probMult1,
                     KMInitW = kmInitW,
                     KMInitH = kmInitH,
-                    CGwithQE = cgWQE,
                     NumItems = numItems,
                     NumCorrect = numCorrect,
                     NumItems2 = numItems2,
@@ -1632,7 +1601,6 @@ namespace AvoidAGrabCutEasy
                 this._gc.ProbMult1 = probMult1;
                 this._gc.KMInitW = kmInitW;
                 this._gc.KMInitH = kmInitH;
-                this._gc.CGwithQE = cgWQE;
                 this._gc.NumItems = numItems;
                 this._gc.NumCorrect = numCorrect;
                 this._gc.NumItems2 = numItems2;
@@ -2660,7 +2628,7 @@ namespace AvoidAGrabCutEasy
 
                     double probMult1 = (double)this.numProbMult1.Value;
 
-                    bool cgWQE = this.cbCGwQE.Checked;
+
 
                     double numItems = this._items;
                     double numCorrect = this._correctItems;
@@ -2681,9 +2649,9 @@ namespace AvoidAGrabCutEasy
                         rectMode, r, autoBias, skipInit, workOnPaths,
                         wh, gammaChanged, intMult, quick, useEightAdj, useTh, th, xi, res, initWKpp,
                         multCapacitiesForTLinks, multTLinkCapacity, castTLInt, getSourcePart, selMode,
-                        scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG, cgWQE,
+                        scribbleMode, this._scribbles, probMult1, kmInitW, kmInitH, setPFGToFG,
                         numItems, numCorrect, numItems2, numCorrect2, skipLearn, comp, autoThreshold,
-                        KMeansInitIters, kMInitRnd, KMeansIters });
+                        KMeansInitIters, kMInitRnd, KMeansIters});
                 }
             }
         }
@@ -2699,7 +2667,6 @@ namespace AvoidAGrabCutEasy
             bool rectMode = (bool)o[4];
             Rectangle r = (Rectangle)o[5];
             bool autoBias = (bool)o[6];
-
             bool skipInit = (bool)o[7];
             bool workOnPaths = (bool)o[8];
             int wh = (int)o[9];
@@ -2723,19 +2690,16 @@ namespace AvoidAGrabCutEasy
             double kmInitW = (double)o[27];
             double kmInitH = (double)o[28];
             bool setPFGToFG = (bool)o[29];
-            bool cgWQE = (bool)o[30];
-            double numItems = (double)o[31];
-            double numCorrect = (double)o[32];
-            double numItems2 = (double)o[33];
-            double numCorrect2 = (double)o[34];
-            bool skipLearn = (bool)o[35];
-
-            int comp = (int)o[36];
-            bool autoThreshold = (bool)o[37];
-
-            int KMeansInitIters = (int)o[38];
-            bool kMInitRnd = (bool)o[39];
-            int KMeansIters = (int)o[40];
+            double numItems = (double)o[30];
+            double numCorrect = (double)o[31];
+            double numItems2 = (double)o[32];
+            double numCorrect2 = (double)o[33];
+            bool skipLearn = (bool)o[34];
+            int comp = (int)o[35];
+            bool autoThreshold = (bool)o[36];
+            int KMeansInitIters = (int)o[37];
+            bool kMInitRnd = (bool)o[38];
+            int KMeansIters = (int)o[39];
 
             if (scribbleMode && !rectMode)
                 r = new Rectangle(0, 0, this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
@@ -2803,7 +2767,6 @@ namespace AvoidAGrabCutEasy
                     ProbMult1 = probMult1,
                     KMInitW = kmInitW,
                     KMInitH = kmInitH,
-                    CGwithQE = cgWQE,
                     NumItems = numItems,
                     NumCorrect = numCorrect,
                     NumItems2 = numItems2,
@@ -2873,7 +2836,6 @@ namespace AvoidAGrabCutEasy
                 this._gc.ProbMult1 = probMult1;
                 this._gc.KMInitW = kmInitW;
                 this._gc.KMInitH = kmInitH;
-                this._gc.CGwithQE = cgWQE;
                 this._gc.NumItems = numItems;
                 this._gc.NumCorrect = numCorrect;
                 this._gc.NumItems2 = numItems2;

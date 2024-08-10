@@ -36,6 +36,9 @@ namespace AvoidAGrabCutEasy
         private int[] _fgLabels;
 
         private int[] _result2;
+
+        public List<Point> SortedPoints { get; private set; }
+
         private bool _addOnlySourceAndSink;
 
         public Bitmap Bmp { get; set; }
@@ -52,7 +55,6 @@ namespace AvoidAGrabCutEasy
         public List<StartNode> StartNodes { get; private set; } = new List<StartNode> { };
         public int QATH { get; internal set; } = 1000000;
         public Dictionary<int, Dictionary<int, List<List<Point>>>> Scribbles { get; internal set; }
-        public bool CGwithQE { get; internal set; } = true;
         public bool QuickEstimation { get; set; }
         public bool EightAdj { get; internal set; }
         internal ListSelectionMode SelectionMode { get; set; }
@@ -218,7 +220,7 @@ namespace AvoidAGrabCutEasy
                 //to get the representation of the smoothenes part of the energy function to minimize
                 //we basically get the needed derivatives and then compute values that
                 //represent the current "is_egde_state" of the pixels to compute the capacities for the n-links in the graph later
-                if (this.CGwithQE || !this.QuickEstimation)
+                if (!this.QuickEstimation)
                     CalcBeta();
 
                 if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
@@ -717,7 +719,7 @@ namespace AvoidAGrabCutEasy
                     this.BGW.ReportProgress(15);
 
                 //compute the directed graph
-                int j = ConstructGraphFull();
+                int j = ConstructResultSet();
                 if (this.BGW != null && this.BGW.WorkerReportsProgress)
                     this.BGW.ReportProgress(30);
                 if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
@@ -857,20 +859,17 @@ namespace AvoidAGrabCutEasy
                 return false;
         }
 
-        private unsafe int ConstructGraphFull()
+        private unsafe int ConstructResultSet()
         {
             if (this.GammaChanged)
             {
-                if (this.CGwithQE || !this.QuickEstimation)
+                if (!this.QuickEstimation)
                     CalcBeta();
                 this.GammaChanged = false;
             }
 
             if (this.BGW != null && this.BGW.WorkerReportsProgress)
                 this.BGW.ReportProgress(20);
-
-            int begin = 0;
-            int begin2 = 0;
 
             this._result2 = null;
 
@@ -896,8 +895,6 @@ namespace AvoidAGrabCutEasy
             byte* p = (byte*)bmData.Scan0;
 
             List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
-
-            #region fullGraph
 
             //fill the list for the known and unknown parts of the data
             for (int y = 0; y < h; y++)
@@ -944,7 +941,7 @@ namespace AvoidAGrabCutEasy
             IEnumerable<Tuple<int, int>> v = pRIndexes.Select(ind => Tuple.Create(this._source, ind.X + ind.Y * w));
             List<Tuple<int, int>> vf = v.ToList();
 
-            //get and tweak the probaabilities of the pixels being fg or bg
+            //get and tweak the probabilities of the pixels being fg or bg
             double[][] prVals = new double[v.Count()][];
             int cnt = v.Count();
             Parallel.For(0, cnt, j =>
@@ -1096,10 +1093,10 @@ namespace AvoidAGrabCutEasy
                             }
                         }
                         else
-                            MessageBox.Show("At least one value is either infinity or NaN."); //temp
+                            MessageBox.Show("At least one value is either infinity or NaN.");
                     }
                     else
-                        MessageBox.Show("At least one sequence has no elements."); //temp
+                        MessageBox.Show("At least one sequence has no elements.");
                 }
             }
             #endregion //autoThreshold
@@ -1166,376 +1163,14 @@ namespace AvoidAGrabCutEasy
                 }
             });
 
-            //if we want to use only the first guess, we dont need to set up the graph and the n-links and so can return here
-            if (this.QuickEstimation && !this.CGwithQE)
-            {
-                //no Mincut needed.
-                this.Bmp.UnlockBits(bmData);
-                this._result2 = z;
-
-                //GetTestPic(z);
-                return 0;
-            }
-
             if (this.BGW != null && this.BGW.WorkerReportsProgress)
-                this.BGW.ReportProgress(45);
+                this.BGW.ReportProgress(100);
 
-            //since we use a directed graph, make sur, each node is connected to the most of 1 terminal 
-            //(the other wa connections are commented out for the known states of the pixels)
-
-            //v = bGIndexes.Select(ind => Tuple.Create(this._source, ind.X + ind.Y * w));
-            //edges.AddRange(v);
-            //this._graphCapacity.AddRange(Enumerable.Repeat(0.0, v.Count()));
-
-            //
-            v = bGIndexes.Select(ind => Tuple.Create(ind.X + ind.Y * w, this._sink));
-            edges.AddRange(v);
-            this._graphCapacity.AddRange(Enumerable.Repeat(9.0 * this.Gamma, v.Count()));
-
-            //
-            v = fGIndexes.Select(ind => Tuple.Create(this._source, ind.X + ind.Y * w));
-            edges.AddRange(v);
-            this._graphCapacity.AddRange(Enumerable.Repeat(9.0 * this.Gamma, v.Count()));
-
-            //
-            //v = fGIndexes.Select(ind => Tuple.Create(ind.X + ind.Y * w, this._sink));
-            //edges.AddRange(v);
-            //this._graphCapacity.AddRange(Enumerable.Repeat(0.0, v.Count()));
-
-            if (this.BGW != null && this.BGW.WorkerReportsProgress)
-                this.BGW.ReportProgress(50);
-            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
-            {
-                this.Bmp.UnlockBits(bmData);
-                return -1;
-            }
-
-            //get a reference number, needed later when we construct the graph
-            begin = edges.Count;
-
-            //n-links 
-            //get the edges and its capacities for the "inner(ly)_connected_vertices most likely for the pixels in the image"
-            Tuple<int, int>[] indexes = new Tuple<int, int>[(w - 1) * h];
-            Tuple<int, int>[] indexes2 = new Tuple<int, int>[(w - 1) * h];
-
-            //for (int y = 0; y < h; y++)
-            Parallel.For(0, h, y =>
-            {
-                for (int x = 0; x < w - 1; x++)
-                {
-                    indexes[y * (w - 1) + x] = new Tuple<int, int>(y * (w - 1) + x + 1 + y, y * (w - 1) + x + y);
-                    indexes2[y * (w - 1) + x] = new Tuple<int, int>(y * (w - 1) + x + y, y * (w - 1) + x + 1 + y);
-                }
-            });
-
-            edges.AddRange(indexes);
-            edges.AddRange(indexes2);
-            double[] lv1 = new double[(w - 1) * h];
-            double[] lv2 = new double[(w - 1) * h];
-            Parallel.For(0, h, y =>
-            {
-                for (int x = 0; x < (w - 1); x++)
-                {
-                    lv1[y * (w - 1) + x] = this._lv[x, y];
-                    lv2[y * (w - 1) + x] = this._lv[x, y];
-                }
-            });
-            this._graphCapacity.AddRange(lv1);
-            this._graphCapacity.AddRange(lv2);
-
-            begin2 = edges.Count;
-
-            if (this.EightAdj)
-            {
-                indexes = new Tuple<int, int>[(w - 1) * (h - 1)];
-                indexes2 = new Tuple<int, int>[(w - 1) * (h - 1)];
-
-                //for (int y = 0; y < h - 1; y++)
-                Parallel.For(0, h - 1, y =>
-                {
-                    for (int x = 0; x < w - 1; x++)
-                    {
-                        indexes[y * (w - 1) + x] = new Tuple<int, int>((y + 1) * w + x + 1, y * w + x);
-                        indexes2[y * (w - 1) + x] = new Tuple<int, int>(y * w + x, (y + 1) * w + x + 1);
-                    }
-                });
-
-                edges.AddRange(indexes);
-                edges.AddRange(indexes2);
-                double[] ulv1 = new double[(w - 1) * (h - 1)];
-                Parallel.For(0, h - 1, y =>
-                {
-                    for (int x = 0; x < w - 1; x++)
-                        ulv1[y * (w - 1) + x] = this._ulv[x, y];
-                });
-                this._graphCapacity.AddRange(ulv1);
-                this._graphCapacity.AddRange(ulv1);
-            }
-
-            indexes = new Tuple<int, int>[w * (h - 1)];
-            indexes2 = new Tuple<int, int>[w * (h - 1)];
-
-            //for (int y = 0; y < (h - 1); y++)
-            Parallel.For(0, h - 1, y =>
-            {
-                for (int x = 0; x < w; x++)
-                {
-                    indexes[y * w + x] = new Tuple<int, int>((y + 1) * w + x, y * w + x);
-                    indexes2[y * w + x] = new Tuple<int, int>(y * w + x, (y + 1) * w + x);
-                }
-            });
-
-            edges.AddRange(indexes);
-            edges.AddRange(indexes2);
-            double[] uv1 = new double[w * (h - 1)];
-            double[] uv2 = new double[w * (h - 1)];
-            Parallel.For(0, h - 1, y =>
-            {
-                for (int x = 0; x < w; x++)
-                {
-                    uv1[y * w + x] = this._uv[x, y];
-                    uv2[y * w + x] = this._uv[x, y];
-                }
-            });
-            this._graphCapacity.AddRange(uv1);
-            this._graphCapacity.AddRange(uv2);
-
-            if (this.EightAdj)
-            {
-                indexes = new Tuple<int, int>[(w - 1) * (h - 1)];
-                indexes2 = new Tuple<int, int>[(w - 1) * (h - 1)];
-
-                //for (int y = 0; y < h - 1; y++)
-                Parallel.For(0, h - 1, y =>
-                {
-                    for (int x = 0; x < w - 1; x++)
-                    {
-                        indexes[y * (w - 1) + x] = new Tuple<int, int>((y + 1) * w + x, y * w + x + 1);
-                        indexes2[y * (w - 1) + x] = new Tuple<int, int>(y * w + x + 1, (y + 1) * w + x);
-                    }
-                });
-
-                edges.AddRange(indexes);
-                edges.AddRange(indexes2);
-                double[] urv1 = new double[(w - 1) * (h - 1)];
-                Parallel.For(0, h - 1, y =>
-                {
-                    for (int x = 0; x < w - 1; x++)
-                        urv1[y * (w - 1) + x] = this._urv[x, y];
-                });
-                this._graphCapacity.AddRange(urv1);
-                this._graphCapacity.AddRange(urv1);
-            }
-
-            //MessageBox.Show(this._graphCapacity.Count.ToString() + " -> " + (5 * w * h - 2 * (w + h)).ToString() + " -> " + (2 * w * h).ToString());
-
-            //do a intermediate check
-            if (edges.Count != this._graphCapacity.Count)
-                return -1;
-
-            //bool normalizeCapacity = true;
-            //if (normalizeCapacity)
-            //{
-            //    double maxCap = this._graphCapacity.Max();
-            //    double minCap = this._graphCapacity.Min();
-
-            //    double diff = maxCap - minCap;
-
-            //    for(int j = 0; j < this._graphCapacity.Count; j++)
-            //    {
-            //        this._graphCapacity[j] -= minCap;
-            //        this._graphCapacity[j] /= diff;
-            //    }
-            //}
-
-            if (this.BGW != null && this.BGW.WorkerReportsProgress)
-                this.BGW.ReportProgress(60);
-            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
-            {
-                this.Bmp.UnlockBits(bmData);
-                return -1;
-            }
-            #endregion
-
-            //now setup the graph(s
-            ////for each node, store its address and a Dictionary that holds these values for all of the neighbors of the current node)
-
-            //Console.WriteLine("graphCapacity.Count = " + this._graphCapacity.Count.ToString());
-
-            Dictionary<int, Dictionary<int, double>> graph = new Dictionary<int, Dictionary<int, double>>();
-            for (int i = 0; i < this._graphCapacity.Count; i++)
-            {
-                //if (this._graphCapacity[i] > 0) //only add positive edges
-                if (!graph.ContainsKey(edges[i].Item1))
-                {
-                    Dictionary<int, double> list = new Dictionary<int, double>();
-                    list.Add(edges[i].Item2, this._graphCapacity[i]);
-                    graph.Add(edges[i].Item1, list);
-                }
-                else
-                    if (!graph[edges[i].Item1].ContainsKey(edges[i].Item2))
-                    graph[edges[i].Item1].Add(edges[i].Item2, this._graphCapacity[i]);
-            }
-
-            if (!graph.ContainsKey(this._sink))
-            {
-                Dictionary<int, double> list2 = new Dictionary<int, double>();
-                graph.Add(this._sink, list2);
-            }
-
-            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
-            {
-                this.Bmp.UnlockBits(bmData);
-                return -1;
-            }
-
-            int grphVertices = graph.Count;
-
-            if (this.BGW != null && this.BGW.WorkerReportsProgress)
-                this.BGW.ReportProgress(80);
-            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
-            {
-                this.Bmp.UnlockBits(bmData);
-                return -1;
-            }
-
-            //test the algs
-            //DirectedGraph dg1 = new DirectedGraph(6);
-
-            //dg1.addEdge(0, 1, 16);
-            //dg1.addEdge(0, 2, 13);
-            //dg1.addEdge(1, 2, 10);
-            //dg1.addEdge(2, 1, 4);
-            //dg1.addEdge(1, 3, 12);
-            //dg1.addEdge(3, 2, 9);
-            //dg1.addEdge(2, 4, 14);
-            //dg1.addEdge(4, 5, 4);
-            //dg1.addEdge(4, 3, 7);
-            //dg1.addEdge(3, 5, 20);
-
-            //PushRelabelFifo f = new PushRelabelFifo(dg1, 0, 5);
-            //f = new PushRelabelFifo(dg1, 0, 5);
-            //double d32479 = f.FIFOPushRelabelStd(100000, false, null);
-            //MessageBox.Show(d32479.ToString());
-
-            //DirectedGraph dg22 = new DirectedGraph(6);
-
-            //dg22.addEdge(0, 1, 16);
-            //dg22.addEdge(0, 2, 13);
-            //dg22.addEdge(1, 2, 10);
-            //dg22.addEdge(2, 1, 4);
-            //dg22.addEdge(1, 3, 12);
-            //dg22.addEdge(3, 2, 9);
-            //dg22.addEdge(2, 4, 14);
-            //dg22.addEdge(4, 5, 4);
-            //dg22.addEdge(4, 3, 7);
-            //dg22.addEdge(3, 5, 20);
-
-            //BoykovKolmogorov ff = new BoykovKolmogorov(dg22, 0, 5);
-            //double d48 = ff.RunMinCut();
-            //MessageBox.Show(d48.ToString());
-
-            //now create the graph from the dictionary
-            //also, setup the residual graph for the estimation, this could also be done in the maxflow algorithm
-            DirectedGraph dg = new DirectedGraph(grphVertices);
-            //residual graph for alg
-            DirectedGraph dg2 = new DirectedGraph(grphVertices);
-            foreach (int j in graph.Keys)
-            {
-                int from = j;
-
-                Dictionary<int, double> list = graph[from];
-
-                foreach (int a in list.Keys)
-                {
-                    dg.addEdge(j, a, list[a]);
-                    dg2.addEdge(j, a, list[a]);
-                }
-            }
-
-            for (int u = 0; u < dg2.vertices; u++)
-            {
-                Dictionary<int, double> ll = dg2.adjacencyList[u];
-                try
-                {
-                    foreach (int vv in ll.Keys)
-                    {
-                        if (!dg2.hasEdge(vv, u))
-                            dg2.addEdge(vv, u, 0);
-
-                    }
-                }
-                catch (Exception exc)
-                {
-                    Console.WriteLine(exc.ToString());
-                    return -25;
-                }
-            }
-
-            this._dg = dg;
-            this._rG = dg2;
-
+            //no Mincut needed.
             this.Bmp.UnlockBits(bmData);
+            this._result2 = z;
 
-            if (this.BGW != null && this.BGW.WorkerReportsProgress)
-                this.BGW.ReportProgress(95);
-
-            //this._graph = graph;
-            //Console.WriteLine(this._graph.Count.ToString());
-
-            //double factor = 255.0 / this._graphCapacity.Skip(begin).Max();
-
-            //Bitmap bmp1 = new Bitmap(w, h);
-            //BitmapData bD = bmp1.LockBits(new Rectangle(0, 0, bmp1.Width, bmp1.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            //int strd = bD.Stride;
-
-            //Bitmap bmp2 = new Bitmap(w, h);
-            //BitmapData bD2 = bmp2.LockBits(new Rectangle(0, 0, bmp2.Width, bmp2.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            //int strd2 = bD2.Stride;
-
-            //byte* pb1 = (byte*)bD.Scan0;
-            //byte* pb2 = (byte*)bD2.Scan0;
-
-            //for (int j = begin; j < begin + ((begin2 - begin) / 2); j++)
-            //{
-            //    int x = edges[j].Item2 % bmp1.Width;
-            //    int y = edges[j].Item2 / bmp1.Width;
-
-            //    int tmp = x + y * (bmp1.Width - 1);
-
-            //    //if (x < bmp1.Width && y < bmp1.Height)
-            //    {
-            //        pb1[x * 4 + y * strd] = (byte)Math.Max(Math.Min(this._graphCapacity[j] * factor, 255), 0);
-            //        pb1[x * 4 + y * strd + 3] = 255;
-            //    }
-            //}
-
-            //for (int j = begin2; j < begin2 + ((begin2 - begin) / 2); j++)
-            //{
-            //    int x = edges[j].Item2 % bmp2.Width;
-            //    int y = edges[j].Item2 / bmp2.Width;
-
-            //    if (x < bmp2.Width && y < bmp2.Height)
-            //    {
-            //        pb2[x * 4 + y * strd + 2] = (byte)Math.Max(Math.Min(this._graphCapacity[j] * factor, 255), 0);
-            //        pb2[x * 4 + y * strd + 3] = 255;
-            //    }
-            //}
-
-            //bmp1.UnlockBits(bD);
-            //bmp2.UnlockBits(bD2);
-
-            //Form ff = new Form();
-            //ff.BackgroundImage = bmp1;
-            //ff.BackgroundImageLayout = ImageLayout.Zoom;
-            //ff.ShowDialog();
-
-            //ff.BackgroundImage = bmp2;
-            //ff.BackgroundImageLayout = ImageLayout.Zoom;
-            //ff.ShowDialog();
-
-            //bmp1.Dispose();
-            //bmp2.Dispose();
+            //GetTestPic(z);
             return 0;
         }
 
@@ -1543,7 +1178,7 @@ namespace AvoidAGrabCutEasy
         {
             if (this.GammaChanged)
             {
-                if (this.CGwithQE || !this.QuickEstimation)
+                if (!this.QuickEstimation)
                     CalcBeta();
                 this.GammaChanged = false;
             }
@@ -1688,7 +1323,7 @@ namespace AvoidAGrabCutEasy
                 return -1;
             }
 
-            if (this.QuickEstimation && !this.CGwithQE)
+            if (this.QuickEstimation)
             {
                 //no Mincut needed.
                 this.Bmp.UnlockBits(bmData);
@@ -1965,7 +1600,7 @@ namespace AvoidAGrabCutEasy
             return 0;
         }
 
-        //now run the maxflow algorithm and do some processing of the results and the used arrays (mask etc)
+        //now do some processing of the results and the used arrays (mask etc)
         private unsafe void EstimateSegmentation()
         {
             int w = this._w;
@@ -1999,6 +1634,9 @@ namespace AvoidAGrabCutEasy
 
                 //ShowRToBmp(r);
             }
+
+            this._dg = null;
+            this._rG = null;
 
             this._dg = null;
             this._rG = null;

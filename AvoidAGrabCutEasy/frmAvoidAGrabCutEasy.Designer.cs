@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAvoidAGrabCutEasy));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnInitSettings = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label13 = new System.Windows.Forms.Label();
             this.cbAutoThreshold = new System.Windows.Forms.CheckBox();
@@ -80,8 +80,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             this.numProbMult1 = new System.Windows.Forms.NumericUpDown();
-            this.btnAddAtEachNum = new System.Windows.Forms.Button();
-            this.cbCGwQE = new System.Windows.Forms.CheckBox();
             this.cbUseTh = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.numDblMult = new System.Windows.Forms.NumericUpDown();
@@ -117,7 +115,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnInitSettings = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWH)).BeginInit();
@@ -190,8 +187,6 @@
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.numMaxSize);
             this.panel1.Controls.Add(this.numProbMult1);
-            this.panel1.Controls.Add(this.btnAddAtEachNum);
-            this.panel1.Controls.Add(this.cbCGwQE);
             this.panel1.Controls.Add(this.cbUseTh);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.numDblMult);
@@ -218,6 +213,16 @@
             this.panel1.TabIndex = 0;
             this.panel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDoubleClick);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // btnInitSettings
+            // 
+            this.btnInitSettings.Location = new System.Drawing.Point(511, 6);
+            this.btnInitSettings.Name = "btnInitSettings";
+            this.btnInitSettings.Size = new System.Drawing.Size(75, 23);
+            this.btnInitSettings.TabIndex = 681;
+            this.btnInitSettings.Text = "KM-settings";
+            this.btnInitSettings.UseVisualStyleBackColor = true;
+            this.btnInitSettings.Click += new System.EventHandler(this.btnInitSettings_Click);
             // 
             // panel2
             // 
@@ -830,29 +835,6 @@
             0,
             0});
             // 
-            // btnAddAtEachNum
-            // 
-            this.btnAddAtEachNum.Enabled = false;
-            this.btnAddAtEachNum.Location = new System.Drawing.Point(399, 51);
-            this.btnAddAtEachNum.Name = "btnAddAtEachNum";
-            this.btnAddAtEachNum.Size = new System.Drawing.Size(31, 23);
-            this.btnAddAtEachNum.TabIndex = 635;
-            this.btnAddAtEachNum.Text = "set";
-            this.btnAddAtEachNum.UseVisualStyleBackColor = true;
-            this.btnAddAtEachNum.Click += new System.EventHandler(this.btnAddAtEachNum_Click);
-            // 
-            // cbCGwQE
-            // 
-            this.cbCGwQE.AutoSize = true;
-            this.cbCGwQE.Location = new System.Drawing.Point(335, 55);
-            this.cbCGwQE.Name = "cbCGwQE";
-            this.cbCGwQE.Size = new System.Drawing.Size(64, 17);
-            this.cbCGwQE.TabIndex = 634;
-            this.cbCGwQE.Text = "CGwQE";
-            this.toolTip1.SetToolTip(this.cbCGwQE, resources.GetString("cbCGwQE.ToolTip"));
-            this.cbCGwQE.UseVisualStyleBackColor = true;
-            this.cbCGwQE.CheckedChanged += new System.EventHandler(this.cbCGwQE_CheckedChanged);
-            // 
             // cbUseTh
             // 
             this.cbUseTh.AutoSize = true;
@@ -1271,16 +1253,6 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // btnInitSettings
-            // 
-            this.btnInitSettings.Location = new System.Drawing.Point(511, 6);
-            this.btnInitSettings.Name = "btnInitSettings";
-            this.btnInitSettings.Size = new System.Drawing.Size(75, 23);
-            this.btnInitSettings.TabIndex = 681;
-            this.btnInitSettings.Text = "KM-settings";
-            this.btnInitSettings.UseVisualStyleBackColor = true;
-            this.btnInitSettings.Click += new System.EventHandler(this.btnInitSettings_Click);
-            // 
             // frmAvoidAGrabCutEasy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1341,8 +1313,6 @@
         private System.Windows.Forms.NumericUpDown numMultTLCap;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numProbMult1;
-        private System.Windows.Forms.Button btnAddAtEachNum;
-        private System.Windows.Forms.CheckBox cbCGwQE;
         private System.Windows.Forms.CheckBox cbUseTh;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numDblMult;

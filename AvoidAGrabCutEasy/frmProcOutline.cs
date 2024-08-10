@@ -678,7 +678,7 @@ namespace AvoidAGrabCutEasy
 
                 if (this.cbExpOutlProc.Checked)
                 {
-                    //Closed_Form Matte
+                    //closedFormMatte
                     this.toolStripProgressBar1.Value = 0;
                     this.toolStripProgressBar1.Visible = true;
 
@@ -830,7 +830,7 @@ namespace AvoidAGrabCutEasy
 
                     bool restoreDefects = this.cbRestoreDefects.Checked;
                     double gamma2 = (double)this.numGamma2.Value;
-                    float opacity = (float)this.numOpacity.Value; 
+                    float opacity = (float)this.numOpacity.Value;
                     double wMin = (double)this.numWMin.Value;
                     double wMax = (double)this.numWMax.Value;
                     int whFactor = (int)this.numWHFactor.Value;
@@ -889,7 +889,6 @@ namespace AvoidAGrabCutEasy
                             double kmInitW = 2.0;
                             double kmInitH = 2.0;
                             bool setPFGToFG = false;
-                            bool cgWQE = false;
                             double numItems = 0;
                             double numCorrect = 0;
                             double numItems2 = 0;
@@ -910,7 +909,7 @@ namespace AvoidAGrabCutEasy
                                     gammaChanged, intMult, quick, useEightAdj, useTh, th, resPic,
                                     initWKpp, multCapacitiesForTLinks, multTLinkCapacity, castTLInt,
                                     getSourcePart, selMode, scribbleMode, scribbles, probMult1,
-                                    kmInitW, kmInitH, setPFGToFG, cgWQE, numItems, numCorrect,
+                                    kmInitW, kmInitH, setPFGToFG, numItems, numCorrect,
                                     numItems2, numCorrect2, skipLearn, clipRect, dontFillPath,
                                     drawNumComp, comp, blur, alphaStartValue, doBlur, restoreDefects,
                                     gamma2, opacity, wMax, whFactor, wMin, desaturate });
@@ -4130,7 +4129,6 @@ namespace AvoidAGrabCutEasy
             Bitmap bOrig = (Bitmap)o[1];
             int innerW = (int)o[2];
             int outerW = (int)o[3];
-
             int gmm_comp = (int)o[4];
             double gamma = (double)o[5];
             int numIters = (int)o[6];
@@ -4157,29 +4155,25 @@ namespace AvoidAGrabCutEasy
             double kmInitW = (double)o[27];
             double kmInitH = (double)o[28];
             bool setPFGToFG = (bool)o[29];
-            bool cgWQE = (bool)o[30];
-            double numItems = (double)o[31];
-            double numCorrect = (double)o[32];
-            double numItems2 = (double)o[33];
-            double numCorrect2 = (double)o[34];
-            bool skipLearn = (bool)o[35];
-
-            Rectangle clipRect = (Rectangle)o[36];
-            bool dontFillPath = (bool)o[37];
-            bool drawNumComp = (bool)o[38];
-            int comp = (int)o[39];
-            int blur = (int)o[40];
-            int alphaStartValue = (int)o[41];
-            bool doBlur = (bool)o[42];
-
-            bool restoreDefects = (bool)o[43];
-            double gamma2 = (double)o[44];
-            float opacity = (float)o[45];
-            double wMax = (double)o[46];
-            int whFactor = (int)o[47];
-            double wMin = (double)o[48];
-
-            bool desaturate = (bool)o[49];
+            double numItems = (double)o[30];
+            double numCorrect = (double)o[31];
+            double numItems2 = (double)o[32];
+            double numCorrect2 = (double)o[33];
+            bool skipLearn = (bool)o[34];
+            Rectangle clipRect = (Rectangle)o[35];
+            bool dontFillPath = (bool)o[36];
+            bool drawNumComp = (bool)o[37];
+            int comp = (int)o[38];
+            int blur = (int)o[39];
+            int alphaStartValue = (int)o[40];
+            bool doBlur = (bool)o[41];
+            bool restoreDefects = (bool)o[42];
+            double gamma2 = (double)o[43];
+            float opacity = (float)o[44];
+            double wMax = (double)o[45];
+            int whFactor = (int)o[46];
+            double wMin = (double)o[47];
+            bool desaturate = (bool)o[48];
 
             //resize the input bmp
             Bitmap bU2 = null;
@@ -4250,7 +4244,6 @@ namespace AvoidAGrabCutEasy
                     ProbMult1 = probMult1,
                     KMInitW = kmInitW,
                     KMInitH = kmInitH,
-                    CGwithQE = cgWQE,
                     NumItems = numItems,
                     NumCorrect = numCorrect,
                     NumItems2 = numItems2,
@@ -4316,7 +4309,6 @@ namespace AvoidAGrabCutEasy
                 this._gc.ProbMult1 = probMult1;
                 this._gc.KMInitW = kmInitW;
                 this._gc.KMInitH = kmInitH;
-                this._gc.CGwithQE = cgWQE;
                 this._gc.NumItems = numItems;
                 this._gc.NumCorrect = numCorrect;
                 this._gc.NumItems2 = numItems2;

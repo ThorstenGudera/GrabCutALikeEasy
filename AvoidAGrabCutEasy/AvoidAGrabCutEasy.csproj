@@ -54,12 +54,6 @@
     <Compile Include="BreakResult.cs" />
     <Compile Include="Centroid.cs" />
     <Compile Include="DirectedGraph.cs" />
-    <Compile Include="frmAddCorrectRelation.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAddCorrectRelation.Designer.cs">
-      <DependentUpon>frmAddCorrectRelation.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmAvoidAGrabCutEasy.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,9 +146,6 @@
     <Compile Include="StartNode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmAddCorrectRelation.resx">
-      <DependentUpon>frmAddCorrectRelation.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmAvoidAGrabCutEasy.resx">
       <DependentUpon>frmAvoidAGrabCutEasy.cs</DependentUpon>
     </EmbeddedResource>
