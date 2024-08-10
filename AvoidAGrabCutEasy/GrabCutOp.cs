@@ -966,7 +966,7 @@ namespace AvoidAGrabCutEasy
             OnShowInfo("d1 = " + d1.ToString());
 
             if (this.BGW != null && this.BGW.WorkerReportsProgress)
-                this.BGW.ReportProgress(40);
+                this.BGW.ReportProgress(60);
 
             if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
             {
@@ -1601,6 +1601,7 @@ namespace AvoidAGrabCutEasy
         }
 
         //now do some processing of the results and the used arrays (mask etc)
+        //this method will be shortened, since the truncated mincut options have been removed
         private unsafe void EstimateSegmentation()
         {
             int w = this._w;
