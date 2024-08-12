@@ -3371,7 +3371,6 @@ namespace AvoidAGrabCutEasy
         {
             //deserialize from binary
             IFormatter formatter = new BinaryFormatter();
-            formatter.Binder = new AvoidAGrabCut_To_Easy_Binder();
             Stream stream = null;
             SavedScribbles f = null;
 
@@ -3398,6 +3397,77 @@ namespace AvoidAGrabCutEasy
 
             return f;
         }
+
+        //if you want to upgrade to .net 8.0
+        //you then can remove the binder-file (AvoidAGrabCut_To_Easy_Binder)
+        //if you want to use these in this .net-framework version, install the
+        //System.Text.Json NuGet package
+        //private bool SerializeF(SavedScribbles f, string FileName)
+        //{
+        //    bool bError = false;
+
+        //    try
+        //    {
+        //        JsonSerializerOptions options = new()
+        //        {
+        //            NumberHandling =
+        //                JsonNumberHandling.AllowReadingFromString |
+        //                JsonNumberHandling.WriteAsString,
+        //            WriteIndented = true,
+        //            ReadCommentHandling = JsonCommentHandling.Skip,
+        //            AllowTrailingCommas = true,
+        //        };
+
+        //        using FileStream createStream = File.Create(FileName);
+        //        JsonSerializer.Serialize(createStream, f, options);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        bError = true;
+        //        Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+        //    }
+
+        //    return !bError;
+        //}
+
+        //private SavedScribbles? DeserializeF(string fileName)
+        //{
+        //    Stream? stream = null;
+        //    SavedScribbles? f = null;
+
+        //    try
+        //    {
+        //        JsonSerializerOptions options = new()
+        //        {
+        //            NumberHandling =
+        //                JsonNumberHandling.AllowReadingFromString |
+        //                JsonNumberHandling.WriteAsString,
+        //            WriteIndented = true,
+        //            ReadCommentHandling = JsonCommentHandling.Skip,
+        //            AllowTrailingCommas = true,
+        //        };
+
+        //        stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        //        f = JsonSerializer.Deserialize<SavedScribbles>(stream, options);
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+        //    }
+
+        //    try
+        //    {
+        //        //stream.Close()
+        //        stream?.Dispose();
+        //        stream = null;
+        //    }
+        //    catch
+        //    { }
+
+        //    return f;
+        //}
 
         private void numShiftX_ValueChanged(object sender, EventArgs e)
         {
