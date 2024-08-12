@@ -3399,7 +3399,6 @@ namespace AvoidAGrabCutEasy
         }
 
         //if you want to upgrade to .net 8.0
-        //you then can remove the binder-file (AvoidAGrabCut_To_Easy_Binder)
         //if you want to use these in this .net-framework version, install the
         //System.Text.Json NuGet package
         //private bool SerializeF(SavedScribbles f, string FileName)
