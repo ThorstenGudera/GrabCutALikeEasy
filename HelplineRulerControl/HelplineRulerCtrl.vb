@@ -133,22 +133,26 @@ Partial Public Class HelplineRulerCtrl
     Protected Overrides Sub OnLayout(e As LayoutEventArgs)
         MyBase.OnLayout(e)
 
-        If Me.dbPanel1 IsNot Nothing Then
-            For Each h As HelpLineControl In Me._helpLines
-                If h.Orientation = LayoutOrientation.OrientationHorizontal Then
-                    h.Size = New Size(Me.leftPanel.Width + Me.dbPanel1.ClientRectangle.Width, h.Height)
-                    h.ParentSize = New Size(Me.leftPanel.Width + Me.dbPanel1.ClientRectangle.Width, h.Height)
-                Else
-                    h.Size = New Size(h.Width, Me.topPanel.Height + Me.dbPanel1.ClientRectangle.Height)
-                    h.ParentSize = New Size(h.Width, Me.topPanel.Height + Me.dbPanel1.ClientRectangle.Height)
-                End If
+        If Not Me.IsDisposed Then
+            If Me.dbPanel1 IsNot Nothing Then
+                For Each h As HelpLineControl In Me._helpLines
+                    If h IsNot Nothing AndAlso Not h.IsDisposed Then
+                        If h.Orientation = LayoutOrientation.OrientationHorizontal Then
+                            h.Size = New Size(Me.leftPanel.Width + Me.dbPanel1.ClientRectangle.Width, h.Height)
+                            h.ParentSize = New Size(Me.leftPanel.Width + Me.dbPanel1.ClientRectangle.Width, h.Height)
+                        Else
+                            h.Size = New Size(h.Width, Me.topPanel.Height + Me.dbPanel1.ClientRectangle.Height)
+                            h.ParentSize = New Size(h.Width, Me.topPanel.Height + Me.dbPanel1.ClientRectangle.Height)
+                        End If
 
-                h.Zoom = Me.Zoom
+                        h.Zoom = Me.Zoom
 
-                If Me.MoveHelpLinesOnResize = False Then
-                    h.SetText()
-                End If
-            Next
+                        If Me.MoveHelpLinesOnResize = False Then
+                            h.SetText()
+                        End If
+                    End If
+                Next
+            End If
         End If
     End Sub
 
@@ -889,9 +893,14 @@ Partial Public Class HelplineRulerCtrl
         End If
 
         If Me._helpLines IsNot Nothing AndAlso Me._helpLines.Count > 0 Then
-            For Each h As HelpLineControl In Me._helpLines
-                h.Dispose()
-                h = Nothing
+            'Testing
+            'For Each h As HelpLineControl In Me._helpLines
+            '    h.Dispose()
+            '    h = Nothing
+            'Next
+            For i As Integer = 0 To Me._helpLines.Count - 1
+                Me._helpLines(i).Dispose()
+                Me._helpLines(i) = Nothing
             Next
         End If
     End Sub

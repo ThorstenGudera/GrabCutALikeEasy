@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSetGamma = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbDesaturate = new System.Windows.Forms.CheckBox();
             this.btnOnlyRestore = new System.Windows.Forms.Button();
             this.cbOnlyRestore = new System.Windows.Forms.CheckBox();
             this.btnPrecompAngles = new System.Windows.Forms.Button();
@@ -145,8 +147,6 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
-            this.cbDesaturate = new System.Windows.Forms.CheckBox();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -220,6 +220,25 @@
             this.splitContainer1.Size = new System.Drawing.Size(1268, 762);
             this.splitContainer1.SplitterDistance = 835;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // helplineRulerCtrl1
+            // 
+            this.helplineRulerCtrl1.Bmp = null;
+            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.helplineRulerCtrl1.DontDoLayout = false;
+            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
+            this.helplineRulerCtrl1.DontPaintBaseImg = false;
+            this.helplineRulerCtrl1.DontProcDoubleClick = false;
+            this.helplineRulerCtrl1.IgnoreZoom = false;
+            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
+            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
+            this.helplineRulerCtrl1.TabIndex = 0;
+            this.helplineRulerCtrl1.Zoom = 1F;
+            this.helplineRulerCtrl1.ZoomSetManually = false;
+            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // groupBox2
             // 
@@ -417,7 +436,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(342, 734);
+            this.btnCancel.Location = new System.Drawing.Point(342, 732);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 645;
@@ -429,7 +448,7 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOK.Location = new System.Drawing.Point(262, 734);
+            this.btnOK.Location = new System.Drawing.Point(262, 732);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 646;
@@ -489,6 +508,17 @@
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
+            // 
+            // cbDesaturate
+            // 
+            this.cbDesaturate.AutoSize = true;
+            this.cbDesaturate.Enabled = false;
+            this.cbDesaturate.Location = new System.Drawing.Point(74, 285);
+            this.cbDesaturate.Name = "cbDesaturate";
+            this.cbDesaturate.Size = new System.Drawing.Size(98, 17);
+            this.cbDesaturate.TabIndex = 692;
+            this.cbDesaturate.Text = "also desaturate";
+            this.cbDesaturate.UseVisualStyleBackColor = true;
             // 
             // btnOnlyRestore
             // 
@@ -1750,36 +1780,6 @@
             this.backgroundWorker7.WorkerSupportsCancellation = true;
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
-            // 
-            // cbDesaturate
-            // 
-            this.cbDesaturate.AutoSize = true;
-            this.cbDesaturate.Enabled = false;
-            this.cbDesaturate.Location = new System.Drawing.Point(74, 285);
-            this.cbDesaturate.Name = "cbDesaturate";
-            this.cbDesaturate.Size = new System.Drawing.Size(98, 17);
-            this.cbDesaturate.TabIndex = 692;
-            this.cbDesaturate.Text = "also desaturate";
-            this.cbDesaturate.UseVisualStyleBackColor = true;
-            // 
-            // helplineRulerCtrl1
-            // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // frmProcOutline
             // 
