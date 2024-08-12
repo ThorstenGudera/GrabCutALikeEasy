@@ -14,6 +14,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace AvoidAGrabCutEasy
 {
@@ -3335,90 +3337,19 @@ namespace AvoidAGrabCutEasy
                 SerializeF(f, this.saveFileDialog1.FileName);
         }
 
-        private bool SerializeF(SavedScribbles f, string FileName)
-        {
-            //serialize data to binary
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = null;
-
-            bool bError = false;
-
-            try
-            {
-                //write the data to the file
-                stream = new FileStream(FileName, FileMode.Create, FileAccess.Write, FileShare.None);
-                formatter.Serialize(stream, f);
-            }
-            catch (Exception ex)
-            {
-                bError = true;
-                Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
-            }
-
-            try
-            {
-                //stream.Close()
-                stream.Dispose();
-                stream = null;
-            }
-            catch
-            { }
-
-            return !bError;
-        }
-
-        private SavedScribbles DeserializeF(string fileName)
-        {
-            //deserialize from binary
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = null;
-            SavedScribbles f = null;
-
-            try
-            {
-                //write the data to the file
-                stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-                f = (SavedScribbles)formatter.Deserialize(stream);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
-            }
-
-            try
-            {
-                //stream.Close()
-                stream.Dispose();
-                stream = null;
-            }
-            catch
-            { }
-
-            return f;
-        }
-
-        //if you want to upgrade to .net 8.0
-        //if you want to use these in this .net-framework version, install the
-        //System.Text.Json NuGet package
         //private bool SerializeF(SavedScribbles f, string FileName)
         //{
+        //    //serialize data to binary
+        //    IFormatter formatter = new BinaryFormatter();
+        //    Stream stream = null;
+
         //    bool bError = false;
 
         //    try
         //    {
-        //        JsonSerializerOptions options = new()
-        //        {
-        //            NumberHandling =
-        //                JsonNumberHandling.AllowReadingFromString |
-        //                JsonNumberHandling.WriteAsString,
-        //            WriteIndented = true,
-        //            ReadCommentHandling = JsonCommentHandling.Skip,
-        //            AllowTrailingCommas = true,
-        //        };
-
-        //        using FileStream createStream = File.Create(FileName);
-        //        JsonSerializer.Serialize(createStream, f, options);
+        //        //write the data to the file
+        //        stream = new FileStream(FileName, FileMode.Create, FileAccess.Write, FileShare.None);
+        //        formatter.Serialize(stream, f);
         //    }
         //    catch (Exception ex)
         //    {
@@ -3426,30 +3357,31 @@ namespace AvoidAGrabCutEasy
         //        Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
         //    }
 
+        //    try
+        //    {
+        //        //stream.Close()
+        //        stream.Dispose();
+        //        stream = null;
+        //    }
+        //    catch
+        //    { }
+
         //    return !bError;
         //}
 
-        //private SavedScribbles? DeserializeF(string fileName)
+        //private SavedScribbles DeserializeF(string fileName)
         //{
-        //    Stream? stream = null;
-        //    SavedScribbles? f = null;
+        //    //deserialize from binary
+        //    IFormatter formatter = new BinaryFormatter();
+        //    Stream stream = null;
+        //    SavedScribbles f = null;
 
         //    try
         //    {
-        //        JsonSerializerOptions options = new()
-        //        {
-        //            NumberHandling =
-        //                JsonNumberHandling.AllowReadingFromString |
-        //                JsonNumberHandling.WriteAsString,
-        //            WriteIndented = true,
-        //            ReadCommentHandling = JsonCommentHandling.Skip,
-        //            AllowTrailingCommas = true,
-        //        };
-
+        //        //write the data to the file
         //        stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-        //        f = JsonSerializer.Deserialize<SavedScribbles>(stream, options);
 
-
+        //        f = (SavedScribbles)formatter.Deserialize(stream);
         //    }
         //    catch (Exception ex)
         //    {
@@ -3459,7 +3391,7 @@ namespace AvoidAGrabCutEasy
         //    try
         //    {
         //        //stream.Close()
-        //        stream?.Dispose();
+        //        stream.Dispose();
         //        stream = null;
         //    }
         //    catch
@@ -3467,6 +3399,71 @@ namespace AvoidAGrabCutEasy
 
         //    return f;
         //}
+
+        private bool SerializeF(SavedScribbles f, string FileName)
+        {
+            bool bError = false;
+
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    NumberHandling =
+                        JsonNumberHandling.AllowReadingFromString |
+                        JsonNumberHandling.WriteAsString,
+                    WriteIndented = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true,
+                };
+
+                using (FileStream createStream = File.Create(FileName))
+                    JsonSerializer.Serialize(createStream, f, options);
+            }
+            catch (Exception ex)
+            {
+                bError = true;
+                Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+            }
+
+            return !bError;
+        }
+
+        private SavedScribbles DeserializeF(string fileName)
+        {
+            Stream stream = null;
+            SavedScribbles f = null;
+
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    NumberHandling =
+                        JsonNumberHandling.AllowReadingFromString |
+                        JsonNumberHandling.WriteAsString,
+                    WriteIndented = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true,
+                };
+
+                stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                f = JsonSerializer.Deserialize<SavedScribbles>(stream, options);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + " " + ex.ToString());
+            }
+
+            try
+            {
+                //stream.Close()
+                stream?.Dispose();
+                stream = null;
+            }
+            catch
+            { }
+
+            return f;
+        }
 
         private void numShiftX_ValueChanged(object sender, EventArgs e)
         {

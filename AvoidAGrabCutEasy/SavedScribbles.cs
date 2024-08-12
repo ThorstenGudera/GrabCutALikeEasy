@@ -7,7 +7,7 @@ using System;
 namespace AvoidAGrabCutEasy
 {
     [Serializable]
-    public class SavedScribbles : ISerializable, IDisposable
+    public class SavedScribbles : IDisposable //ISerializable, IDisposable
     {
         public int[] BGSizes { get; set; } = null;
         public Point[][][] BGPoints { get; set; }
@@ -21,29 +21,29 @@ namespace AvoidAGrabCutEasy
         {
 
         }
-        protected SavedScribbles(SerializationInfo info, StreamingContext context)
-        {
-            this.BGSizes = (int[])info.GetValue("_BGSizes", typeof(int[]));
-            this.BGPoints = (Point[][][])info.GetValue("_BGPoints", typeof(Point[][][]));
-            this.FGSizes = (int[])info.GetValue("_FGSizes", typeof(int[]));
-            this.FGPoints = (Point[][][])info.GetValue("_FGPoints", typeof(Point[][][]));
+        //protected SavedScribbles(SerializationInfo info, StreamingContext context)
+        //{
+        //    this.BGSizes = (int[])info.GetValue("_BGSizes", typeof(int[]));
+        //    this.BGPoints = (Point[][][])info.GetValue("_BGPoints", typeof(Point[][][]));
+        //    this.FGSizes = (int[])info.GetValue("_FGSizes", typeof(int[]));
+        //    this.FGPoints = (Point[][][])info.GetValue("_FGPoints", typeof(Point[][][]));
 
-            try
-            {
-                this.Bmp = (Bitmap)info.GetValue("_Bmp", typeof(Bitmap));
-            }
-            catch { }
-        }
+        //    try
+        //    {
+        //        this.Bmp = (Bitmap)info.GetValue("_Bmp", typeof(Bitmap));
+        //    }
+        //    catch { }
+        //}
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("_BGSizes", this.BGSizes);
-            info.AddValue("_BGPoints", this.BGPoints);
-            info.AddValue("_FGSizes", this.FGSizes);
-            info.AddValue("_FGPoints", this.FGPoints);
-            if (this.Bmp != null)
-                info.AddValue("_Bmp", this.Bmp);
-        }
+        //public void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("_BGSizes", this.BGSizes);
+        //    info.AddValue("_BGPoints", this.BGPoints);
+        //    info.AddValue("_FGSizes", this.FGSizes);
+        //    info.AddValue("_FGPoints", this.FGPoints);
+        //    if (this.Bmp != null)
+        //        info.AddValue("_Bmp", this.Bmp);
+        //}
 
         public Dictionary<int, Dictionary<int, List<List<Point>>>> ToDictionary()
         {
