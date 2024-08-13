@@ -46,6 +46,9 @@ If you implement this in a performance optimized technology and language, you co
 
 I'll look, if I can set up a mathematical model for this, which may give us a way to estimate the ideal parameter (e.g. threshold) value(s). 
 
+An upgraded version (.net 8.0) can be found here:
+https://github.com/ThorstenGudera/TerminalLinkSegmentation/tree/master
+
 Disclaimer:
 
 The code is free for academic/research purpose. Use at your own risk and we are not responsible for any loss resulting from this code.
