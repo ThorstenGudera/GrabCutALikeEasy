@@ -3621,6 +3621,11 @@ namespace AvoidAGrabCutEasy
                 this.backgroundWorker4.DoWork += backgroundWorker4_DoWork;
                 this.backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
                 this.backgroundWorker4.RunWorkerCompleted += backgroundWorker4_RunWorkerCompleted;
+
+                this._sw.Stop();
+                this.Text = "frmProcOutline";
+                if (this._sw != null)
+                    this.Text += "        - ### -        " + TimeSpan.FromMilliseconds(this._sw.ElapsedMilliseconds).ToString();
             }
         }
 
