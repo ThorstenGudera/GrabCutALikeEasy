@@ -535,6 +535,7 @@ namespace AvoidAGrabCutEasy.ProcOutline
             this.cmbCurrentColor.SelectedIndex = 2;
             this.cbBGColor_CheckedChanged(this.cbBGColor, new EventArgs());
             this.cbDraw.Checked = true;
+            this.cmbZoom.SelectedIndex = 4;
         }
 
         private void cmbCurrentColor_SelectedIndexChanged(object sender, EventArgs e)
