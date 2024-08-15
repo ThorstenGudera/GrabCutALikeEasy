@@ -755,7 +755,7 @@ namespace AvoidAGrabCutEasy
                         }
 
                         using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
-                        using (Bitmap bBackground = ExtendOutlineEx(bW, outerW, true, false))
+                        using (Bitmap bBackground = ExtendOutlineEx(bW, outerW, true, true))
                         {
                             using (Graphics gx = Graphics.FromImage(bTrimap))
                             {
