@@ -711,17 +711,6 @@ namespace AvoidAGrabCutEasy
                         bool editTrimap = this.cbEditTrimap.Checked;
                         Bitmap bWork = new Bitmap(this._bmpOrig);
 
-                        if (cbHalfSize.Checked)
-                        {
-                            Bitmap bWork2 = ResampleBmp(bWork, 2);
-
-                            Bitmap bOld = bWork;
-                            bWork = bWork2;
-                            bOld.Dispose();
-                            bOld = null;
-                        }
-
-                        //maybe put this before the halfSize code...
                         double res = CheckWidthHeight(bWork, true, (double)this.numMaxSize.Value);
                         this.toolStripStatusLabel1.Text = "resFactor: " + Math.Max(res, 1).ToString("N2");
 
@@ -735,6 +724,18 @@ namespace AvoidAGrabCutEasy
                                 bOld = null;
                             }
                         }
+
+                        if (cbHalfSize.Checked)
+                        {
+                            Bitmap bWork2 = ResampleBmp(bWork, 2);
+
+                            Bitmap bOld = bWork;
+                            bWork = bWork2;
+                            bOld.Dispose();
+                            bOld = null;
+                        }
+
+                        //maybe put this before the halfSize code...done
 
                         //the question is: should we change innerW, outerW by the resampling factor.
                         double factor = this.cbHalfSize.Checked ? 2.0 : 1.0;
