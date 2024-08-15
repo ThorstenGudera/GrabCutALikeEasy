@@ -819,7 +819,7 @@ namespace AvoidAGrabCutEasy
                         bool trySingleTile = this.cbHalfSize.Checked ? false : true;
                         bool verifyTrimaps = false;
 
-                        this.backgroundWorker4.RunWorkerAsync(new object[] { 0, scalesPics, scales, overlap,
+                        this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,
                             interpolated, forceSerial, group, groupAmountX, groupAmountY, maxSize, bWork, trWork,
                             trySingleTile, verifyTrimaps });
                     }
