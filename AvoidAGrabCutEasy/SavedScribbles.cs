@@ -15,7 +15,7 @@ namespace AvoidAGrabCutEasy
         public int[] FGSizes { get; set; } = null;
         public Point[][][] FGPoints { get; set; }
 
-        public Bitmap Bmp { get; set; }
+        public string Bmp { get; set; }
 
         public SavedScribbles()
         {
@@ -79,10 +79,7 @@ namespace AvoidAGrabCutEasy
         public void Dispose()
         {
             if (this.Bmp != null)
-            {
-                this.Bmp.Dispose();
                 this.Bmp = null;
-            }
 
             this.BGSizes = null;
             this.FGSizes = null;

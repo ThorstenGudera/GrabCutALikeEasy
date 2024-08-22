@@ -3238,20 +3238,23 @@ namespace AvoidAGrabCutEasy
 
                     if (f.Bmp != null && this.cbLSBmp.Checked)
                     {
-                        Bitmap b = new Bitmap(f.Bmp);
+                        Bitmap b = ConvertFromBase64(f.Bmp);
 
-                        this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
-                        _undoOPCache.Add(b);
+                        if (b != null)
+                        {
+                            this.SetBitmap(this.helplineRulerCtrl1.Bmp, b, this.helplineRulerCtrl1, "Bmp");
+                            _undoOPCache?.Add(b);
 
-                        btnReset2.Enabled = true;
-                        this._pic_changed = true;
+                            btnReset2.Enabled = true;
+                            this._pic_changed = true;
 
-                        this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
-                        this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
-                            (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
-                            (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+                            this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+                            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(
+                                (int)(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom),
+                                (int)(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
 
-                        this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+                            this.cmbZoom_SelectedIndexChanged(this.cmbZoom, new EventArgs());
+                        }
                     }
 
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
@@ -3320,12 +3323,40 @@ namespace AvoidAGrabCutEasy
                 }
 
                 if (this.helplineRulerCtrl1.Bmp != null && this.cbLSBmp.Checked)
-                    f.Bmp = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                {
+                    string b64 = ConvertToBase64(this.helplineRulerCtrl1.Bmp);
+                    if (b64 != null)
+                        f.Bmp = b64;
+                }
 
                 WriteToFile(f);
 
                 f.Dispose();
             }
+        }
+
+        private string ConvertToBase64(Bitmap bmp)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return Convert.ToBase64String(ms.GetBuffer());
+            }
+        }
+
+        private Bitmap ConvertFromBase64(string base64String)
+        {
+            byte[] bytes = Convert.FromBase64String(base64String);
+
+            Bitmap bmp = null;
+            Image img = null;
+            using (MemoryStream ms = new MemoryStream(bytes))
+                img = Image.FromStream(ms);
+
+            bmp = new Bitmap(img);
+            img.Dispose();
+            img = null;
+            return bmp;
         }
 
         private void WriteToFile(SavedScribbles f)
