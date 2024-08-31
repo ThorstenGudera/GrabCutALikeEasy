@@ -1394,8 +1394,8 @@ namespace AvoidAGrabCutEasy
                                     this.Threshold = th;
                                     OnShowInfo(this.Threshold.ToString());
                                     //temp
-                                    MessageBox.Show(this.Threshold.ToString() + "\n\nrel pos: " + cGC.ToString() + "\nrel amount: " + ga.ToString() +
-                                        "\naddOne: " + addOne.ToString() + "\nsubOne: " + subOne.ToString());
+                                    //MessageBox.Show(this.Threshold.ToString() + "\n\nrel pos: " + cGC.ToString() + "\nrel amount: " + ga.ToString() +
+                                    //    "\naddOne: " + addOne.ToString() + "\nsubOne: " + subOne.ToString());
                                 }
                             }
                             else
