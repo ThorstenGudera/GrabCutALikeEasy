@@ -110,6 +110,8 @@ namespace AvoidAGrabCutEasy
         private int _numShiftX;
         private int _numShiftY;
 
+        //It would be much easier to use a List of objects which hold all information about drawing instead of using a seperate sequence file...
+        //Maybe I'll change it (as far as it is also easy to serialize in json)
         private List<Tuple<int, int, int>> _pointsListSeq;
         private int _currentDrawOperation;
 
