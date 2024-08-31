@@ -859,7 +859,7 @@ namespace AvoidAGrabCutEasy
                 return false;
         }
 
-        private unsafe int ConstructResultSet()
+        private unsafe int ConstructResultSetOld()
         {
             if (this.GammaChanged)
             {
@@ -1172,6 +1172,276 @@ namespace AvoidAGrabCutEasy
 
             //GetTestPic(z);
             return 0;
+        }
+
+        //let's now test the condensed method
+        private unsafe int ConstructResultSet()
+        {
+            if (this.GammaChanged)
+            {
+                if (!this.QuickEstimation)
+                    CalcBeta();
+                this.GammaChanged = false;
+            }
+
+            if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                this.BGW.ReportProgress(20);
+
+            this._result2 = null;
+
+            List<Point> bGIndexes = new List<Point>();
+            List<Point> fGIndexes = new List<Point>();
+            List<Point> pRIndexes = new List<Point>();
+            List<Point> pRIndexesFull = new List<Point>();
+
+            List<Point> pRFIndexes = new List<Point>();
+            List<Point> pRBIndexes = new List<Point>();
+
+            int w = this._w;
+            int h = this._h;
+
+            if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+            {
+                return -1;
+            }
+
+            if (this.Bmp != null && this.Mask != null && this._bgGmm != null && this._fgGmm != null)
+            {
+                BitmapData bmData = this.Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                int stride = bmData.Stride;
+
+                byte* p = (byte*)bmData.Scan0;
+
+                //fill the list for the known and unknown parts of the data
+                for (int y = 0; y < h; y++)
+                    for (int x = 0; x < w; x++)
+                    {
+                        if (this.Mask[x, y] == 0)
+                            bGIndexes.Add(new Point(x, y));
+                        else if (this.Mask[x, y] == 1)
+                            fGIndexes.Add(new Point(x, y));
+                        else if (this.Mask[x, y] == 2)
+                        {
+                            pRIndexes.Add(new Point(x, y));
+                            pRBIndexes.Add(new Point(x, y));
+                        }
+                        else if (this.Mask[x, y] == 3)
+                        {
+                            pRIndexes.Add(new Point(x, y));
+                            pRFIndexes.Add(new Point(x, y));
+                        }
+                    }
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(30);
+                if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                {
+                    this.Bmp.UnlockBits(bmData);
+                    return -1;
+                }
+
+                //the Data term (and so, the terminal nodes and its capacities)
+                //t - links -->
+                // https://www.researchgate.net/publication/230837921_Exact_Maximum_A_Posteriori_Estimation_for_Binary_Images
+                //innerhalb des Graphen links zu Nodes des graphen(keine Adressen des Bildes)
+                IEnumerable<Tuple<int, int>> v = pRIndexes.Select(ind => Tuple.Create(this._source, ind.X + ind.Y * w));
+                List<Tuple<int, int>> vf = v.ToList();
+
+                //get and tweak the probabilities of the pixels being fg or bg
+                double[][] prVals = new double[v.Count()][];
+                int cnt = v.Count();
+                Parallel.For(0, cnt, j =>
+                {
+                    int x = vf[j].Item2 % w;
+                    int y = vf[j].Item2 / w;
+                    int address = x * 4 + y * stride;
+                    prVals[j] = new double[] { p[address], p[address + 1], p[address + 2] };
+                });
+                double[] d = this._bgGmm.CalcProb(prVals);
+                for (int j = 0; j < d.Length; j++)
+                    d[j] *= this.ProbMult1;
+
+                IEnumerable<double> dTmp = d.Except(d.Where(a => a == 0));
+                double d1 = 0;
+                if (dTmp.Count() > 0)
+                    d1 = Math.Log(dTmp.Max());
+
+                int l = d.Length;
+                double[] d2 = this._fgGmm.CalcProb(prVals);
+
+                OnShowInfo("d1 = " + d1.ToString());
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(60);
+
+                if (this.BGW != null && this.BGW.WorkerSupportsCancellation && this.BGW.CancellationPending)
+                {
+                    this.Bmp.UnlockBits(bmData);
+                    return -1;
+                }
+
+                //test for automated finding of threshold... (first attempt, this is bound to change)
+                #region autoThreshold
+                if (this.UseThreshold && this.AutoThreshold)
+                {
+                    //get extreme vals
+                    IEnumerable<double> dv = d.Where(a => a == 0);
+                    IEnumerable<double> d2v = d2.Where(a => a == 0);
+
+                    if (dv != null && d2v != null) //dont test for count > 0, .Except(...) works with empty sets //dv.Count() > 0 && d2v.Count() > 0
+                    {
+                        IEnumerable<double> dExDV = d.Except(dv);
+                        IEnumerable<double> d2ExD2V = d2.Except(d2v);
+
+                        if (dExDV != null && d2ExD2V != null && dExDV.Count() > 0 && d2ExD2V.Count() > 0)
+                        {
+                            double dMin = Math.Log(dExDV.Min());
+                            double dMax = Math.Log(dExDV.Max());
+                            double d2Min = Math.Log(d2ExD2V.Min());
+                            double d2Max = Math.Log(d2ExD2V.Max());
+
+                            double fMin = Math.Min(dMin, d2Min);
+                            double fMax = Math.Max(dMax, d2Max);
+
+                            if (!double.IsInfinity(dMin) && !double.IsInfinity(dMax) &&
+                                !double.IsInfinity(d2Min) && !double.IsInfinity(d2Max) &&
+                                !double.IsNaN(dMin) && !double.IsNaN(dMax) &&
+                                !double.IsNaN(d2Min) && !double.IsNaN(d2Max))
+                            {
+                                //setup a histogram
+                                double fv = Math.Max(Math.Abs(fMin), Math.Abs(fMax));
+
+                                int[] dH = new int[(int)Math.Ceiling(Math.Abs(fv))];
+                                int[] d2H = new int[dH.Length];
+
+                                double af = -this.Threshold - dMin;
+
+                                for (int i = 0; i < l; i++)
+                                {
+                                    if (d[i] != 0)
+                                    {
+                                        int dl = (int)(Math.Log(d[i]) - dMin);
+                                        if (dH.Length > dl)
+                                            dH[dl]++;
+                                    }
+                                    if (d2[i] != 0)
+                                    {
+                                        int d2l = (int)(Math.Log(d2[i]) - d2Min);
+                                        if (d2H.Length > d2l)
+                                            d2H[d2l]++;
+                                    }
+                                }
+
+                                //get kind of a derivative
+                                double dm = dH.Sum();
+                                double[] fsl = new double[dH.Length];
+                                for (int j = 1; j < dH.Length - 1; j++)
+                                {
+                                    double diff = (dH[j + 1] - dH[j - 1]) / 2.0 / dm;
+                                    fsl[j] = diff;
+                                }
+
+                                List<double> dli = fsl.Reverse().ToList();
+
+                                //now get (in reversed direction) some critical positions in the lists
+                                //I try to find a difference which is the beginning of the
+                                //curve (histogram counts for the single bins) to start getting exponentially up
+                                //and also pay respect to the fact that usually the last bins of the Histogram are empty
+                                IEnumerable<double> f1 = dli.Where(x => x > 0 && x < 0.04);
+                                IEnumerable<double> f2 = dli.Where(a => a != 0);
+                                double th = this.MaxAllowedAutoThreshold + 1e-7;
+
+                                //you could use such a construct to return quite good values,
+                                //but its made simply of testing some combination of values without a model behind
+                                double addATh = Math.Abs((dMax - dMin) / Math.Sqrt(dH.Length * dH.Length)) * Math.E * Math.E;
+
+                                double cGC = 0;
+                                double ga = 0;
+                                int addOne = 0;
+                                int subOne = 0;
+
+                                //get the amount of non-empty bins from the end of the list up to the bin where the threshold is met (x < 0.04)
+                                if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
+                                {
+                                    //do a second test and add, or subtract 1 from the intermediate result [things and values might change]
+                                    int indx = dli.IndexOf(f1.First());
+
+                                    int cG = 0;
+                                    for (int j = 0; j < dH.Length - indx - 1; j++)
+                                        cG += dH[j];
+                                    cG += dH[dH.Length - indx] / 2;
+                                    cGC = (double)cG / dm;
+                                    ga = (double)dH[dH.Length - indx] / dm;
+
+                                    //Console.WriteLine("rel pos: " + cGC.ToString()); 
+                                    //Console.WriteLine("rel amount: " + ga.ToString());
+
+                                    addOne = 0;
+                                    if (cGC > 0.64)
+                                        addOne++;
+                                    if (ga < 0.1)
+                                        addOne++;
+                                    if (dli.Count() > 1 && indx > 0 && dli[indx - 1] > 0.085)
+                                        addOne++;
+                                    subOne = 0;
+                                    if (f1.Count() > 1 && indx < dli.Count() - 1 && dli[indx + 1] < 0.004) //this will probably be changed to a test for ">"
+                                        subOne++;
+                                    th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
+                                }
+
+                                if (th <= this.MaxAllowedAutoThreshold)
+                                {
+                                    this.Threshold = th;
+                                    OnShowInfo(this.Threshold.ToString());
+                                    //temp
+                                    MessageBox.Show(this.Threshold.ToString() + "\n\nrel pos: " + cGC.ToString() + "\nrel amount: " + ga.ToString() +
+                                        "\naddOne: " + addOne.ToString() + "\nsubOne: " + subOne.ToString());
+                                }
+                            }
+                            else
+                                MessageBox.Show("At least one value is either infinity or NaN.");
+                        }
+                        else
+                            MessageBox.Show("At least one sequence has no elements.");
+                    }
+                }
+                #endregion //autoThreshold
+                //end test
+
+                int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
+
+                Parallel.For(0, l, i =>
+                {
+                    if (d[i] == 0)
+                        d[i] = 0.0000000001;
+                    if (d2[i] == 0)
+                        d2[i] = 0.0000000001;
+
+                    if (this.UseThreshold)
+                        d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
+
+                    double vv = Math.Log(d[i] / d2[i]);
+
+                    if (double.IsInfinity(vv))
+                        vv = 0.0000001;
+
+                    Point ind = pRIndexes[i];
+
+                    if (vv <= 0)
+                        z[ind.X + ind.Y * w] = 1;
+                });
+
+                if (this.BGW != null && this.BGW.WorkerReportsProgress)
+                    this.BGW.ReportProgress(100);
+
+                //no Mincut needed.
+                this.Bmp.UnlockBits(bmData);
+                this._result2 = z;
+
+                return 0;
+            }
+
+            return -1;
         }
 
         private unsafe int ConstructGraphOld()
