@@ -1892,37 +1892,70 @@ namespace AvoidAGrabCutEasy
             OnShowInfo(e);
         }
 
-        internal unsafe void SetAllPointsInMask(Dictionary<int, List<Tuple<List<Point>, int>>> allPoints, bool setPFGToFG)
+        internal unsafe void SetAllPointsInMask(Dictionary<int, List<Tuple<List<Point>, int>>> allPoints, List<Tuple<int, int, int>> pointsListSeq, bool setPFGToFG)
         {
             if (setPFGToFG)
             {
-                for (int y = 0; y < this._h; y++)
-                    for (int x = 0; x < this._w; x++)
-                    {
-                        if (this.Mask[x, y] == 3)
-                            this.Mask[x, y] = 1;
-                    }
+                if (this.Mask != null)
+                    for (int y = 0; y < this._h; y++)
+                        for (int x = 0; x < this._w; x++)
+                        {
+                            if (this.Mask[x, y] == 3)
+                                this.Mask[x, y] = 1;
+                        }
             }
 
             if (this.Mask != null)
             {
-                foreach (int j in allPoints.Keys)
+                if (pointsListSeq != null)
                 {
-                    List<Tuple<List<Point>, int>> pts = allPoints[j];
+                    int curOp = 0;
 
-                    for (int i = 0; i < pts.Count; i++)
+                    foreach (Tuple<int, int, int> f in pointsListSeq)
                     {
-                        List<Point> cP = pts[i].Item1;
-                        int wh = pts[i].Item2 / 2;
+                        IEnumerable<Tuple<int, int, int>> jj = pointsListSeq.Where(a => a.Item2 == curOp);
 
-                        for (int l = 0; l < cP.Count; l++)
-                            Rect(cP[l], j, wh);
+                        if (jj != null && jj.Count() > 0)
+                        {
+                            List<Tuple<List<Point>, int>> lpts = allPoints[jj.First().Item1].ToList();
+
+                            Tuple<List<Point>, int> ptsList = allPoints[jj.First().Item1][jj.First().Item3]; //lpts = this._allPoints[jj.First().Item1]
+
+                            if (ptsList != null && ptsList.Item1.Count() > 0)
+                            {
+                                List<Point> pts = ptsList.Item1;
+                                int wh = ptsList.Item2 / 2;
+
+                                if (pts.Count > 0)
+                                {
+                                    for (int l = 0; l < pts.Count; l++)
+                                        Rect(pts[l], jj.First().Item1, wh);
+                                }
+                            }
+                        }
+                        curOp++;
+                    }
+                }
+                else
+                {
+                    foreach (int j in allPoints.Keys)
+                    {
+                        List<Tuple<List<Point>, int>> pts = allPoints[j];
+
+                        for (int i = 0; i < pts.Count; i++)
+                        {
+                            List<Point> cP = pts[i].Item1;
+                            int wh = pts[i].Item2 / 2;
+
+                            for (int l = 0; l < cP.Count; l++)
+                                Rect(cP[l], j, wh);
+                        }
                     }
                 }
 
                 Classify();
 
-                //ShowMaskToBmp();
+                ShowMaskToBmp();
             }
         }
 
