@@ -114,6 +114,7 @@ namespace AvoidAGrabCutEasy
         //Maybe I'll change it (as far as it is also easy to serialize in json)
         private List<Tuple<int, int, int>> _pointsListSeq;
         private int _currentDrawOperation;
+        private bool _resetClicked;
 
         public event EventHandler<string> ShowInfo;
         //public event EventHandler<string> BoundaryError;
@@ -525,8 +526,11 @@ namespace AvoidAGrabCutEasy
                 this.toolStripStatusLabel1.Text = ix.ToString() + "; " + iy.ToString();
                 this.ToolStripStatusLabel2.BackColor = c;
 
-                if(_tracking4 || _tracking)
+                if (_tracking4 || _tracking || this._resetClicked)
+                {
                     this.helplineRulerCtrl1.dbPanel1.Invalidate();
+                    this._resetClicked = false;
+                }
             }
         }
 
@@ -826,6 +830,7 @@ namespace AvoidAGrabCutEasy
             this.btnReset2.Enabled = true;
             this.cbDraw.Checked = false;
             this.numMaxSize.Enabled = this.numGmmComp.Enabled = true;
+            this._resetClicked = true;
 
             this.cbQuickEst_CheckedChanged(this.cbQuickEst, new EventArgs());
             this.cbDraw_CheckedChanged(this.cbDraw, new EventArgs());
