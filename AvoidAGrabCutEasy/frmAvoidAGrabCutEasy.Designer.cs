@@ -466,6 +466,7 @@
             this.btnRecut.Size = new System.Drawing.Size(38, 23);
             this.btnRecut.TabIndex = 660;
             this.btnRecut.Text = "Go";
+            this.toolTip1.SetToolTip(this.btnRecut, "Draw all components");
             this.btnRecut.UseVisualStyleBackColor = true;
             this.btnRecut.Click += new System.EventHandler(this.btnRecut_Click);
             // 
@@ -982,7 +983,7 @@
             this.numMaxComponents.Size = new System.Drawing.Size(45, 20);
             this.numMaxComponents.TabIndex = 625;
             this.numMaxComponents.Value = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
