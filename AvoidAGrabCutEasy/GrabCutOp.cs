@@ -1357,8 +1357,8 @@ namespace AvoidAGrabCutEasy
 
                                 double cGC = 0;
                                 double ga = 0;
-                                int addOne = 0;
-                                int subOne = 0;
+                                int addTo = 0;
+                                int subFrom = 0;
 
                                 //get the amount of non-empty bins from the end of the list up to the bin where the threshold is met (x < 0.04)
                                 if (f1 != null && f2 != null && f1.Count() > 0 && f2.Count() > 0)
@@ -1376,17 +1376,17 @@ namespace AvoidAGrabCutEasy
                                     //Console.WriteLine("rel pos: " + cGC.ToString()); 
                                     //Console.WriteLine("rel amount: " + ga.ToString());
 
-                                    addOne = 0;
+                                    addTo = 0;
                                     if (cGC > 0.64)
-                                        addOne++;
+                                        addTo++;
                                     if (ga < 0.1)
-                                        addOne++;
+                                        addTo++;
                                     if (dli.Count() > 1 && indx > 0 && dli[indx - 1] > 0.085)
-                                        addOne++;
-                                    subOne = 0;
+                                        addTo++;
+                                    subFrom = 0;
                                     if (f1.Count() > 1 && indx < dli.Count() - 1 && dli[indx + 1] < 0.004) //this will probably be changed to a test for ">"
-                                        subOne++;
-                                    th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addOne - subOne; // addATh;
+                                        subFrom++;
+                                    th = (indx - dli.IndexOf(f2.First())) + this.AutoThresholdAddition + addTo - subFrom; // addATh;
                                 }
 
                                 if (th <= this.MaxAllowedAutoThreshold)
