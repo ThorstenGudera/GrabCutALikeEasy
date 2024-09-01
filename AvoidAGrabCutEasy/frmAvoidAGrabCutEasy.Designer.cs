@@ -468,6 +468,7 @@
             this.btnRecut.Text = "Go";
             this.toolTip1.SetToolTip(this.btnRecut, "Draw all components");
             this.btnRecut.UseVisualStyleBackColor = true;
+            this.btnRecut.Visible = false;
             this.btnRecut.Click += new System.EventHandler(this.btnRecut_Click);
             // 
             // btnRemStroke
