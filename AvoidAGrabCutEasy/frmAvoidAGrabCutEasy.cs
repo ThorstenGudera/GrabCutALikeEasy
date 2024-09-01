@@ -3705,7 +3705,8 @@ namespace AvoidAGrabCutEasy
                         this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
                         _undoOPCache.Add(bmp);
 
-                        this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl2.Zoom.ToString());
+                        if (this.cmbZoom.SelectedItem != null)
+                            this.helplineRulerCtrl2.SetZoom(this.cmbZoom.SelectedItem.ToString());
                         this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
                         this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
                             (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
