@@ -1117,10 +1117,15 @@ namespace AvoidAGrabCutEasy
                     d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
                 }
 
-                double vv = Math.Log(d[i] / d2[i]);
+                //double vv = Math.Log(d[i] / d2[i]);
 
-                if (double.IsInfinity(vv))
-                    vv = 0.0000001;
+                //if (double.IsInfinity(vv))
+                //    vv = 0.0000001;
+
+                double vv = 0.0000001;
+
+                if (d[i] != 0)
+                    vv = Math.Log(d[i] / d2[i]);
 
                 Point ind = pRIndexes[i];
 
@@ -1420,10 +1425,15 @@ namespace AvoidAGrabCutEasy
                     if (this.UseThreshold)
                         d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
 
-                    double vv = Math.Log(d[i] / d2[i]);
+                    //double vv = Math.Log(d[i] / d2[i]);
 
-                    if (double.IsInfinity(vv))
-                        vv = 0.0000001;
+                    //if (double.IsInfinity(vv))
+                    //    vv = 0.0000001;
+
+                    double vv = 0.0000001;
+
+                    if (d[i] != 0)
+                        vv = Math.Log(d[i] / d2[i]);
 
                     Point ind = pRIndexes[i];
 
@@ -2602,10 +2612,15 @@ namespace AvoidAGrabCutEasy
                     d[i] = Math.Log(d[i]) < -this.Threshold ? d[i] : 0;
                 }
 
-                double vv = Math.Log(d[i] / d2[i]);
+                //double vv = Math.Log(d[i] / d2[i]);
 
-                if (double.IsInfinity(vv))
-                    vv = 0.0000001;
+                //if (double.IsInfinity(vv))
+                //    vv = 0.0000001;
+
+                double vv = 0.0000001;
+
+                if (d[i] != 0)
+                    vv = Math.Log(d[i] / d2[i]);
 
                 Point ind = pRIndexes[i];
 
