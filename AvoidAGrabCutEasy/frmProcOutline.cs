@@ -755,14 +755,14 @@ namespace AvoidAGrabCutEasy
                         }
 
                         using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
-                        using (Bitmap bBackground = ExtendOutlineEx(bW, outerW, true, true))
+                        using (Bitmap bUnknown = ExtendOutlineEx(bW, outerW, true, true))
                         {
                             using (Graphics gx = Graphics.FromImage(bTrimap))
                             {
                                 gx.SmoothingMode = SmoothingMode.None;
                                 gx.InterpolationMode = InterpolationMode.NearestNeighbor;
                                 gx.Clear(Color.Black);
-                                gx.DrawImage(bBackground, 0, 0);
+                                gx.DrawImage(bUnknown, 0, 0);
                                 gx.DrawImage(bForeground, 0, 0);
                             }
                         }
@@ -2124,14 +2124,14 @@ namespace AvoidAGrabCutEasy
                 Bitmap bTrimap = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
 
                 using (Bitmap bForeground = RemoveOutlineEx(this.helplineRulerCtrl1.Bmp, innerW, true))
-                using (Bitmap bBackground = ExtendOutlineEx(this.helplineRulerCtrl1.Bmp, outerW, true, false))
+                using (Bitmap bUnknown = ExtendOutlineEx(this.helplineRulerCtrl1.Bmp, outerW, true, false))
                 {
                     using (Graphics gx = Graphics.FromImage(bTrimap))
                     {
                         gx.SmoothingMode = SmoothingMode.None;
                         gx.InterpolationMode = InterpolationMode.NearestNeighbor;
                         gx.Clear(Color.Black);
-                        gx.DrawImage(bBackground, 0, 0);
+                        gx.DrawImage(bUnknown, 0, 0);
                         gx.DrawImage(bForeground, 0, 0);
                     }
                 }
@@ -4175,14 +4175,14 @@ namespace AvoidAGrabCutEasy
             Bitmap bInner = null;
 
             using (Bitmap bForeground = RemoveOutlineEx(bWork, innerW, true))
-            using (Bitmap bBackground = ExtendOutlineEx2(bWork, outerW, true, false))
+            using (Bitmap bUnknown = ExtendOutlineEx2(bWork, outerW, true, false))
             {
                 using (Graphics gx = Graphics.FromImage(bTrimap))
                 {
                     gx.SmoothingMode = SmoothingMode.None;
                     gx.InterpolationMode = InterpolationMode.NearestNeighbor;
                     gx.Clear(Color.Black);
-                    gx.DrawImage(bBackground, 0, 0);
+                    gx.DrawImage(bUnknown, 0, 0);
                     gx.DrawImage(bForeground, 0, 0);
                 }
 
