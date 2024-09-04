@@ -42,6 +42,9 @@ Usage:
 - Click onto the Go-button again
 - Process the outline
 
+It's IMHO better to use Bayes-Matting here, since a relatively thin (slim) unknown part in a closed curve (= our setup), is kind of ideal for Bayesian Matting. Bayesian Matting also does not use the big graph-like sparse matrix (the matting laplacian), because its done by solving small(er) eq-systems and so, we dont need so much memory while processing.
+But I dont know, if it is allowed to post code for Bayesian Matting. It's some code out there for that, but on the other hand, the people from https://alphamatting.com/code.php say that they do not post Bayesian Matting example code due to licensing issues.
+
 If you implement this in a performance optimized technology and language, you could get the segmentation [almost] in real-time.
 
 I'll look, if I can set up a mathematical model for this, which may give us a way to estimate the ideal parameter (e.g. threshold) value(s). 
