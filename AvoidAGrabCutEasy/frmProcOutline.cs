@@ -735,9 +735,6 @@ namespace AvoidAGrabCutEasy
                             bOld = null;
                         }
 
-                        //maybe put this before the halfSize code...done
-
-                        //the question is: should we change innerW, outerW by the resampling factor.
                         double factor = this.cbHalfSize.Checked ? 2.0 : 1.0;
                         factor *= (res > 1) ? res : 1.0;
 
@@ -747,7 +744,9 @@ namespace AvoidAGrabCutEasy
                         Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
 
                         Bitmap bW = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                        GetOpaqueParts(bW);
                         Bitmap bOld4 = bW;
+
                         bW = ResampleDown(bW, factor);
                         if (bOld4 != null)
                         {
@@ -917,6 +916,30 @@ namespace AvoidAGrabCutEasy
                     }
                 }
             }
+        }
+
+        private unsafe void GetOpaqueParts(Bitmap bW)
+        {
+            int w = bW.Width;
+            int h = bW.Height;
+
+            BitmapData bmD = bW.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int stride = bmD.Stride;
+
+            Parallel.For(0, h, y =>
+            {
+                byte* p = (byte*)bmD.Scan0;
+                p += y * stride;
+
+                for (int x = 0; x < w; x++)
+                {
+                    if (p[3] > 0 && p[3] < 255)
+                        p[3] = 0;
+                    p += 4;
+                }
+            });
+
+            bW.UnlockBits(bmD);
         }
 
         private void _cfop_ShowInfo(object sender, string e)
@@ -3569,7 +3592,7 @@ namespace AvoidAGrabCutEasy
                     frm4.ShowDialog();
 
                     b2 = bmp;
-                    bmp = GetAlphaBoundsPic(this._bmpOrig, bmp);
+                    bmp = GetAlphaBoundsPic(this._bmpOrig, bmp, true);
                     b2.Dispose();
                     b2 = null;
                 }
@@ -3738,7 +3761,7 @@ namespace AvoidAGrabCutEasy
             return null;
         }
 
-        private unsafe Bitmap GetAlphaBoundsPic(Bitmap bmpIn, Bitmap bmpAlpha)
+        private unsafe Bitmap GetAlphaBoundsPic(Bitmap bmpIn, Bitmap bmpAlpha, bool procOrig)
         {
             Bitmap bmp = null;
 
@@ -3771,56 +3794,10 @@ namespace AvoidAGrabCutEasy
                         p[1] = pIn[1];
                         p[2] = pIn[2];
 
-                        p[3] = pA[0];
-
-                        p += 4;
-                        pIn += 4;
-                        pA += 4;
-                    }
-                });
-
-                bmp.UnlockBits(bmD);
-                bmpIn.UnlockBits(bmIn);
-                bmpAlpha.UnlockBits(bmA);
-            }
-
-            return bmp;
-        }
-
-        private unsafe Bitmap GetAlphaBoundsPic(Bitmap bmpIn, Bitmap bmpAlpha, double gamma)
-        {
-            Bitmap bmp = null;
-
-            if (AvailMem.AvailMem.checkAvailRam(bmpAlpha.Width * bmpAlpha.Height * 16L))
-            {
-                int w = bmpAlpha.Width;
-                int h = bmpAlpha.Height;
-
-                bmp = new Bitmap(w, h);
-
-                BitmapData bmD = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                BitmapData bmIn = bmpIn.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                BitmapData bmA = bmpAlpha.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                int stride = bmD.Stride;
-
-                Parallel.For(0, h, y =>
-                {
-                    byte* p = (byte*)bmD.Scan0;
-                    p += y * stride;
-
-                    byte* pIn = (byte*)bmIn.Scan0;
-                    pIn += y * stride;
-
-                    byte* pA = (byte*)bmA.Scan0;
-                    pA += y * stride;
-
-                    for (int x = 0; x < w; x++)
-                    {
-                        p[0] = pIn[0];
-                        p[1] = pIn[1];
-                        p[2] = pIn[2];
-
-                        p[3] = (byte)Math.Max(Math.Min(255.0 * Math.Pow((double)pA[0] / 255.0, gamma), 255), 0);
+                        if (procOrig || (!procOrig && pIn[3] > 0))
+                            p[3] = pA[0];
+                        //  maybe use
+                        //  p[3] = (byte)Math.Max(Math.Min(255.0 * Math.Pow((double)pA[3] / 255.0, gamma), 255), 0);
 
                         p += 4;
                         pIn += 4;
