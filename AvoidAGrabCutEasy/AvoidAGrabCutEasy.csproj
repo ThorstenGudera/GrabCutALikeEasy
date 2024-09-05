@@ -81,6 +81,7 @@
     <Compile Include="BreakResult.cs" />
     <Compile Include="Centroid.cs" />
     <Compile Include="DirectedGraph.cs" />
+    <Compile Include="EdgeDetectionMethods.cs" />
     <Compile Include="frmAvoidAGrabCutEasy.cs">
       <SubType>Form</SubType>
     </Compile>

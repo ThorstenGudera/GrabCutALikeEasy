@@ -147,6 +147,7 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
+            this.cbRedrawInner = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -247,7 +248,7 @@
             this.groupBox2.Controls.Add(this.numGamma);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.numMaxSize);
-            this.groupBox2.Location = new System.Drawing.Point(9, 604);
+            this.groupBox2.Location = new System.Drawing.Point(9, 620);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(408, 45);
             this.groupBox2.TabIndex = 660;
@@ -340,7 +341,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 696);
+            this.label1.Location = new System.Drawing.Point(13, 708);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 658;
@@ -348,7 +349,7 @@
             // 
             // btmSetBU
             // 
-            this.btmSetBU.Location = new System.Drawing.Point(151, 691);
+            this.btmSetBU.Location = new System.Drawing.Point(151, 703);
             this.btmSetBU.Name = "btmSetBU";
             this.btmSetBU.Size = new System.Drawing.Size(75, 23);
             this.btmSetBU.TabIndex = 657;
@@ -359,7 +360,7 @@
             // Label20
             // 
             this.Label20.AutoSize = true;
-            this.Label20.Location = new System.Drawing.Point(13, 659);
+            this.Label20.Location = new System.Drawing.Point(13, 675);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(53, 13);
             this.Label20.TabIndex = 656;
@@ -375,7 +376,7 @@
             "1",
             "Fit_Width",
             "Fit"});
-            this.cmbZoom.Location = new System.Drawing.Point(72, 656);
+            this.cmbZoom.Location = new System.Drawing.Point(72, 672);
             this.cmbZoom.Name = "cmbZoom";
             this.cmbZoom.Size = new System.Drawing.Size(75, 21);
             this.cmbZoom.TabIndex = 655;
@@ -387,7 +388,7 @@
             this.cbBGColor.AutoSize = true;
             this.cbBGColor.Checked = true;
             this.cbBGColor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBGColor.Location = new System.Drawing.Point(161, 658);
+            this.cbBGColor.Location = new System.Drawing.Point(161, 674);
             this.cbBGColor.Name = "cbBGColor";
             this.cbBGColor.Size = new System.Drawing.Size(65, 17);
             this.cbBGColor.TabIndex = 654;
@@ -399,7 +400,7 @@
             // 
             this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button10.Location = new System.Drawing.Point(334, 691);
+            this.button10.Location = new System.Drawing.Point(334, 703);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 23);
             this.button10.TabIndex = 653;
@@ -411,7 +412,7 @@
             // 
             this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(253, 691);
+            this.button8.Location = new System.Drawing.Point(253, 703);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 652;
@@ -424,7 +425,7 @@
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(334, 656);
+            this.button2.Location = new System.Drawing.Point(334, 672);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 651;
@@ -458,6 +459,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbEditTrimap);
+            this.groupBox4.Controls.Add(this.cbRedrawInner);
             this.groupBox4.Controls.Add(this.cbDesaturate);
             this.groupBox4.Controls.Add(this.btnOnlyRestore);
             this.groupBox4.Controls.Add(this.cbOnlyRestore);
@@ -504,7 +507,7 @@
             this.groupBox4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox4.Location = new System.Drawing.Point(9, 279);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(408, 315);
+            this.groupBox4.Size = new System.Drawing.Size(408, 335);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
@@ -513,7 +516,7 @@
             // 
             this.cbDesaturate.AutoSize = true;
             this.cbDesaturate.Enabled = false;
-            this.cbDesaturate.Location = new System.Drawing.Point(74, 285);
+            this.cbDesaturate.Location = new System.Drawing.Point(74, 307);
             this.cbDesaturate.Name = "cbDesaturate";
             this.cbDesaturate.Size = new System.Drawing.Size(98, 17);
             this.cbDesaturate.TabIndex = 692;
@@ -522,7 +525,7 @@
             // 
             // btnOnlyRestore
             // 
-            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 256);
+            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 278);
             this.btnOnlyRestore.Name = "btnOnlyRestore";
             this.btnOnlyRestore.Size = new System.Drawing.Size(75, 23);
             this.btnOnlyRestore.TabIndex = 691;
@@ -533,7 +536,7 @@
             // cbOnlyRestore
             // 
             this.cbOnlyRestore.AutoSize = true;
-            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 261);
+            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 283);
             this.cbOnlyRestore.Name = "cbOnlyRestore";
             this.cbOnlyRestore.Size = new System.Drawing.Size(80, 17);
             this.cbOnlyRestore.TabIndex = 690;
@@ -544,7 +547,7 @@
             // btnPrecompAngles
             // 
             this.btnPrecompAngles.Enabled = false;
-            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 257);
+            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 279);
             this.btnPrecompAngles.Name = "btnPrecompAngles";
             this.btnPrecompAngles.Size = new System.Drawing.Size(84, 23);
             this.btnPrecompAngles.TabIndex = 689;
@@ -555,7 +558,7 @@
             // cbShowAngles
             // 
             this.cbShowAngles.AutoSize = true;
-            this.cbShowAngles.Location = new System.Drawing.Point(15, 261);
+            this.cbShowAngles.Location = new System.Drawing.Point(15, 283);
             this.cbShowAngles.Name = "cbShowAngles";
             this.cbShowAngles.Size = new System.Drawing.Size(83, 17);
             this.cbShowAngles.TabIndex = 688;
@@ -567,7 +570,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(260, 232);
+            this.label10.Location = new System.Drawing.Point(260, 254);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 13);
             this.label10.TabIndex = 687;
@@ -577,7 +580,7 @@
             // 
             // numWHFactor
             // 
-            this.numWHFactor.Location = new System.Drawing.Point(324, 230);
+            this.numWHFactor.Location = new System.Drawing.Point(324, 252);
             this.numWHFactor.Maximum = new decimal(new int[] {
             24,
             0,
@@ -600,7 +603,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(39, 233);
+            this.label8.Location = new System.Drawing.Point(39, 255);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 13);
             this.label8.TabIndex = 685;
@@ -609,7 +612,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(259, 205);
+            this.label7.Location = new System.Drawing.Point(259, 227);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 13);
             this.label7.TabIndex = 684;
@@ -618,7 +621,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(147, 206);
+            this.label12.Location = new System.Drawing.Point(147, 228);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(32, 13);
             this.label12.TabIndex = 683;
@@ -627,7 +630,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(147, 233);
+            this.label6.Location = new System.Drawing.Point(147, 255);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 683;
@@ -642,7 +645,7 @@
             0,
             0,
             65536});
-            this.numGamma2.Location = new System.Drawing.Point(312, 203);
+            this.numGamma2.Location = new System.Drawing.Point(312, 225);
             this.numGamma2.Minimum = new decimal(new int[] {
             1,
             0,
@@ -660,7 +663,7 @@
             // cbRestoreDefects
             // 
             this.cbRestoreDefects.AutoSize = true;
-            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 205);
+            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 227);
             this.cbRestoreDefects.Name = "cbRestoreDefects";
             this.cbRestoreDefects.Size = new System.Drawing.Size(95, 17);
             this.cbRestoreDefects.TabIndex = 682;
@@ -671,7 +674,7 @@
             // numOpacity
             // 
             this.numOpacity.DecimalPlaces = 2;
-            this.numOpacity.Location = new System.Drawing.Point(84, 230);
+            this.numOpacity.Location = new System.Drawing.Point(84, 252);
             this.numOpacity.Maximum = new decimal(new int[] {
             2,
             0,
@@ -689,7 +692,7 @@
             // numWMin
             // 
             this.numWMin.DecimalPlaces = 2;
-            this.numWMin.Location = new System.Drawing.Point(188, 203);
+            this.numWMin.Location = new System.Drawing.Point(188, 225);
             this.numWMin.Maximum = new decimal(new int[] {
             360,
             0,
@@ -702,7 +705,7 @@
             // numWMax
             // 
             this.numWMax.DecimalPlaces = 2;
-            this.numWMax.Location = new System.Drawing.Point(188, 230);
+            this.numWMax.Location = new System.Drawing.Point(188, 252);
             this.numWMax.Maximum = new decimal(new int[] {
             360,
             0,
@@ -720,7 +723,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(183, 287);
+            this.label5.Location = new System.Drawing.Point(183, 309);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
             this.label5.TabIndex = 678;
@@ -731,7 +734,7 @@
             this.cmbMethodMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMethodMode.DropDownWidth = 95;
             this.cmbMethodMode.FormattingEnabled = true;
-            this.cmbMethodMode.Location = new System.Drawing.Point(222, 283);
+            this.cmbMethodMode.Location = new System.Drawing.Point(222, 305);
             this.cmbMethodMode.Name = "cmbMethodMode";
             this.cmbMethodMode.Size = new System.Drawing.Size(89, 21);
             this.cmbMethodMode.TabIndex = 677;
@@ -740,7 +743,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(213, 177);
+            this.label4.Location = new System.Drawing.Point(213, 199);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 661;
@@ -749,7 +752,7 @@
             // numTh
             // 
             this.numTh.DecimalPlaces = 6;
-            this.numTh.Location = new System.Drawing.Point(269, 175);
+            this.numTh.Location = new System.Drawing.Point(269, 197);
             this.numTh.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -766,7 +769,6 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.cbEditTrimap);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.numSleep);
             this.groupBox5.Controls.Add(this.cbHalfSize);
@@ -783,7 +785,7 @@
             // cbEditTrimap
             // 
             this.cbEditTrimap.AutoSize = true;
-            this.cbEditTrimap.Location = new System.Drawing.Point(129, 64);
+            this.cbEditTrimap.Location = new System.Drawing.Point(333, 148);
             this.cbEditTrimap.Name = "cbEditTrimap";
             this.cbEditTrimap.Size = new System.Drawing.Size(74, 17);
             this.cbEditTrimap.TabIndex = 575;
@@ -903,7 +905,7 @@
             // label52
             // 
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(81, 173);
+            this.label52.Location = new System.Drawing.Point(81, 195);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(36, 13);
             this.label52.TabIndex = 547;
@@ -914,7 +916,7 @@
             this.cbBlur.AutoSize = true;
             this.cbBlur.Checked = true;
             this.cbBlur.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBlur.Location = new System.Drawing.Point(32, 172);
+            this.cbBlur.Location = new System.Drawing.Point(32, 194);
             this.cbBlur.Name = "cbBlur";
             this.cbBlur.Size = new System.Drawing.Size(43, 17);
             this.cbBlur.TabIndex = 546;
@@ -925,7 +927,7 @@
             // 
             this.label51.AutoSize = true;
             this.label51.Enabled = false;
-            this.label51.Location = new System.Drawing.Point(220, 152);
+            this.label51.Location = new System.Drawing.Point(220, 174);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(88, 13);
             this.label51.TabIndex = 545;
@@ -934,7 +936,7 @@
             // rbBoth
             // 
             this.rbBoth.AutoSize = true;
-            this.rbBoth.Location = new System.Drawing.Point(165, 150);
+            this.rbBoth.Location = new System.Drawing.Point(165, 172);
             this.rbBoth.Name = "rbBoth";
             this.rbBoth.Size = new System.Drawing.Size(46, 17);
             this.rbBoth.TabIndex = 544;
@@ -944,7 +946,7 @@
             // rbBoundary
             // 
             this.rbBoundary.AutoSize = true;
-            this.rbBoundary.Location = new System.Drawing.Point(93, 149);
+            this.rbBoundary.Location = new System.Drawing.Point(93, 171);
             this.rbBoundary.Name = "rbBoundary";
             this.rbBoundary.Size = new System.Drawing.Size(69, 17);
             this.rbBoundary.TabIndex = 544;
@@ -955,7 +957,7 @@
             // 
             this.rbOuterPx.AutoSize = true;
             this.rbOuterPx.Checked = true;
-            this.rbOuterPx.Location = new System.Drawing.Point(15, 149);
+            this.rbOuterPx.Location = new System.Drawing.Point(15, 171);
             this.rbOuterPx.Name = "rbOuterPx";
             this.rbOuterPx.Size = new System.Drawing.Size(76, 17);
             this.rbOuterPx.TabIndex = 543;
@@ -966,7 +968,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(12, 128);
+            this.label50.Location = new System.Drawing.Point(12, 150);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(82, 13);
             this.label50.TabIndex = 542;
@@ -1008,7 +1010,7 @@
             0,
             0,
             65536});
-            this.numFactorOuterPx.Location = new System.Drawing.Point(325, 149);
+            this.numFactorOuterPx.Location = new System.Drawing.Point(325, 171);
             this.numFactorOuterPx.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1061,7 +1063,7 @@
             0,
             0,
             0});
-            this.numBlur.Location = new System.Drawing.Point(129, 171);
+            this.numBlur.Location = new System.Drawing.Point(129, 193);
             this.numBlur.Maximum = new decimal(new int[] {
             99,
             0,
@@ -1106,7 +1108,7 @@
             // btnAlphaV
             // 
             this.btnAlphaV.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAlphaV.Location = new System.Drawing.Point(319, 281);
+            this.btnAlphaV.Location = new System.Drawing.Point(319, 303);
             this.btnAlphaV.Name = "btnAlphaV";
             this.btnAlphaV.Size = new System.Drawing.Size(75, 23);
             this.btnAlphaV.TabIndex = 538;
@@ -1781,6 +1783,18 @@
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
+            // cbRedrawInner
+            // 
+            this.cbRedrawInner.AutoSize = true;
+            this.cbRedrawInner.Checked = true;
+            this.cbRedrawInner.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbRedrawInner.Location = new System.Drawing.Point(207, 148);
+            this.cbRedrawInner.Name = "cbRedrawInner";
+            this.cbRedrawInner.Size = new System.Drawing.Size(123, 17);
+            this.cbRedrawInner.TabIndex = 693;
+            this.cbRedrawInner.Text = "redraw inner outlines";
+            this.cbRedrawInner.UseVisualStyleBackColor = true;
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1967,5 +1981,6 @@
         private System.Windows.Forms.CheckBox cbOnlyRestore;
         internal System.ComponentModel.BackgroundWorker backgroundWorker7;
         private System.Windows.Forms.CheckBox cbDesaturate;
+        private System.Windows.Forms.CheckBox cbRedrawInner;
     }
 }

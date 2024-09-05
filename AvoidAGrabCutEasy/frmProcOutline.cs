@@ -707,6 +707,7 @@ namespace AvoidAGrabCutEasy
                     {
                         int innerW = this._iW;
                         int outerW = this._oW;
+                        bool redrawInner = this.cbRedrawInner.Checked;
 
                         bool editTrimap = this.cbEditTrimap.Checked;
                         Bitmap bWork = new Bitmap(this._bmpOrig);
@@ -744,26 +745,113 @@ namespace AvoidAGrabCutEasy
                         Bitmap bTrimap = new Bitmap(bWork.Width, bWork.Height);
 
                         Bitmap bW = new Bitmap(this.helplineRulerCtrl1.Bmp);
+
                         GetOpaqueParts(bW);
                         Bitmap bOld4 = bW;
-
                         bW = ResampleDown(bW, factor);
+
                         if (bOld4 != null)
                         {
                             bOld4.Dispose();
                             bOld4 = null;
                         }
 
-                        using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
-                        using (Bitmap bUnknown = ExtendOutlineEx(bW, outerW, true, true))
+                        if (redrawInner)
                         {
-                            using (Graphics gx = Graphics.FromImage(bTrimap))
+                            Bitmap bTrimapTmp = new Bitmap(bTrimap.Width, bTrimap.Height);
+                            using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
+                            using (Bitmap bUnknown = ExtendOutlineEx(bW, outerW, true, true))
                             {
-                                gx.SmoothingMode = SmoothingMode.None;
-                                gx.InterpolationMode = InterpolationMode.NearestNeighbor;
-                                gx.Clear(Color.Black);
-                                gx.DrawImage(bUnknown, 0, 0);
-                                gx.DrawImage(bForeground, 0, 0);
+                                using (Graphics gx = Graphics.FromImage(bTrimapTmp))
+                                {
+                                    gx.SmoothingMode = SmoothingMode.None;
+                                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                    gx.Clear(Color.Black);
+                                    gx.DrawImage(bUnknown, 0, 0);
+                                    gx.DrawImage(bForeground, 0, 0);
+                                }
+
+                                int tolerance = 95;
+                                EdgeDetectionMethods.ReplaceColors(bTrimapTmp, 0, 0, 0, 0, tolerance, 255, 0, 0, 0);
+
+                                //
+                                List<ChainCode> c = GetBoundary(bTrimapTmp);
+                                ChainFinder cf = new ChainFinder();
+                                cf.AllowNullCells = true;
+
+                                c = c.OrderByDescending(a => a.Coord.Count).ToList();
+
+                                List<List<Point>> points = new List<List<Point>>();
+
+                                foreach (ChainCode cc in c)
+                                {
+                                    bool isInner = ChainFinder.IsInnerOutline(cc);
+
+                                    if (isInner)
+                                    {
+                                        using (GraphicsPath gP = new GraphicsPath())
+                                        {
+                                            gP.StartFigure();
+                                            gP.AddLines(cc.Coord.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                            gP.CloseFigure();
+
+                                            using (Graphics gx = Graphics.FromImage(bTrimapTmp))
+                                            {
+                                                using (Pen pen = new Pen(Color.Gray, innerW + outerW))
+                                                    gx.DrawPath(pen, gP);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                foreach (List<Point> pts in points)
+                                {
+                                    using (GraphicsPath gP = new GraphicsPath())
+                                    {
+                                        gP.StartFigure();
+                                        gP.AddLines(pts.Select(a => new PointF(a.X, a.Y)).ToArray());
+                                        gP.CloseFigure();
+
+                                        using (Graphics gx = Graphics.FromImage(bTrimapTmp))
+                                        {
+                                            using (Pen pen = new Pen(Color.Gray, innerW + outerW))
+                                                gx.DrawPath(pen, gP);
+                                        }
+                                    }
+                                }
+                                //
+                            }
+
+                            //Form fff = new Form();
+                            //fff.BackgroundImage = bTrimapTmp;
+                            //fff.BackgroundImageLayout = ImageLayout.Zoom;
+                            //fff.ShowDialog();
+
+                            if (bTrimap != null)
+                            {
+                                Bitmap b = bTrimap;
+                                bTrimap = new Bitmap(bTrimapTmp);
+                                if (b != null)
+                                    b.Dispose();
+                                b = null;
+                            }
+
+                            bTrimapTmp.Dispose();
+                            bTrimapTmp = null;
+                        }
+                        else
+                        {
+                            using (Bitmap bForeground = RemoveOutlineEx(bW, innerW, true))
+                            using (Bitmap bUnknown = ExtendOutlineEx(bW, outerW, true, true))
+                            {
+                                using (Graphics gx = Graphics.FromImage(bTrimap))
+                                {
+                                    gx.SmoothingMode = SmoothingMode.None;
+                                    gx.InterpolationMode = InterpolationMode.NearestNeighbor;
+                                    gx.Clear(Color.Black);
+                                    gx.DrawImage(bUnknown, 0, 0);
+                                    gx.DrawImage(bForeground, 0, 0);
+                                }
                             }
                         }
 
@@ -1821,6 +1909,7 @@ namespace AvoidAGrabCutEasy
             this.cbHalfSize.Enabled = this.numError.Enabled = ch;
             this.label9.Enabled = this.numMaxSize.Enabled = ch;
             this.label4.Enabled = this.numTh.Enabled = !ch;
+            this.cbRedrawInner.Enabled = this.cbEditTrimap.Enabled = ch;
 
             cmbMethodMode_SelectedIndexChanged(this.cmbMethodMode, new EventArgs());
             cbRestoreDefects_CheckedChanged(this.cbRestoreDefects, new EventArgs());
