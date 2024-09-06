@@ -899,7 +899,7 @@ namespace AvoidAGrabCutEasy
                         int scales = scalesPics ? rb4.Checked ? 4 : 16 : 0;
                         int overlap = 32;
                         bool interpolated = false;
-                        bool forceSerial = false;
+                        bool forceSerial = this.cbForceSerial.Checked;
                         bool group = false;
                         int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
                         int groupAmountY = scalesPics ? 1 : 0;

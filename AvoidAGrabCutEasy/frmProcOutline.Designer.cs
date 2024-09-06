@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSetGamma = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -70,6 +71,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numTh = new System.Windows.Forms.NumericUpDown();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.rb16 = new System.Windows.Forms.RadioButton();
+            this.rb4 = new System.Windows.Forms.RadioButton();
+            this.cbSlices = new System.Windows.Forms.CheckBox();
+            this.cbInterpolated = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.numSleep = new System.Windows.Forms.NumericUpDown();
             this.cbHalfSize = new System.Windows.Forms.CheckBox();
@@ -147,11 +152,7 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
-            this.rb16 = new System.Windows.Forms.RadioButton();
-            this.rb4 = new System.Windows.Forms.RadioButton();
-            this.cbSlices = new System.Windows.Forms.CheckBox();
-            this.cbInterpolated = new System.Windows.Forms.CheckBox();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            this.cbForceSerial = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -225,6 +226,25 @@
             this.splitContainer1.Size = new System.Drawing.Size(1268, 762);
             this.splitContainer1.SplitterDistance = 835;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // helplineRulerCtrl1
+            // 
+            this.helplineRulerCtrl1.Bmp = null;
+            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.helplineRulerCtrl1.DontDoLayout = false;
+            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
+            this.helplineRulerCtrl1.DontPaintBaseImg = false;
+            this.helplineRulerCtrl1.DontProcDoubleClick = false;
+            this.helplineRulerCtrl1.IgnoreZoom = false;
+            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
+            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
+            this.helplineRulerCtrl1.TabIndex = 0;
+            this.helplineRulerCtrl1.Zoom = 1F;
+            this.helplineRulerCtrl1.ZoomSetManually = false;
+            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // groupBox2
             // 
@@ -776,6 +796,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.cbForceSerial);
             this.groupBox5.Controls.Add(this.rb16);
             this.groupBox5.Controls.Add(this.rb4);
             this.groupBox5.Controls.Add(this.cbSlices);
@@ -792,6 +813,51 @@
             this.groupBox5.TabIndex = 551;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Experimental";
+            // 
+            // rb16
+            // 
+            this.rb16.AutoSize = true;
+            this.rb16.Location = new System.Drawing.Point(116, 91);
+            this.rb16.Name = "rb16";
+            this.rb16.Size = new System.Drawing.Size(37, 17);
+            this.rb16.TabIndex = 577;
+            this.rb16.Text = "16";
+            this.rb16.UseVisualStyleBackColor = true;
+            // 
+            // rb4
+            // 
+            this.rb4.AutoSize = true;
+            this.rb4.Checked = true;
+            this.rb4.Location = new System.Drawing.Point(85, 91);
+            this.rb4.Name = "rb4";
+            this.rb4.Size = new System.Drawing.Size(31, 17);
+            this.rb4.TabIndex = 578;
+            this.rb4.TabStop = true;
+            this.rb4.Text = "4";
+            this.rb4.UseVisualStyleBackColor = true;
+            // 
+            // cbSlices
+            // 
+            this.cbSlices.AutoSize = true;
+            this.cbSlices.Location = new System.Drawing.Point(14, 92);
+            this.cbSlices.Name = "cbSlices";
+            this.cbSlices.Size = new System.Drawing.Size(71, 17);
+            this.cbSlices.TabIndex = 576;
+            this.cbSlices.Text = "Do Slices";
+            this.toolTip1.SetToolTip(this.cbSlices, "Take n lower res pictures.\r\nExample for 4 pics:\r\n 1st Pic take pixels x/y mod 4 =" +
+        " 0\r\n 2nd Pic take pixels x/y mod 4 = 1 etc.\r\n");
+            this.cbSlices.UseVisualStyleBackColor = true;
+            // 
+            // cbInterpolated
+            // 
+            this.cbInterpolated.AutoSize = true;
+            this.cbInterpolated.Location = new System.Drawing.Point(127, 66);
+            this.cbInterpolated.Name = "cbInterpolated";
+            this.cbInterpolated.Size = new System.Drawing.Size(81, 17);
+            this.cbInterpolated.TabIndex = 575;
+            this.cbInterpolated.Text = "interpolated";
+            this.toolTip1.SetToolTip(this.cbInterpolated, "Use a Sqrt_2 enlarged pic");
+            this.cbInterpolated.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -1784,66 +1850,18 @@
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
-            // rb16
+            // cbForceSerial
             // 
-            this.rb16.AutoSize = true;
-            this.rb16.Location = new System.Drawing.Point(126, 91);
-            this.rb16.Name = "rb16";
-            this.rb16.Size = new System.Drawing.Size(37, 17);
-            this.rb16.TabIndex = 577;
-            this.rb16.Text = "16";
-            this.rb16.UseVisualStyleBackColor = true;
-            // 
-            // rb4
-            // 
-            this.rb4.AutoSize = true;
-            this.rb4.Checked = true;
-            this.rb4.Location = new System.Drawing.Point(91, 91);
-            this.rb4.Name = "rb4";
-            this.rb4.Size = new System.Drawing.Size(31, 17);
-            this.rb4.TabIndex = 578;
-            this.rb4.TabStop = true;
-            this.rb4.Text = "4";
-            this.rb4.UseVisualStyleBackColor = true;
-            // 
-            // cbSlices
-            // 
-            this.cbSlices.AutoSize = true;
-            this.cbSlices.Location = new System.Drawing.Point(14, 92);
-            this.cbSlices.Name = "cbSlices";
-            this.cbSlices.Size = new System.Drawing.Size(71, 17);
-            this.cbSlices.TabIndex = 576;
-            this.cbSlices.Text = "Do Slices";
-            this.cbSlices.UseVisualStyleBackColor = true;
-            // 
-            // cbInterpolated
-            // 
-            this.cbInterpolated.AutoSize = true;
-            this.cbInterpolated.Location = new System.Drawing.Point(127, 66);
-            this.cbInterpolated.Name = "cbInterpolated";
-            this.cbInterpolated.Size = new System.Drawing.Size(81, 17);
-            this.cbInterpolated.TabIndex = 575;
-            this.cbInterpolated.Text = "interpolated";
-            this.cbInterpolated.UseVisualStyleBackColor = true;
-            // 
-            // helplineRulerCtrl1
-            // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
+            this.cbForceSerial.AutoSize = true;
+            this.cbForceSerial.Checked = true;
+            this.cbForceSerial.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbForceSerial.Location = new System.Drawing.Point(159, 92);
+            this.cbForceSerial.Name = "cbForceSerial";
+            this.cbForceSerial.Size = new System.Drawing.Size(50, 17);
+            this.cbForceSerial.TabIndex = 579;
+            this.cbForceSerial.Text = "serial";
+            this.toolTip1.SetToolTip(this.cbForceSerial, "run threads serially to lower memory consumption");
+            this.cbForceSerial.UseVisualStyleBackColor = true;
             // 
             // frmProcOutline
             // 
@@ -2036,5 +2054,6 @@
         private System.Windows.Forms.RadioButton rb4;
         private System.Windows.Forms.CheckBox cbSlices;
         private System.Windows.Forms.CheckBox cbInterpolated;
+        private System.Windows.Forms.CheckBox cbForceSerial;
     }
 }
