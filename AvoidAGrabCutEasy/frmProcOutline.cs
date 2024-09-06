@@ -895,16 +895,16 @@ namespace AvoidAGrabCutEasy
                         this._cfop.ShowProgess += Cfop_UpdateProgress;
                         this._cfop.ShowInfo += _cfop_ShowInfo;
 
-                        bool scalesPics = false;
-                        int scales = 0;
+                        bool scalesPics = this.cbSlices.Checked;
+                        int scales = scalesPics ? rb4.Checked ? 4 : 16 : 0;
                         int overlap = 32;
                         bool interpolated = false;
                         bool forceSerial = false;
                         bool group = false;
-                        int groupAmountX = 0;
-                        int groupAmountY = 0;
+                        int groupAmountX = scalesPics ? 1 : 0; //we dont use grouping, so set it simply to 1
+                        int groupAmountY = scalesPics ? 1 : 0;
                         int maxSize = bWork.Width * bWork.Height;
-                        bool trySingleTile = this.cbHalfSize.Checked ? false : true;
+                        bool trySingleTile = scalesPics ? false : this.cbHalfSize.Checked ? false : true;
                         bool verifyTrimaps = false;
 
                         this.backgroundWorker4.RunWorkerAsync(new object[] { 1 /*GMRES_r; 0 is GaussSeidel*/, scalesPics, scales, overlap,

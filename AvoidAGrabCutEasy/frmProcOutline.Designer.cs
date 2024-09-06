@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSetGamma = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -48,6 +47,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbEditTrimap = new System.Windows.Forms.CheckBox();
+            this.cbRedrawInner = new System.Windows.Forms.CheckBox();
             this.cbDesaturate = new System.Windows.Forms.CheckBox();
             this.btnOnlyRestore = new System.Windows.Forms.Button();
             this.cbOnlyRestore = new System.Windows.Forms.CheckBox();
@@ -69,7 +70,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numTh = new System.Windows.Forms.NumericUpDown();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cbEditTrimap = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.numSleep = new System.Windows.Forms.NumericUpDown();
             this.cbHalfSize = new System.Windows.Forms.CheckBox();
@@ -147,7 +147,11 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
-            this.cbRedrawInner = new System.Windows.Forms.CheckBox();
+            this.rb16 = new System.Windows.Forms.RadioButton();
+            this.rb4 = new System.Windows.Forms.RadioButton();
+            this.cbSlices = new System.Windows.Forms.CheckBox();
+            this.cbInterpolated = new System.Windows.Forms.CheckBox();
+            this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -221,25 +225,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1268, 762);
             this.splitContainer1.SplitterDistance = 835;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // helplineRulerCtrl1
-            // 
-            this.helplineRulerCtrl1.Bmp = null;
-            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.helplineRulerCtrl1.DontDoLayout = false;
-            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
-            this.helplineRulerCtrl1.DontPaintBaseImg = false;
-            this.helplineRulerCtrl1.DontProcDoubleClick = false;
-            this.helplineRulerCtrl1.IgnoreZoom = false;
-            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
-            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
-            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
-            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
-            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
-            this.helplineRulerCtrl1.TabIndex = 0;
-            this.helplineRulerCtrl1.Zoom = 1F;
-            this.helplineRulerCtrl1.ZoomSetManually = false;
-            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // groupBox2
             // 
@@ -505,18 +490,40 @@
             this.groupBox4.Controls.Add(this.numBoundInner);
             this.groupBox4.Controls.Add(this.label46);
             this.groupBox4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox4.Location = new System.Drawing.Point(9, 279);
+            this.groupBox4.Location = new System.Drawing.Point(9, 261);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(408, 335);
+            this.groupBox4.Size = new System.Drawing.Size(408, 353);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
+            // 
+            // cbEditTrimap
+            // 
+            this.cbEditTrimap.AutoSize = true;
+            this.cbEditTrimap.Location = new System.Drawing.Point(333, 170);
+            this.cbEditTrimap.Name = "cbEditTrimap";
+            this.cbEditTrimap.Size = new System.Drawing.Size(74, 17);
+            this.cbEditTrimap.TabIndex = 575;
+            this.cbEditTrimap.Text = "edit trimap";
+            this.cbEditTrimap.UseVisualStyleBackColor = true;
+            // 
+            // cbRedrawInner
+            // 
+            this.cbRedrawInner.AutoSize = true;
+            this.cbRedrawInner.Checked = true;
+            this.cbRedrawInner.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbRedrawInner.Location = new System.Drawing.Point(207, 170);
+            this.cbRedrawInner.Name = "cbRedrawInner";
+            this.cbRedrawInner.Size = new System.Drawing.Size(123, 17);
+            this.cbRedrawInner.TabIndex = 693;
+            this.cbRedrawInner.Text = "redraw inner outlines";
+            this.cbRedrawInner.UseVisualStyleBackColor = true;
             // 
             // cbDesaturate
             // 
             this.cbDesaturate.AutoSize = true;
             this.cbDesaturate.Enabled = false;
-            this.cbDesaturate.Location = new System.Drawing.Point(74, 307);
+            this.cbDesaturate.Location = new System.Drawing.Point(74, 329);
             this.cbDesaturate.Name = "cbDesaturate";
             this.cbDesaturate.Size = new System.Drawing.Size(98, 17);
             this.cbDesaturate.TabIndex = 692;
@@ -525,7 +532,7 @@
             // 
             // btnOnlyRestore
             // 
-            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 278);
+            this.btnOnlyRestore.Location = new System.Drawing.Point(285, 300);
             this.btnOnlyRestore.Name = "btnOnlyRestore";
             this.btnOnlyRestore.Size = new System.Drawing.Size(75, 23);
             this.btnOnlyRestore.TabIndex = 691;
@@ -536,7 +543,7 @@
             // cbOnlyRestore
             // 
             this.cbOnlyRestore.AutoSize = true;
-            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 283);
+            this.cbOnlyRestore.Location = new System.Drawing.Point(199, 305);
             this.cbOnlyRestore.Name = "cbOnlyRestore";
             this.cbOnlyRestore.Size = new System.Drawing.Size(80, 17);
             this.cbOnlyRestore.TabIndex = 690;
@@ -547,7 +554,7 @@
             // btnPrecompAngles
             // 
             this.btnPrecompAngles.Enabled = false;
-            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 279);
+            this.btnPrecompAngles.Location = new System.Drawing.Point(102, 301);
             this.btnPrecompAngles.Name = "btnPrecompAngles";
             this.btnPrecompAngles.Size = new System.Drawing.Size(84, 23);
             this.btnPrecompAngles.TabIndex = 689;
@@ -558,7 +565,7 @@
             // cbShowAngles
             // 
             this.cbShowAngles.AutoSize = true;
-            this.cbShowAngles.Location = new System.Drawing.Point(15, 283);
+            this.cbShowAngles.Location = new System.Drawing.Point(15, 305);
             this.cbShowAngles.Name = "cbShowAngles";
             this.cbShowAngles.Size = new System.Drawing.Size(83, 17);
             this.cbShowAngles.TabIndex = 688;
@@ -570,7 +577,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(260, 254);
+            this.label10.Location = new System.Drawing.Point(260, 276);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 13);
             this.label10.TabIndex = 687;
@@ -580,7 +587,7 @@
             // 
             // numWHFactor
             // 
-            this.numWHFactor.Location = new System.Drawing.Point(324, 252);
+            this.numWHFactor.Location = new System.Drawing.Point(324, 274);
             this.numWHFactor.Maximum = new decimal(new int[] {
             24,
             0,
@@ -603,7 +610,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(39, 255);
+            this.label8.Location = new System.Drawing.Point(39, 277);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 13);
             this.label8.TabIndex = 685;
@@ -612,7 +619,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(259, 227);
+            this.label7.Location = new System.Drawing.Point(259, 249);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 13);
             this.label7.TabIndex = 684;
@@ -621,7 +628,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(147, 228);
+            this.label12.Location = new System.Drawing.Point(147, 250);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(32, 13);
             this.label12.TabIndex = 683;
@@ -630,7 +637,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(147, 255);
+            this.label6.Location = new System.Drawing.Point(147, 277);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 683;
@@ -645,7 +652,7 @@
             0,
             0,
             65536});
-            this.numGamma2.Location = new System.Drawing.Point(312, 225);
+            this.numGamma2.Location = new System.Drawing.Point(312, 247);
             this.numGamma2.Minimum = new decimal(new int[] {
             1,
             0,
@@ -663,7 +670,7 @@
             // cbRestoreDefects
             // 
             this.cbRestoreDefects.AutoSize = true;
-            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 227);
+            this.cbRestoreDefects.Location = new System.Drawing.Point(15, 249);
             this.cbRestoreDefects.Name = "cbRestoreDefects";
             this.cbRestoreDefects.Size = new System.Drawing.Size(95, 17);
             this.cbRestoreDefects.TabIndex = 682;
@@ -674,7 +681,7 @@
             // numOpacity
             // 
             this.numOpacity.DecimalPlaces = 2;
-            this.numOpacity.Location = new System.Drawing.Point(84, 252);
+            this.numOpacity.Location = new System.Drawing.Point(84, 274);
             this.numOpacity.Maximum = new decimal(new int[] {
             2,
             0,
@@ -692,7 +699,7 @@
             // numWMin
             // 
             this.numWMin.DecimalPlaces = 2;
-            this.numWMin.Location = new System.Drawing.Point(188, 225);
+            this.numWMin.Location = new System.Drawing.Point(188, 247);
             this.numWMin.Maximum = new decimal(new int[] {
             360,
             0,
@@ -705,7 +712,7 @@
             // numWMax
             // 
             this.numWMax.DecimalPlaces = 2;
-            this.numWMax.Location = new System.Drawing.Point(188, 252);
+            this.numWMax.Location = new System.Drawing.Point(188, 274);
             this.numWMax.Maximum = new decimal(new int[] {
             360,
             0,
@@ -723,7 +730,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(183, 309);
+            this.label5.Location = new System.Drawing.Point(183, 331);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(33, 13);
             this.label5.TabIndex = 678;
@@ -734,7 +741,7 @@
             this.cmbMethodMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMethodMode.DropDownWidth = 95;
             this.cmbMethodMode.FormattingEnabled = true;
-            this.cmbMethodMode.Location = new System.Drawing.Point(222, 305);
+            this.cmbMethodMode.Location = new System.Drawing.Point(222, 327);
             this.cmbMethodMode.Name = "cmbMethodMode";
             this.cmbMethodMode.Size = new System.Drawing.Size(89, 21);
             this.cmbMethodMode.TabIndex = 677;
@@ -743,7 +750,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(213, 199);
+            this.label4.Location = new System.Drawing.Point(213, 221);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 661;
@@ -752,7 +759,7 @@
             // numTh
             // 
             this.numTh.DecimalPlaces = 6;
-            this.numTh.Location = new System.Drawing.Point(269, 197);
+            this.numTh.Location = new System.Drawing.Point(269, 219);
             this.numTh.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -769,6 +776,10 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.rb16);
+            this.groupBox5.Controls.Add(this.rb4);
+            this.groupBox5.Controls.Add(this.cbSlices);
+            this.groupBox5.Controls.Add(this.cbInterpolated);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.numSleep);
             this.groupBox5.Controls.Add(this.cbHalfSize);
@@ -777,20 +788,10 @@
             this.groupBox5.Controls.Add(this.label54);
             this.groupBox5.Location = new System.Drawing.Point(190, 49);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(212, 95);
+            this.groupBox5.Size = new System.Drawing.Size(212, 115);
             this.groupBox5.TabIndex = 551;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Experimental";
-            // 
-            // cbEditTrimap
-            // 
-            this.cbEditTrimap.AutoSize = true;
-            this.cbEditTrimap.Location = new System.Drawing.Point(333, 148);
-            this.cbEditTrimap.Name = "cbEditTrimap";
-            this.cbEditTrimap.Size = new System.Drawing.Size(74, 17);
-            this.cbEditTrimap.TabIndex = 575;
-            this.cbEditTrimap.Text = "edit trimap";
-            this.cbEditTrimap.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -905,7 +906,7 @@
             // label52
             // 
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(81, 195);
+            this.label52.Location = new System.Drawing.Point(81, 217);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(36, 13);
             this.label52.TabIndex = 547;
@@ -916,7 +917,7 @@
             this.cbBlur.AutoSize = true;
             this.cbBlur.Checked = true;
             this.cbBlur.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBlur.Location = new System.Drawing.Point(32, 194);
+            this.cbBlur.Location = new System.Drawing.Point(32, 216);
             this.cbBlur.Name = "cbBlur";
             this.cbBlur.Size = new System.Drawing.Size(43, 17);
             this.cbBlur.TabIndex = 546;
@@ -927,7 +928,7 @@
             // 
             this.label51.AutoSize = true;
             this.label51.Enabled = false;
-            this.label51.Location = new System.Drawing.Point(220, 174);
+            this.label51.Location = new System.Drawing.Point(220, 196);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(88, 13);
             this.label51.TabIndex = 545;
@@ -936,7 +937,7 @@
             // rbBoth
             // 
             this.rbBoth.AutoSize = true;
-            this.rbBoth.Location = new System.Drawing.Point(165, 172);
+            this.rbBoth.Location = new System.Drawing.Point(165, 194);
             this.rbBoth.Name = "rbBoth";
             this.rbBoth.Size = new System.Drawing.Size(46, 17);
             this.rbBoth.TabIndex = 544;
@@ -946,7 +947,7 @@
             // rbBoundary
             // 
             this.rbBoundary.AutoSize = true;
-            this.rbBoundary.Location = new System.Drawing.Point(93, 171);
+            this.rbBoundary.Location = new System.Drawing.Point(93, 193);
             this.rbBoundary.Name = "rbBoundary";
             this.rbBoundary.Size = new System.Drawing.Size(69, 17);
             this.rbBoundary.TabIndex = 544;
@@ -957,7 +958,7 @@
             // 
             this.rbOuterPx.AutoSize = true;
             this.rbOuterPx.Checked = true;
-            this.rbOuterPx.Location = new System.Drawing.Point(15, 171);
+            this.rbOuterPx.Location = new System.Drawing.Point(15, 193);
             this.rbOuterPx.Name = "rbOuterPx";
             this.rbOuterPx.Size = new System.Drawing.Size(76, 17);
             this.rbOuterPx.TabIndex = 543;
@@ -968,7 +969,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(12, 150);
+            this.label50.Location = new System.Drawing.Point(12, 172);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(82, 13);
             this.label50.TabIndex = 542;
@@ -1010,7 +1011,7 @@
             0,
             0,
             65536});
-            this.numFactorOuterPx.Location = new System.Drawing.Point(325, 171);
+            this.numFactorOuterPx.Location = new System.Drawing.Point(325, 193);
             this.numFactorOuterPx.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1063,7 +1064,7 @@
             0,
             0,
             0});
-            this.numBlur.Location = new System.Drawing.Point(129, 193);
+            this.numBlur.Location = new System.Drawing.Point(129, 215);
             this.numBlur.Maximum = new decimal(new int[] {
             99,
             0,
@@ -1108,7 +1109,7 @@
             // btnAlphaV
             // 
             this.btnAlphaV.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAlphaV.Location = new System.Drawing.Point(319, 303);
+            this.btnAlphaV.Location = new System.Drawing.Point(319, 325);
             this.btnAlphaV.Name = "btnAlphaV";
             this.btnAlphaV.Size = new System.Drawing.Size(75, 23);
             this.btnAlphaV.TabIndex = 538;
@@ -1213,9 +1214,9 @@
             this.groupBox3.Controls.Add(this.numPPEpsilon2);
             this.groupBox3.Controls.Add(this.numPPEpsilon);
             this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox3.Location = new System.Drawing.Point(45, 58);
+            this.groupBox3.Location = new System.Drawing.Point(45, 50);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(364, 214);
+            this.groupBox3.Size = new System.Drawing.Size(364, 205);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "outline shape";
@@ -1223,7 +1224,7 @@
             // cbReShift
             // 
             this.cbReShift.AutoSize = true;
-            this.cbReShift.Location = new System.Drawing.Point(11, 186);
+            this.cbReShift.Location = new System.Drawing.Point(11, 178);
             this.cbReShift.Name = "cbReShift";
             this.cbReShift.Size = new System.Drawing.Size(104, 17);
             this.cbReShift.TabIndex = 678;
@@ -1233,7 +1234,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(181, 187);
+            this.label11.Location = new System.Drawing.Point(181, 179);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(17, 13);
             this.label11.TabIndex = 676;
@@ -1241,7 +1242,7 @@
             // 
             // numShiftY
             // 
-            this.numShiftY.Location = new System.Drawing.Point(204, 185);
+            this.numShiftY.Location = new System.Drawing.Point(204, 177);
             this.numShiftY.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -1258,7 +1259,7 @@
             // 
             // numShiftX
             // 
-            this.numShiftX.Location = new System.Drawing.Point(130, 185);
+            this.numShiftX.Location = new System.Drawing.Point(130, 177);
             this.numShiftX.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -1276,7 +1277,7 @@
             // cbRemArea
             // 
             this.cbRemArea.AutoSize = true;
-            this.cbRemArea.Location = new System.Drawing.Point(11, 157);
+            this.cbRemArea.Location = new System.Drawing.Point(11, 149);
             this.cbRemArea.Name = "cbRemArea";
             this.cbRemArea.Size = new System.Drawing.Size(179, 17);
             this.cbRemArea.TabIndex = 591;
@@ -1288,7 +1289,7 @@
             this.cbApproxLines.AutoSize = true;
             this.cbApproxLines.Checked = true;
             this.cbApproxLines.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbApproxLines.Location = new System.Drawing.Point(11, 47);
+            this.cbApproxLines.Location = new System.Drawing.Point(11, 39);
             this.cbApproxLines.Name = "cbApproxLines";
             this.cbApproxLines.Size = new System.Drawing.Size(102, 17);
             this.cbApproxLines.TabIndex = 590;
@@ -1297,7 +1298,7 @@
             // 
             // numPPThresholdInner
             // 
-            this.numPPThresholdInner.Location = new System.Drawing.Point(278, 129);
+            this.numPPThresholdInner.Location = new System.Drawing.Point(278, 121);
             this.numPPThresholdInner.Maximum = new decimal(new int[] {
             441,
             0,
@@ -1314,7 +1315,7 @@
             // 
             // numPPPixelDepthInner
             // 
-            this.numPPPixelDepthInner.Location = new System.Drawing.Point(278, 103);
+            this.numPPPixelDepthInner.Location = new System.Drawing.Point(278, 95);
             this.numPPPixelDepthInner.Maximum = new decimal(new int[] {
             441,
             0,
@@ -1332,7 +1333,7 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(84, 131);
+            this.label34.Location = new System.Drawing.Point(84, 123);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(31, 13);
             this.label34.TabIndex = 563;
@@ -1341,7 +1342,7 @@
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(129, 131);
+            this.label36.Location = new System.Drawing.Point(129, 123);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(66, 13);
             this.label36.TabIndex = 561;
@@ -1350,7 +1351,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(129, 105);
+            this.label37.Location = new System.Drawing.Point(129, 97);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(50, 13);
             this.label37.TabIndex = 562;
@@ -1359,7 +1360,7 @@
             // cbPPCleanOutline
             // 
             this.cbPPCleanOutline.AutoSize = true;
-            this.cbPPCleanOutline.Location = new System.Drawing.Point(11, 104);
+            this.cbPPCleanOutline.Location = new System.Drawing.Point(11, 96);
             this.cbPPCleanOutline.Name = "cbPPCleanOutline";
             this.cbPPCleanOutline.Size = new System.Drawing.Size(112, 17);
             this.cbPPCleanOutline.TabIndex = 559;
@@ -1368,7 +1369,7 @@
             // 
             // numPPMinAllowedArea
             // 
-            this.numPPMinAllowedArea.Location = new System.Drawing.Point(204, 156);
+            this.numPPMinAllowedArea.Location = new System.Drawing.Point(204, 148);
             this.numPPMinAllowedArea.Maximum = new decimal(new int[] {
             441000000,
             0,
@@ -1390,7 +1391,7 @@
             // 
             // numPPThresholdOuter
             // 
-            this.numPPThresholdOuter.Location = new System.Drawing.Point(204, 129);
+            this.numPPThresholdOuter.Location = new System.Drawing.Point(204, 121);
             this.numPPThresholdOuter.Maximum = new decimal(new int[] {
             441,
             0,
@@ -1407,7 +1408,7 @@
             // 
             // numPPCleanAmount
             // 
-            this.numPPCleanAmount.Location = new System.Drawing.Point(27, 129);
+            this.numPPCleanAmount.Location = new System.Drawing.Point(27, 121);
             this.numPPCleanAmount.Maximum = new decimal(new int[] {
             999,
             0,
@@ -1429,7 +1430,7 @@
             // 
             // numPPPixelDepthOuter
             // 
-            this.numPPPixelDepthOuter.Location = new System.Drawing.Point(204, 103);
+            this.numPPPixelDepthOuter.Location = new System.Drawing.Point(204, 95);
             this.numPPPixelDepthOuter.Maximum = new decimal(new int[] {
             441,
             0,
@@ -1447,7 +1448,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(102, 77);
+            this.label33.Location = new System.Drawing.Point(102, 69);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(41, 13);
             this.label33.TabIndex = 551;
@@ -1456,7 +1457,7 @@
             // cbOutlinesAsCurves
             // 
             this.cbOutlinesAsCurves.AutoSize = true;
-            this.cbOutlinesAsCurves.Location = new System.Drawing.Point(11, 76);
+            this.cbOutlinesAsCurves.Location = new System.Drawing.Point(11, 68);
             this.cbOutlinesAsCurves.Name = "cbOutlinesAsCurves";
             this.cbOutlinesAsCurves.Size = new System.Drawing.Size(84, 17);
             this.cbOutlinesAsCurves.TabIndex = 550;
@@ -1471,7 +1472,7 @@
             0,
             0,
             65536});
-            this.numTension.Location = new System.Drawing.Point(191, 73);
+            this.numTension.Location = new System.Drawing.Point(191, 65);
             this.numTension.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1508,7 +1509,7 @@
             // 
             this.btnPPGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPPGo.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnPPGo.Location = new System.Drawing.Point(283, 182);
+            this.btnPPGo.Location = new System.Drawing.Point(282, 174);
             this.btnPPGo.Name = "btnPPGo";
             this.btnPPGo.Size = new System.Drawing.Size(75, 23);
             this.btnPPGo.TabIndex = 538;
@@ -1563,7 +1564,7 @@
             0,
             0,
             65536});
-            this.numPPEpsilon2.Location = new System.Drawing.Point(191, 47);
+            this.numPPEpsilon2.Location = new System.Drawing.Point(191, 39);
             this.numPPEpsilon2.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1586,7 +1587,7 @@
             0,
             0,
             65536});
-            this.numPPEpsilon.Location = new System.Drawing.Point(115, 47);
+            this.numPPEpsilon.Location = new System.Drawing.Point(115, 39);
             this.numPPEpsilon.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1609,7 +1610,7 @@
             this.groupBox1.Controls.Add(this.label44);
             this.groupBox1.Controls.Add(this.btnJRem);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox1.Location = new System.Drawing.Point(9, 12);
+            this.groupBox1.Location = new System.Drawing.Point(9, 5);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 40);
             this.groupBox1.TabIndex = 3;
@@ -1783,17 +1784,66 @@
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
-            // cbRedrawInner
+            // rb16
             // 
-            this.cbRedrawInner.AutoSize = true;
-            this.cbRedrawInner.Checked = true;
-            this.cbRedrawInner.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbRedrawInner.Location = new System.Drawing.Point(207, 148);
-            this.cbRedrawInner.Name = "cbRedrawInner";
-            this.cbRedrawInner.Size = new System.Drawing.Size(123, 17);
-            this.cbRedrawInner.TabIndex = 693;
-            this.cbRedrawInner.Text = "redraw inner outlines";
-            this.cbRedrawInner.UseVisualStyleBackColor = true;
+            this.rb16.AutoSize = true;
+            this.rb16.Location = new System.Drawing.Point(126, 91);
+            this.rb16.Name = "rb16";
+            this.rb16.Size = new System.Drawing.Size(37, 17);
+            this.rb16.TabIndex = 577;
+            this.rb16.Text = "16";
+            this.rb16.UseVisualStyleBackColor = true;
+            // 
+            // rb4
+            // 
+            this.rb4.AutoSize = true;
+            this.rb4.Checked = true;
+            this.rb4.Location = new System.Drawing.Point(91, 91);
+            this.rb4.Name = "rb4";
+            this.rb4.Size = new System.Drawing.Size(31, 17);
+            this.rb4.TabIndex = 578;
+            this.rb4.TabStop = true;
+            this.rb4.Text = "4";
+            this.rb4.UseVisualStyleBackColor = true;
+            // 
+            // cbSlices
+            // 
+            this.cbSlices.AutoSize = true;
+            this.cbSlices.Location = new System.Drawing.Point(14, 92);
+            this.cbSlices.Name = "cbSlices";
+            this.cbSlices.Size = new System.Drawing.Size(71, 17);
+            this.cbSlices.TabIndex = 576;
+            this.cbSlices.Text = "Do Slices";
+            this.cbSlices.UseVisualStyleBackColor = true;
+            // 
+            // cbInterpolated
+            // 
+            this.cbInterpolated.AutoSize = true;
+            this.cbInterpolated.Location = new System.Drawing.Point(127, 66);
+            this.cbInterpolated.Name = "cbInterpolated";
+            this.cbInterpolated.Size = new System.Drawing.Size(81, 17);
+            this.cbInterpolated.TabIndex = 575;
+            this.cbInterpolated.Text = "interpolated";
+            this.cbInterpolated.UseVisualStyleBackColor = true;
+            // 
+            // helplineRulerCtrl1
+            // 
+            this.helplineRulerCtrl1.Bmp = null;
+            this.helplineRulerCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.helplineRulerCtrl1.DontDoLayout = false;
+            this.helplineRulerCtrl1.DontHandleDoubleClick = false;
+            this.helplineRulerCtrl1.DontPaintBaseImg = false;
+            this.helplineRulerCtrl1.DontProcDoubleClick = false;
+            this.helplineRulerCtrl1.IgnoreZoom = false;
+            this.helplineRulerCtrl1.Location = new System.Drawing.Point(0, 0);
+            this.helplineRulerCtrl1.MoveHelpLinesOnResize = false;
+            this.helplineRulerCtrl1.Name = "helplineRulerCtrl1";
+            this.helplineRulerCtrl1.SetZoomOnlyByMethodCall = false;
+            this.helplineRulerCtrl1.Size = new System.Drawing.Size(835, 762);
+            this.helplineRulerCtrl1.TabIndex = 0;
+            this.helplineRulerCtrl1.Zoom = 1F;
+            this.helplineRulerCtrl1.ZoomSetManually = false;
+            this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
             // 
             // frmProcOutline
             // 
@@ -1982,5 +2032,9 @@
         internal System.ComponentModel.BackgroundWorker backgroundWorker7;
         private System.Windows.Forms.CheckBox cbDesaturate;
         private System.Windows.Forms.CheckBox cbRedrawInner;
+        private System.Windows.Forms.RadioButton rb16;
+        private System.Windows.Forms.RadioButton rb4;
+        private System.Windows.Forms.CheckBox cbSlices;
+        private System.Windows.Forms.CheckBox cbInterpolated;
     }
 }
