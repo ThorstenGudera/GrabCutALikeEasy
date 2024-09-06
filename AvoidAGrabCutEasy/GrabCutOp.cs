@@ -1183,6 +1183,17 @@ namespace AvoidAGrabCutEasy
         }
 
         //let's now test the condensed method
+
+        // What we are doing here is a 2 step application of the likelihood-principle to get the desired (connected) component(s) out of the picture.
+        // Here's the first step: Taking the probabilities we get from the GMMs to estimate a first partitioning of the image - as result of computing
+        // the Likelihood and its derivative plus a further step. From inspecting the flow in computing a maxflow/mincut, we see,
+        // that around the boundaries of the desired (and other) objects the flow is a lot bigger than in between. So we apply a thresholding function
+        // to the data to exclude (zero out) the pixels that are not close to the connected components of the image. By setting these values to a
+        // small fixed positive value, we exclude them from being "connected" to the sink terminal, from which we then read the results -
+        // as foreground partition of this first step. After returning this first estimation of the foreground parts to out main processing method,
+        // we then use a chaincode to get all the boundaries of all connected components and sort them bigger first. All we have to do now, is extracting
+        // the wanted parts, which is typically the biggest component (plus a couple of more components, if we have outlines, contained in
+        // other outlines (of objects), e.g.: as transparent inner parts of the desired part of the image). That is the second step.
         private unsafe int ConstructResultSet()
         {
             if (this.GammaChanged)
