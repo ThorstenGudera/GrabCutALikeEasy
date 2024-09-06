@@ -1417,6 +1417,8 @@ namespace AvoidAGrabCutEasy
                 //end test
 
                 int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
+                //Exp(-10.5) = 2,7536449349747157857411097102426e-5
+                double dTh = Math.Exp(-this.Threshold);
 
                 Parallel.For(0, l, i =>
                 {
@@ -1433,8 +1435,10 @@ namespace AvoidAGrabCutEasy
                     //if (double.IsInfinity(vv))
                     //    vv = 0.0000001;
 
-                    if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                    if (this.UseThreshold && d[i] >= dTh)
                         d[i] = 0;
+                    //if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                    //    d[i] = 0;
 
                     double vv = 0.0000001;
 
@@ -2604,6 +2608,8 @@ namespace AvoidAGrabCutEasy
             }
 
             int[] z = new int[this.Mask.GetLength(0) * this.Mask.GetLength(1)];
+            //Exp(-10.5) = 2,7536449349747157857411097102426e-5
+            double dTh = Math.Exp(-this.Threshold);
 
             //take the negative logs as penalties (take the bg_probabilities for computing the fg_capacities and vice versa)
             Parallel.For(0, l, () => new InnerListObject(), (i, loopState, innerList) =>
@@ -2623,8 +2629,10 @@ namespace AvoidAGrabCutEasy
                 //if (double.IsInfinity(vv))
                 //    vv = 0.0000001;
 
-                if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                if (this.UseThreshold && d[i] >= dTh)
                     d[i] = 0;
+                //if (this.UseThreshold && Math.Log(d[i]) >= -this.Threshold)
+                //    d[i] = 0;
 
                 double vv = 0.0000001;
 
