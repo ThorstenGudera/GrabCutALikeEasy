@@ -71,6 +71,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numTh = new System.Windows.Forms.NumericUpDown();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbForceSerial = new System.Windows.Forms.CheckBox();
             this.rb16 = new System.Windows.Forms.RadioButton();
             this.rb4 = new System.Windows.Forms.RadioButton();
             this.cbSlices = new System.Windows.Forms.CheckBox();
@@ -152,7 +153,6 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
-            this.cbForceSerial = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -814,6 +814,19 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Experimental";
             // 
+            // cbForceSerial
+            // 
+            this.cbForceSerial.AutoSize = true;
+            this.cbForceSerial.Checked = true;
+            this.cbForceSerial.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbForceSerial.Location = new System.Drawing.Point(159, 92);
+            this.cbForceSerial.Name = "cbForceSerial";
+            this.cbForceSerial.Size = new System.Drawing.Size(50, 17);
+            this.cbForceSerial.TabIndex = 579;
+            this.cbForceSerial.Text = "serial";
+            this.toolTip1.SetToolTip(this.cbForceSerial, "run threads serially to lower memory consumption");
+            this.cbForceSerial.UseVisualStyleBackColor = true;
+            // 
             // rb16
             // 
             this.rb16.AutoSize = true;
@@ -839,6 +852,8 @@
             // cbSlices
             // 
             this.cbSlices.AutoSize = true;
+            this.cbSlices.Checked = true;
+            this.cbSlices.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbSlices.Location = new System.Drawing.Point(14, 92);
             this.cbSlices.Name = "cbSlices";
             this.cbSlices.Size = new System.Drawing.Size(71, 17);
@@ -851,6 +866,8 @@
             // cbInterpolated
             // 
             this.cbInterpolated.AutoSize = true;
+            this.cbInterpolated.Checked = true;
+            this.cbInterpolated.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbInterpolated.Location = new System.Drawing.Point(127, 66);
             this.cbInterpolated.Name = "cbInterpolated";
             this.cbInterpolated.Size = new System.Drawing.Size(81, 17);
@@ -1849,19 +1866,6 @@
             this.backgroundWorker7.WorkerSupportsCancellation = true;
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
-            // 
-            // cbForceSerial
-            // 
-            this.cbForceSerial.AutoSize = true;
-            this.cbForceSerial.Checked = true;
-            this.cbForceSerial.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbForceSerial.Location = new System.Drawing.Point(159, 92);
-            this.cbForceSerial.Name = "cbForceSerial";
-            this.cbForceSerial.Size = new System.Drawing.Size(50, 17);
-            this.cbForceSerial.TabIndex = 579;
-            this.cbForceSerial.Text = "serial";
-            this.toolTip1.SetToolTip(this.cbForceSerial, "run threads serially to lower memory consumption");
-            this.cbForceSerial.UseVisualStyleBackColor = true;
             // 
             // frmProcOutline
             // 
