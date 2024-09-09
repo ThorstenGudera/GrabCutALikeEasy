@@ -2193,7 +2193,7 @@ namespace AvoidAGrabCutEasy
             OnShowInfo(e);
         }
 
-        internal unsafe void SetAllPointsInMask(Dictionary<int, List<Tuple<List<Point>, int>>> allPoints, List<Tuple<int, int, int>> pointsListSeq, bool setPFGToFG)
+        internal unsafe void SetAllPointsInMask(Dictionary<int, List<Tuple<List<Point>, int>>> allPoints, List<Tuple<int, int, int, bool>> pointsListSeq, bool setPFGToFG)
         {
             if (setPFGToFG)
             {
@@ -2212,9 +2212,9 @@ namespace AvoidAGrabCutEasy
                 {
                     int curOp = 0;
 
-                    foreach (Tuple<int, int, int> f in pointsListSeq)
+                    foreach (Tuple<int, int, int, bool> f in pointsListSeq)
                     {
-                        IEnumerable<Tuple<int, int, int>> jj = pointsListSeq.Where(a => a.Item2 == curOp);
+                        IEnumerable<Tuple<int, int, int, bool>> jj = pointsListSeq.Where(a => a.Item2 == curOp);
 
                         if (jj != null && jj.Count() > 0)
                         {
