@@ -112,7 +112,7 @@ namespace AvoidAGrabCutEasy
 
         //It would be much easier to use a List of objects which hold all information about drawing instead of using a seperate sequence file...
         //Maybe I'll change it (as far as it is also easy to serialize in json)
-        private List<Tuple<int, int, int, bool>> _pointsListSeq;
+        private List<Tuple<int, int, int, bool, List<List<Point>>>> _pointsListSeq;
         private int _currentDrawOperation;
         private bool _resetClicked;
 
@@ -279,7 +279,7 @@ namespace AvoidAGrabCutEasy
                 this._allPoints.Add(this._currentDraw, new List<Tuple<List<Point>, int>>());
 
             if (this._pointsListSeq == null)
-                this._pointsListSeq = new List<Tuple<int, int, int, bool>>();
+                this._pointsListSeq = new List<Tuple<int, int, int, bool, List<List<Point>>>>();
 
             GraphicsPath gp = this._pathList[this._currentDraw];
             using (GraphicsPath gpTmp = new GraphicsPath())
@@ -312,7 +312,7 @@ namespace AvoidAGrabCutEasy
                 }
             }
 
-            this._pointsListSeq.Add(Tuple.Create(this._currentDraw, this._currentDrawOperation, this._allPoints[this._currentDraw].Count - 1, false));
+            this._pointsListSeq.Add(Tuple.Create(this._currentDraw, this._currentDrawOperation, this._allPoints[this._currentDraw].Count - 1, false, new List<List<Point>>()));
 
             this._currentDrawOperation++;
 
@@ -332,9 +332,9 @@ namespace AvoidAGrabCutEasy
                     {
                         int curOp = 0;
 
-                        foreach (Tuple<int, int, int, bool> f in this._pointsListSeq)
+                        foreach (Tuple<int, int, int, bool, List<List<Point>>> f in this._pointsListSeq)
                         {
-                            IEnumerable<Tuple<int, int, int, bool>> jj = this._pointsListSeq.Where(a => a.Item2 == curOp);
+                            IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jj = this._pointsListSeq.Where(a => a.Item2 == curOp);
 
                             if (jj != null && jj.Count() > 0)
                             {
@@ -2450,10 +2450,10 @@ namespace AvoidAGrabCutEasy
 
                 if (this._pointsListSeq != null && this._pointsListSeq.Count > 0)
                 {
-                    IEnumerable<Tuple<int, int, int, bool>> jj = this._pointsListSeq.Where(a => a.Item1 == j);
+                    IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jj = this._pointsListSeq.Where(a => a.Item1 == j);
                     if (jj != null && jj.Count() > 0)
                     {
-                        IEnumerable<Tuple<int, int, int, bool>> jjj = jj.Where(a => a.Item2 == this._currentDrawOperation);
+                        IEnumerable<Tuple<int, int, int, bool, List<List<Point>>>> jjj = jj.Where(a => a.Item2 == this._currentDrawOperation);
                         if (jjj != null && jjj.Count() > 0)
                             this._pointsListSeq.Remove(jjj.First());
                     }
