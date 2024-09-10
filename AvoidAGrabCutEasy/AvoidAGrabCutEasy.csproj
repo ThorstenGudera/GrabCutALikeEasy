@@ -183,6 +183,9 @@
     <EmbeddedResource Include="frmProcOutline.resx">
       <DependentUpon>frmProcOutline.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ProcOutline\frmEdgePic.resx">
+      <DependentUpon>frmEdgePic.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cache\Cache.vbproj">

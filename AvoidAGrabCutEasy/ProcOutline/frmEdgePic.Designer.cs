@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEdgePic));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
             this.btnSave = new System.Windows.Forms.Button();
@@ -107,6 +106,7 @@
             // 
             // frmEdgePic
             // 
+            this.AcceptButton = this.btnClose;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 669);

@@ -51,6 +51,59 @@ namespace LUBitmapDesigner
             return bOut;
         }
 
+        //public void SetUpperImage(Bitmap bmp, float x, float y)
+        //{
+        //    if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
+        //    {
+        //        if (this.ShapeList == null)
+        //            this.ShapeList = new ShapeList();
+        //        if (this.ShapeList.Count == 0)
+        //            SetBlankLowerImage();
+        //        if (bmp != null && this.ShapeList.Count > 0)
+        //        {
+        //            for (int i = 2; i < this.ShapeList.Count; i++)
+        //                this.ShapeList.RemoveAt(i);
+
+        //            int cnt = this.ShapeList.Count;
+
+        //            BitmapShape b = null;
+        //            if (this.ShapeList.Count > 1)
+        //                b = this.ShapeList[1];
+
+        //            RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
+
+        //            this.ShapeList.AllowAdding = true;
+        //            this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+        //            if (cnt >= 2)
+        //                this.ShapeList.RemoveAt(1);
+
+        //            if (b != null)
+        //            {
+        //                b.Dispose();
+        //                b = null;
+        //            }
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Not enough Memory");
+        //        return;
+        //    }
+
+        //    this.helplineRulerCtrl1.Bmp = this.ShapeList[0].Bmp;
+
+        //    double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
+        //    double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Height);
+        //    if (multiplier >= faktor)
+        //        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Width));
+        //    else
+        //        this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Height));
+
+        //    this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Height * this.helplineRulerCtrl1.Zoom));
+        //    this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
+        //}
+
         public void SetUpperImage(Bitmap bmp, float x, float y)
         {
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
@@ -70,10 +123,25 @@ namespace LUBitmapDesigner
                     if (this.ShapeList.Count > 1)
                         b = this.ShapeList[1];
 
+                    RectangleF? r = null;
+                    float? rot = null;
+                    //old loaction and size
+                    if (b != null)
+                    {
+                        r = b.Bounds;
+                        rot = b.Rotation;
+                    }
+
                     RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
 
                     this.ShapeList.AllowAdding = true;
                     this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+                    if (r != null && rot != null)
+                    {
+                        this.ShapeList[this.ShapeList.Count - 1].Bounds = r.Value;
+                        this.ShapeList[this.ShapeList.Count - 1].Rotation = rot.Value;
+                    }
+
                     if (cnt >= 2)
                         this.ShapeList.RemoveAt(1);
 
