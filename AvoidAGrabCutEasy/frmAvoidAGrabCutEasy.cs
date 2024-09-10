@@ -2001,6 +2001,9 @@ namespace AvoidAGrabCutEasy
                 Bitmap bC = new Bitmap(this.helplineRulerCtrl2.Bmp);
                 this.SetBitmap(ref this._b4Copy, ref bC);
 
+                Bitmap bC2 = new Bitmap(this.helplineRulerCtrl1.Bmp);
+                this.SetBitmap(ref this._bmpBU, ref bC2);
+
                 this.helplineRulerCtrl2.SetZoom(this.helplineRulerCtrl1.Zoom.ToString());
                 this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
                 this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
