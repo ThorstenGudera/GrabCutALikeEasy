@@ -15,6 +15,8 @@ namespace LUBitmapDesigner
             get { return Shapes.Count; }
         }
 
+        public bool AllowAdding { get; set; }
+
         private const int _MAXSIZE = 2;
 
         internal ShapeList()
@@ -39,8 +41,11 @@ namespace LUBitmapDesigner
             if (this.Shapes == null)
                 this.Shapes = new List<BitmapShape>();
 
-            if (this.Shapes.Count < ShapeList._MAXSIZE)
+            if (this.Shapes.Count < ShapeList._MAXSIZE || this.AllowAdding)
+            {
                 this.Shapes.Add(b);
+                this.AllowAdding = false;
+            }
             else
                 throw new Exception("This List already contains its maximum amount of Shapes");
         }
@@ -50,7 +55,7 @@ namespace LUBitmapDesigner
             if (this.Shapes == null)
                 this.Shapes = new List<BitmapShape>();
 
-            if (this.Shapes.Contains(b))
+            if (b != null && this.Shapes.Contains(b))
             {
                 this.Shapes.Remove(b);
                 b.Dispose();

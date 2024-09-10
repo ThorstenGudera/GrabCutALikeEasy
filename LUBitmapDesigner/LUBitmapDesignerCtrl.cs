@@ -38,7 +38,20 @@ namespace LUBitmapDesigner
             this.helplineRulerCtrl1.Bmp = bLower;
         }
 
-        public void SetUpperImage(Bitmap bmp)
+        public Bitmap GetUpperImage()
+        {
+            Bitmap bOut = null;
+            if (this.ShapeList == null)
+                this.ShapeList = new ShapeList();
+            if (this.ShapeList.Count == 0)
+                SetBlankLowerImage();
+            if (this.ShapeList.Count > 1)
+                bOut = this.ShapeList[1].Bmp;
+
+            return bOut;
+        }
+
+        public void SetUpperImage(Bitmap bmp, float x, float y)
         {
             if (AvailMem.AvailMem.checkAvailRam(bmp.Width * bmp.Height * 16L))
             {
@@ -46,7 +59,31 @@ namespace LUBitmapDesigner
                     this.ShapeList = new ShapeList();
                 if (this.ShapeList.Count == 0)
                     SetBlankLowerImage();
-                this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = new RectangleF(0, 0, bmp.Width, bmp.Height), Rotation = 0, Zoom = 1f });
+                if (bmp != null && this.ShapeList.Count > 0)
+                {
+                    for (int i = 2; i < this.ShapeList.Count; i++)
+                        this.ShapeList.RemoveAt(i);
+
+                    int cnt = this.ShapeList.Count;
+
+                    BitmapShape b = null;
+                    if (this.ShapeList.Count > 1)
+                        b = this.ShapeList[1];
+
+                    RectangleF rc = new RectangleF(x, y, bmp.Width, bmp.Height);
+
+                    this.ShapeList.AllowAdding = true;
+                    this.ShapeList.Add(new BitmapShape() { Bmp = bmp, Bounds = rc, Rotation = 0, Zoom = 1f });
+                    if (cnt >= 2)
+                        this.ShapeList.RemoveAt(1);
+
+                    if (b != null)
+                    {
+                        b.Dispose();
+                        b = null;
+                    }
+                }
+
             }
             else
             {
@@ -57,13 +94,13 @@ namespace LUBitmapDesigner
             this.helplineRulerCtrl1.Bmp = this.ShapeList[0].Bmp;
 
             double faktor = System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height);
-            double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height);
+            double multiplier = System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Height);
             if (multiplier >= faktor)
-                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Width));
+                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Width) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Width));
             else
-                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp.Height));
+                this.helplineRulerCtrl1.Zoom = System.Convert.ToSingle(System.Convert.ToDouble(helplineRulerCtrl1.dbPanel1.Height) / System.Convert.ToDouble(this.helplineRulerCtrl1.Bmp?.Height));
 
-            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp.Height * this.helplineRulerCtrl1.Zoom));
+            this.helplineRulerCtrl1.dbPanel1.AutoScrollMinSize = new Size(System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Width * this.helplineRulerCtrl1.Zoom), System.Convert.ToInt32(this.helplineRulerCtrl1.Bmp?.Height * this.helplineRulerCtrl1.Zoom));
             this.helplineRulerCtrl1.MakeBitmap(this.helplineRulerCtrl1.Bmp);
         }
 
@@ -84,7 +121,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (this.ShapeList.Count > 1 && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
+            if (this.ShapeList?.Count > 1 && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -112,7 +149,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (this.ShapeList.Count > 1 && e.Button == MouseButtons.Left)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -132,7 +169,7 @@ namespace LUBitmapDesigner
                     }
                 }
             }
-            if (this.ShapeList.Count > 1 && e.Button == MouseButtons.Right)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -202,7 +239,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (this.ShapeList.Count > 1 && e.Button == MouseButtons.Left)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
             {
                 BitmapShape b = this.ShapeList[1];
             }
@@ -210,7 +247,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_Paint(object sender, PaintEventArgs e)
         {
-            if (this.ShapeList.Count > 1)
+            if (this.ShapeList?.Count > 1)
             {
                 e.Graphics.TranslateTransform(this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X,
                     this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y);
@@ -283,7 +320,7 @@ namespace LUBitmapDesigner
 
         public void SetZoom(string zoomString)
         {
-            if (this.helplineRulerCtrl1.Bmp != null)
+            if (this.helplineRulerCtrl1.Bmp != null && zoomString != null)
             {
                 float zoom = this.helplineRulerCtrl1.Zoom;
 

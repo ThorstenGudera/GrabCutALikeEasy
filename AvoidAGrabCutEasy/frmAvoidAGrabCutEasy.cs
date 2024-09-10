@@ -3699,27 +3699,36 @@ namespace AvoidAGrabCutEasy
         {
             if (this.helplineRulerCtrl2.Bmp != null)
             {
-                using (frmCompose frm = new frmCompose(this.helplineRulerCtrl2.Bmp))
+                if (this.CachePathAddition != null)
                 {
-                    if (frm.ShowDialog() == DialogResult.OK)
+                    using (frmCompose frm = new frmCompose(this.helplineRulerCtrl2.Bmp, this.CachePathAddition))
                     {
-                        Bitmap bmp = new Bitmap(frm.FBitmap);
+                        frm.SetupCache();
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            if (frm.FBitmap != null)
+                            {
+                                Bitmap bmp = new Bitmap(frm.FBitmap);
 
-                        this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
-                        _undoOPCache.Add(bmp);
+                                this.SetBitmap(this.helplineRulerCtrl2.Bmp, bmp, this.helplineRulerCtrl2, "Bmp");
+                                _undoOPCache?.Add(bmp);
 
-                        if (this.cmbZoom.SelectedItem != null)
-                            this.helplineRulerCtrl2.SetZoom(this.cmbZoom.SelectedItem.ToString());
-                        this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
-                        this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
-                            (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
-                            (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
+                                if (this.cmbZoom.SelectedItem != null)
+                                    this.helplineRulerCtrl2.SetZoom(this.cmbZoom.SelectedItem.ToString());
+                                this.helplineRulerCtrl2.MakeBitmap(this.helplineRulerCtrl2.Bmp);
+                                this.helplineRulerCtrl2.dbPanel1.AutoScrollMinSize = new Size(
+                                    (int)(this.helplineRulerCtrl2.Bmp.Width * this.helplineRulerCtrl2.Zoom),
+                                    (int)(this.helplineRulerCtrl2.Bmp.Height * this.helplineRulerCtrl2.Zoom));
 
-                        Bitmap bC = new Bitmap(bmp);
-                        this.SetBitmap(ref this._bmpBU, ref bC);
+                                Bitmap bC = new Bitmap(bmp);
+                                this.SetBitmap(ref this._bmpBU, ref bC);
+                            }
+                        }
                     }
                 }
             }
+
+            this.btnRecut.Enabled = false;
         }
 
         private void btnInitSettings_Click(object sender, EventArgs e)
