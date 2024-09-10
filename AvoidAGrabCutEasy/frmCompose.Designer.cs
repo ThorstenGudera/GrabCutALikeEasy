@@ -127,7 +127,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnOK
             // 
-            btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnOK.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             btnOK.DialogResult = DialogResult.OK;
             btnOK.ForeColor = SystemColors.ControlText;
             btnOK.Location = new Point(1191, 25);
@@ -252,7 +252,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnRedo
             // 
-            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRedo.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             btnRedo.Enabled = false;
             btnRedo.ForeColor = SystemColors.ControlText;
             btnRedo.Location = new Point(120, 547);
@@ -266,7 +266,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnUndo
             // 
-            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnUndo.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             btnUndo.Enabled = false;
             btnUndo.ForeColor = SystemColors.ControlText;
             btnUndo.Location = new Point(24, 547);
@@ -381,7 +381,7 @@ namespace AvoidAGrabCutEasy
             // 
             // btnCancel
             // 
-            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ForeColor = SystemColors.ControlText;
             btnCancel.Location = new Point(1284, 25);
@@ -435,7 +435,7 @@ namespace AvoidAGrabCutEasy
             // 
             // frmCompose
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1386, 981);
             Controls.Add(splitContainer1);
