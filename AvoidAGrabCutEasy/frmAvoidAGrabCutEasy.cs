@@ -478,6 +478,8 @@ namespace AvoidAGrabCutEasy
             int eX = e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X;
             int eY = e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y;
 
+            this.helplineRulerCtrl1.dbPanel1.Capture = true;
+
             if (ix >= 0 && ix < this.helplineRulerCtrl1.Bmp.Width && iy >= 0 && iy < this.helplineRulerCtrl1.Bmp.Height)
             {
                 this._rX = ix;
@@ -568,6 +570,7 @@ namespace AvoidAGrabCutEasy
 
             this._tracking = false;
             this._tracking4 = false;
+            this.helplineRulerCtrl1.dbPanel1.Capture = false;
         }
 
         private void AddPointsToScribblePath()
