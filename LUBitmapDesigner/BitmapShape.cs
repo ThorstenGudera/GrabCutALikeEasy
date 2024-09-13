@@ -47,9 +47,9 @@ namespace LUBitmapDesigner
                         new PointF[] { new PointF(this.Bounds.X * this.Zoom, this.Bounds.Y * this.Zoom),
                             new PointF((this.Bounds.X+this.Bounds.Width) * this.Zoom, this.Bounds.Y * this.Zoom),
                             new PointF(this.Bounds.X * this.Zoom,  (this.Bounds.Y +this.Bounds.Height) * this.Zoom) },
-                            new RectangleF(0, 0,
-                                this.Bounds.Width, this.Bounds.Height),
-                                GraphicsUnit.Pixel, ia);
+                                new RectangleF(0, 0,
+                                    this.Bmp.Width, this.Bmp.Height),
+                                    GraphicsUnit.Pixel, ia);
                 }
             }
             gx.EndContainer(con);
