@@ -153,6 +153,9 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
+            this.label13 = new System.Windows.Forms.Label();
+            this.btnLoadBasePic = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -209,8 +212,10 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.label13);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
+            this.splitContainer1.Panel2.Controls.Add(this.btnLoadBasePic);
             this.splitContainer1.Panel2.Controls.Add(this.btmSetBU);
             this.splitContainer1.Panel2.Controls.Add(this.Label20);
             this.splitContainer1.Panel2.Controls.Add(this.cmbZoom);
@@ -1867,6 +1872,30 @@
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(13, 737);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(64, 13);
+            this.label13.TabIndex = 661;
+            this.label13.Text = "load orig pic";
+            // 
+            // btnLoadBasePic
+            // 
+            this.btnLoadBasePic.Location = new System.Drawing.Point(85, 732);
+            this.btnLoadBasePic.Name = "btnLoadBasePic";
+            this.btnLoadBasePic.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadBasePic.TabIndex = 657;
+            this.btnLoadBasePic.Text = "Load";
+            this.btnLoadBasePic.UseVisualStyleBackColor = true;
+            this.btnLoadBasePic.Click += new System.EventHandler(this.btnLoadBasePic_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
+            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2059,5 +2088,8 @@
         private System.Windows.Forms.CheckBox cbSlices;
         private System.Windows.Forms.CheckBox cbInterpolated;
         private System.Windows.Forms.CheckBox cbForceSerial;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btnLoadBasePic;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
