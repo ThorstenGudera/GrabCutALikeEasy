@@ -50,6 +50,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cbEditTrimap = new System.Windows.Forms.CheckBox();
             this.cbRedrawInner = new System.Windows.Forms.CheckBox();
             this.cbDesaturate = new System.Windows.Forms.CheckBox();
@@ -156,7 +157,6 @@
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -165,6 +165,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGamma)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).BeginInit();
@@ -199,7 +200,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -543,6 +543,16 @@
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "boundary alpha";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(10, 119);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(59, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 694;
+            this.pictureBox1.TabStop = false;
             // 
             // cbEditTrimap
             // 
@@ -1899,15 +1909,6 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(10, 119);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(59, 50);
-            this.pictureBox1.TabIndex = 694;
-            this.pictureBox1.TabStop = false;
-            // 
             // frmProcOutline
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1931,6 +1932,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numMaxSize)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWHFactor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGamma2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOpacity)).EndInit();
@@ -1969,7 +1971,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
