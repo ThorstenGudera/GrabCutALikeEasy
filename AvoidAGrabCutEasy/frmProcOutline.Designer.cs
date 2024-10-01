@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.helplineRulerCtrl1 = new HelplineRulerControl.HelplineRulerCtrl();
+            this.label13 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSetGamma = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,6 +39,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.numMaxSize = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnLoadBasePic = new System.Windows.Forms.Button();
             this.btmSetBU = new System.Windows.Forms.Button();
             this.Label20 = new System.Windows.Forms.Label();
             this.cmbZoom = new System.Windows.Forms.ComboBox();
@@ -153,9 +155,8 @@
             this.backgroundWorker5 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker6 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker7 = new System.ComponentModel.BackgroundWorker();
-            this.label13 = new System.Windows.Forms.Label();
-            this.btnLoadBasePic = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -198,6 +199,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -250,6 +252,15 @@
             this.helplineRulerCtrl1.Zoom = 1F;
             this.helplineRulerCtrl1.ZoomSetManually = false;
             this.helplineRulerCtrl1.DBPanelDblClicked += new HelplineRulerControl.HelplineRulerCtrl.DblClickedEventHandler(this.helplineRulerCtrl1_DBPanelDblClicked);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(13, 737);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(64, 13);
+            this.label13.TabIndex = 661;
+            this.label13.Text = "load orig pic";
             // 
             // groupBox2
             // 
@@ -356,6 +367,16 @@
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 658;
             this.label1.Text = "set current pic as work pic";
+            // 
+            // btnLoadBasePic
+            // 
+            this.btnLoadBasePic.Location = new System.Drawing.Point(85, 732);
+            this.btnLoadBasePic.Name = "btnLoadBasePic";
+            this.btnLoadBasePic.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadBasePic.TabIndex = 657;
+            this.btnLoadBasePic.Text = "Load";
+            this.btnLoadBasePic.UseVisualStyleBackColor = true;
+            this.btnLoadBasePic.Click += new System.EventHandler(this.btnLoadBasePic_Click);
             // 
             // btmSetBU
             // 
@@ -469,6 +490,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.pictureBox1);
             this.groupBox4.Controls.Add(this.cbEditTrimap);
             this.groupBox4.Controls.Add(this.cbRedrawInner);
             this.groupBox4.Controls.Add(this.cbDesaturate);
@@ -1872,29 +1894,19 @@
             this.backgroundWorker7.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker7_DoWork);
             this.backgroundWorker7.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker7_RunWorkerCompleted);
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(13, 737);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(64, 13);
-            this.label13.TabIndex = 661;
-            this.label13.Text = "load orig pic";
-            // 
-            // btnLoadBasePic
-            // 
-            this.btnLoadBasePic.Location = new System.Drawing.Point(85, 732);
-            this.btnLoadBasePic.Name = "btnLoadBasePic";
-            this.btnLoadBasePic.Size = new System.Drawing.Size(75, 23);
-            this.btnLoadBasePic.TabIndex = 657;
-            this.btnLoadBasePic.Text = "Load";
-            this.btnLoadBasePic.UseVisualStyleBackColor = true;
-            this.btnLoadBasePic.Click += new System.EventHandler(this.btnLoadBasePic_Click);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Images - (*.bmp;*.jpg;*.jpeg;*.jfif;*.png)|*.bmp;*.jpg;*.jpeg;*.jfif;*.png";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(10, 119);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(59, 50);
+            this.pictureBox1.TabIndex = 694;
+            this.pictureBox1.TabStop = false;
             // 
             // frmProcOutline
             // 
@@ -1957,6 +1969,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numJRem1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2091,5 +2104,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnLoadBasePic;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

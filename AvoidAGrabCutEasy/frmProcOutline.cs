@@ -76,6 +76,8 @@ namespace AvoidAGrabCutEasy
                 this.helplineRulerCtrl1.Bmp = new Bitmap(bmp);
                 _bmpBU = new Bitmap(bmp);
                 this._bmpOrig = new Bitmap(bmpOrig);
+                this.pictureBox1.Image = this._bmpOrig;
+                this.pictureBox1.Refresh();
             }
             else
             {
@@ -5271,13 +5273,28 @@ namespace AvoidAGrabCutEasy
 
         private void btnLoadBasePic_Click(object sender, EventArgs e)
         {
-            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK && this.helplineRulerCtrl1.Bmp != null)
             {
                 Bitmap bmp = null;
                 using (Image img = Image.FromFile(this.openFileDialog1.FileName))
-                    bmp = new Bitmap(img);
+                {
+                    //if(img.Width >= this.helplineRulerCtrl1.Bmp.Width && img.Height >= this.helplineRulerCtrl1.Bmp.Height)
+                    if (img.Width == this.helplineRulerCtrl1.Bmp.Width && img.Height == this.helplineRulerCtrl1.Bmp.Height)
+                        bmp = new Bitmap(img);
+                    else
+                    {
+                        bmp = new Bitmap(this.helplineRulerCtrl1.Bmp.Width, this.helplineRulerCtrl1.Bmp.Height);
+                        using (Graphics gx = Graphics.FromImage(bmp))
+                        {
+                            gx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            gx.DrawImage(img, 0, 0, bmp.Width, bmp.Height);
+                        }
+                    }
+                }
 
                 this.SetBitmap(ref this._bmpOrig, ref bmp);
+                this.pictureBox1.Image = this._bmpOrig;
+                this.pictureBox1.Refresh();
             }
         }
     }
