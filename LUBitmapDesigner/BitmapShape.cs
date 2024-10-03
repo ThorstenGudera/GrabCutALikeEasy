@@ -16,6 +16,7 @@ namespace LUBitmapDesigner
         public override float Zoom { get; set; } = 1.0f;
         public Bitmap Bmp { get; set; }
         public float Opacity { get; set; } = 1.0f;
+        public bool IsLocked { get; set; }
 
         public override void Draw(Graphics gx)
         {

@@ -19,6 +19,7 @@ namespace LUBitmapDesigner
         private float _rotationStart;
 
         public ShapeList ShapeList { get; set; }
+        public BitmapShape SelectedShape { get; private set; }
 
         public event EventHandler<BitmapShape> ShapeChanged;
 
@@ -201,7 +202,7 @@ namespace LUBitmapDesigner
                         this._ix = ix;
                         this._iy = iy;
 
-                        if (e.Button == MouseButtons.Right)
+                        if (e.Button == MouseButtons.Right && this.SelectedShape?.IsLocked == false)
                         {
                             BitmapShape b = this.ShapeList[1];
 
@@ -217,7 +218,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape?.IsLocked == false)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -237,7 +238,7 @@ namespace LUBitmapDesigner
                     }
                 }
             }
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Right && this.SelectedShape?.IsLocked == false)
             {
                 int ix = (int)((e.X - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.X) / (double)this.helplineRulerCtrl1.Zoom);
                 int iy = (int)((e.Y - this.helplineRulerCtrl1.dbPanel1.AutoScrollPosition.Y) / (double)this.helplineRulerCtrl1.Zoom);
@@ -272,6 +273,7 @@ namespace LUBitmapDesigner
             // check, if a DrawnRectangle is at the current point
             if (this.ShapeList != null && this.ShapeList.Count > 1)
             {
+                this.SelectedShape = null;
                 // we use a GraphicsPath for testing, because it is easy to handle when obects are rotated
                 // then, we simply rotate the path
                 using (GraphicsPath gP = new GraphicsPath())
@@ -297,6 +299,7 @@ namespace LUBitmapDesigner
                     {
                         ShapeChanged?.Invoke(this, this.ShapeList[1]);
                         gP.Dispose();
+                        this.SelectedShape = this.ShapeList[1];
                         return true;
                     }
                 }
@@ -307,7 +310,7 @@ namespace LUBitmapDesigner
 
         private void helplineRulerCtrl1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left)
+            if (this.ShapeList?.Count > 1 && e.Button == MouseButtons.Left && this.SelectedShape?.IsLocked == false)
             {
                 BitmapShape b = this.ShapeList[1];
             }

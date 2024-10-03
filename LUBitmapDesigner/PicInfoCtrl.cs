@@ -31,11 +31,16 @@ namespace LUBitmapDesigner
                 RectangleF r = e.Bounds;
                 float rot = e.Rotation;
 
+                bool chckd = this.cbAspect.Checked;
+                this.cbAspect.Checked = false;
+
                 this.numX.Value = (decimal)r.X;
                 this.numY.Value = (decimal)r.Y;
                 this.numW.Value = (decimal)r.Width;
                 this.numH.Value = (decimal)r.Height;
                 this.numRot.Value = (decimal)rot;
+
+                this.cbAspect.Checked = chckd;
             }
         }
 
@@ -108,6 +113,8 @@ namespace LUBitmapDesigner
 
                 if (!this._dontRaise)
                     ShapeChanged?.Invoke(this, this._curShape);
+
+                this.SetValues(this._curShape);
             }
         }
 
@@ -127,6 +134,25 @@ namespace LUBitmapDesigner
             if (this._curShape != null)
             {
                 this._curShape.Opacity = (float)this.numOpacity.Value; 
+
+                if (!this._dontRaise)
+                    ShapeChanged?.Invoke(this, this._curShape);
+            }
+        }
+
+        private void cbLock_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SetControls(!this.cbLock.Checked);
+            this.Refresh();
+        }
+
+        private void SetControls(bool chckd)
+        {
+            if (this._curShape != null)
+            {
+                foreach (Control c in this.GroupBox1.Controls)
+                    if (!c.Equals(this.cbLock))
+                        c.Enabled = chckd;
 
                 if (!this._dontRaise)
                     ShapeChanged?.Invoke(this, this._curShape);

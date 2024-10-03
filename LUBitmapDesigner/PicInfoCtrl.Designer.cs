@@ -136,6 +136,7 @@
             this.cbLock.TabIndex = 33;
             this.cbLock.Text = "Lock";
             this.cbLock.UseVisualStyleBackColor = true;
+            this.cbLock.CheckedChanged += new System.EventHandler(this.cbLock_CheckedChanged);
             // 
             // Label2
             // 

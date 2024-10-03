@@ -65,6 +65,7 @@ namespace AvoidAGrabCutEasy
         private void PicInfoCtrl1_ShapeChanged(object sender, BitmapShape e)
         {
             this.luBitmapDesignerCtrl1.helplineRulerCtrl1.dbPanel1.Invalidate();
+            e.IsLocked = this.picInfoCtrl1.cbLock.Checked;
         }
 
         private void LuBitmapDesignerCtrl1_ShapeChanged(object sender, BitmapShape e)
