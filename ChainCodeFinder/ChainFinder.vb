@@ -7860,4 +7860,136 @@ Public Class ChainFinder
     Public Sub Reset()
         Me._start = New Point(0, 0)
     End Sub
+
+    'ab hier neu
+    Public Sub ShiftChains(b As Bitmap, fList As List(Of ChainCode), shiftX As Integer, shiftY As Integer)
+        Dim bmData As BitmapData = Nothing
+
+        If Not AvailMem.AvailMem.checkAvailRam(b.Width * b.Height * 4L) Then
+            Return
+        End If
+
+        Try
+            bmData = b.LockBits(New Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
+            Dim w As Integer = b.Width
+            Dim h As Integer = b.Height
+            Dim stride As Integer = bmData.Stride
+
+            Dim Scan0 As System.IntPtr = bmData.Scan0
+
+            Dim p((bmData.Stride * bmData.Height) - 1) As Byte
+            Marshal.Copy(bmData.Scan0, p, 0, p.Length)
+
+            Parallel.For(0, h, Sub(y)
+                                   For x As Integer = 0 To w - 1
+                                       p(y * stride + x * 4) = 0
+                                       p(y * stride + x * 4 + 1) = 0
+                                       p(y * stride + x * 4 + 2) = 0
+                                       p(y * stride + x * 4 + 3) = 0
+                                   Next
+                               End Sub)
+
+            Marshal.Copy(p, 0, bmData.Scan0, p.Length)
+            b.UnlockBits(bmData)
+            p = Nothing
+
+            If fList IsNot Nothing AndAlso fList.Count > 0 Then
+                For Each c As ChainCode In fList
+                    For i As Integer = 0 To c.Coord.Count - 1
+                        Dim x As Integer = c.Coord(i).X
+                        Dim y As Integer = c.Coord(i).Y
+
+                        c.Coord(i) = New Point(x + shiftX, y + shiftY)
+                    Next
+                Next
+            End If
+
+            'CleanChains(fList, w, h)
+
+            Using gx As Graphics = Graphics.FromImage(b)
+                gx.SmoothingMode = SmoothingMode.None
+                gx.InterpolationMode = InterpolationMode.NearestNeighbor
+                For i As Integer = 0 To fList.Count - 1
+                    Dim fl As ChainCode = fList(i)
+                    gx.CompositingMode = CompositingMode.SourceOver
+                    If Not ChainFinder.IsInnerOutline(fl) Then
+                        Using gP As New GraphicsPath
+                            gP.StartFigure()
+                            gP.AddLines(fl.Coord.ToArray())
+                            gP.CloseFigure()
+                            gx.FillPath(Brushes.Black, gP)
+                            gx.DrawPath(Pens.Black, gP)
+                        End Using
+                    Else
+                        gx.CompositingMode = CompositingMode.SourceCopy
+
+                        Using gP As New GraphicsPath
+                            gP.StartFigure()
+                            gP.AddLines(fl.Coord.ToArray())
+                            gP.CloseFigure()
+                            gx.FillPath(Brushes.Transparent, gP)
+                            gx.DrawPath(Pens.Transparent, gP)
+                        End Using
+                    End If
+                Next
+            End Using
+        Catch
+            Try
+                b.UnlockBits(bmData)
+            Catch
+
+            End Try
+        End Try
+    End Sub
+
+    Private Sub CleanChains(fList As List(Of ChainCode), w As Integer, h As Integer)
+        If fList IsNot Nothing AndAlso fList.Count > 0 Then
+            For Each c As ChainCode In fList
+                For i As Integer = c.Coord.Count - 1 To 0 Step -1
+                    Dim x As Integer = c.Coord(i).X
+                    Dim y As Integer = c.Coord(i).Y
+
+                    If x < 0 OrElse x > w OrElse y < 0 OrElse y > h Then
+                        c.Chain.RemoveAt(i)
+                        c.Coord.RemoveAt(i)
+                    End If
+                Next
+
+                RecompArea(c)
+            Next
+        End If
+    End Sub
+
+    Public Shared Sub RecompArea(c As ChainCode)
+        c.Area = 0
+
+        For i As Integer = 0 To c.Chain.Count - 1
+            Dim direction As Integer = c.Chain(i)
+            Select Case direction
+                Case 0
+                    c.Area += c.Coord(i).Y + 1
+                    Exit Select
+                Case 1
+                    Exit Select
+                Case 2
+                    c.Area -= c.Coord(i).Y
+                    Exit Select
+                Case 3
+                    Exit Select
+            End Select
+        Next
+    End Sub
+
+    Public Shared Function GetCentroid(c As ChainCode) As PointF
+        Dim pt As New PointF(0F, 0F)
+
+        Dim x As Double = c.Coord.Select(Function(a) a.X).Sum()
+        Dim y As Double = c.Coord.Select(Function(a) a.Y).Sum()
+
+        If x > 0 AndAlso y > 0 Then
+            pt = New PointF(CSng(x / c.Chain.Count), CSng(y / c.Chain.Count))
+        End If
+
+        Return pt
+    End Function
 End Class
